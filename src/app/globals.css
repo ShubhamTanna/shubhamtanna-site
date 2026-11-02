@@ -465,7 +465,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: var(--dw); }
 .card h3 { font-family: var(--body); }
 
 /* 1. Hero numbers never collide on small phones */
-@media (max-width: 360px) {
+@media (max-width: 339px) {
   .proof { grid-template-columns: 1fr 1fr; row-gap: 14px; }
   .proof b { font-size: 2rem; }
 }
@@ -549,3 +549,21 @@ nav.top .who { display: inline-block; padding-block: 4px; }
 .outline { font: 600 13px var(--mono); border: 1.5px solid var(--ink); padding: 10.5px 16px; text-decoration: none; display: inline-block; }
 .outline:hover { background: var(--ink); color: var(--paper); }
 .smaller li a.demo { font: 600 12px var(--mono); color: var(--accent-text); white-space: nowrap; display: inline-block; padding-block: 4px; }
+
+/* --- 2 Nov fixes from phone review --- */
+html { scroll-padding-top: calc(var(--nav-h) + 16px); }            /* #anchors land below the sticky nav */
+.jump { margin-bottom: 8px; position: relative; z-index: 1; }      /* Next box no longer meets the footer */
+/* Grid, not baseline flex: iOS Safari mis-sizes a wrapped baseline flex box, so the label spilled past the bottom border */
+.jump { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 16px; row-gap: 10px; box-sizing: border-box; width: 100%; padding: 24px 26px 26px; }
+.jump b { text-align: right; line-height: 1.15; }
+@media (max-width: 600px) { .jump { grid-template-columns: 1fr; } .jump b { text-align: left; } }
+main > .wrap:last-child { padding-bottom: 8px; }
+.nc { text-transform: none; }                                       /* brand names keep their case */
+figure.cph figcaption, .xstrip figcaption, .lead > figcaption { text-transform: none; letter-spacing: .02em; font-size: 12px; }
+.proof .mono { display: block; margin-top: 10px; line-height: 1.35; }
+@media (max-width: 480px) {
+  .proof b { font-size: clamp(1.45rem, 7.4vw, 2.1rem); white-space: nowrap; }
+  .proof { column-gap: 10px; }
+  .proof .mono { font-size: 11px; letter-spacing: .05em; }
+  .proof div { padding-right: 8px; }
+}

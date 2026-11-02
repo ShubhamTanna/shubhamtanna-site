@@ -28,7 +28,8 @@ for (const [w, h, mobile] of SIZES) {
   const page = await ctx.newPage();
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
+  // Vercel Analytics' script only exists on Vercel, so it 404s on a local server: not a real error.
+  page.on("console", (m) => { if (m.type() === "error" && !m.location()?.url?.includes("/_vercel/")) errors.push(m.text()); });
   console.log(`${w}×${h}`);
   for (const p of PAGES) {
     errors.length = 0;

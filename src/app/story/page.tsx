@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getChapters, getSite } from "@/lib/content";
-import { Jump, Todo } from "@/components/bits";
+import { Jump, Todo, keepCase } from "@/components/bits";
 import StoryIndex from "@/components/StoryIndex";
 
 export const metadata: Metadata = { title: "Story", description: "Build, sell, teach, price, analyse: how I got here, in six chapters." };
@@ -43,7 +43,7 @@ export default function StoryPage() {
               ) : (
                 <div className="proofrow">
                   {c.proof.map((t) => {
-                    const inner = <><b className={t.value.length > 9 ? "long" : undefined}>{t.value}</b><span className="what">{t.what}</span><span className="src"><span>{t.source}</span>{t.href && <span>→</span>}</span></>;
+                    const inner = <><b className={t.value.length > 9 ? "long" : undefined}>{t.value}</b><span className="what">{t.what}</span><span className="src"><span>{keepCase(t.source)}</span>{t.href && <span>→</span>}</span></>;
                     return t.href ? <Link key={t.value} className="ptile" href={t.href}>{inner}</Link> : <div key={t.value} className="ptile">{inner}</div>;
                   })}
                 </div>

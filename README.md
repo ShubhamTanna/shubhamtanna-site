@@ -4,7 +4,7 @@ Personal site of Shubham Tanna: consulting, strategy and decision analytics. Nex
 
 ## Editing the words (no code needed)
 
-All text lives in `content/`. Edit a file on GitHub, commit, and Vercel redeploys in about a minute.
+All text lives in `content/`. Edit a file on GitHub, commit, and Vercel redeploys in about a minute. Full guide: [EDITING.md](EDITING.md).
 
 | File | What's in it |
 | --- | --- |

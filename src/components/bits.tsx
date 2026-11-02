@@ -36,3 +36,9 @@ export function Todo({ children }: { children: React.ReactNode }) {
   if (process.env.NODE_ENV === "production" && !process.env.SHOW_TODOS) return null;
   return <p className="todo">{children}</p>;
 }
+
+/** Keeps brand names in their own case inside UPPERCASE labels (Code1o1 would otherwise read "CODE101"). */
+const BRANDS = /(Code1o1)/;
+export function keepCase(text: string) {
+  return text.split(BRANDS).map((part, i) => (BRANDS.test(part) ? <span key={i} className="nc">{part}</span> : part));
+}

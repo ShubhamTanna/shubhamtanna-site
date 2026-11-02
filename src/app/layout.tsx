@@ -13,6 +13,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { SITE_URL } from "@/lib/config";
 import { Analytics } from "@vercel/analytics/next";
+import ScrollTop from "@/components/ScrollTop";
 
 const site = getSite();
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-IN">
       <body>
+        <ScrollTop />
         <Nav resume={site.links.resume} />
         <main>{children}</main>
         <Footer />
