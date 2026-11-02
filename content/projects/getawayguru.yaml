@@ -53,9 +53,7 @@ skills:
   - Survey analysis
   - Business model design
   - Pitching
-links:
-  - label: Deck and wireframes on GitHub
-    href: https://github.com/ShubhamTanna/case-studies/tree/main/getawayguru
+links: []
 charts:
   - kind: bar
     file: chart-1.csv
@@ -68,3 +66,4 @@ charts:
 lead:
   kind: chart
   chart: 0
+code: https://github.com/ShubhamTanna/case-studies/tree/main/getawayguru

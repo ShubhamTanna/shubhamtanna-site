@@ -67,7 +67,9 @@ export const Project = z.object({
   notes: z.array(z.string()).optional(),
   story: z.object({ title: z.string(), text: z.string() }).optional(),
   skills: z.array(z.string()).default([]),
-  links: z.array(Link).default([]),
+  links: z.array(Link).default([]), // other files: decks, Figma, papers
+  code: z.string().url().optional(), // GitHub repo, or the project's folder in case-studies
+  demo: z.string().url().optional(), // live Streamlit app
   lead: Lead.optional(),
   charts: z.array(Chart).default([]),
   // Never rendered. The leak check fails the build if this text appears in the output.

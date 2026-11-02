@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { getPagedProjects, getProject } from "@/lib/content";
 import { ChartView } from "@/components/Charts";
 
+const codeLabel = (url: string) => (url.includes("/case-studies/") ? "Case files on GitHub" : "Code on GitHub");
+
 export function generateStaticParams() {
   return getPagedProjects().map((p) => ({ slug: p.slug }));
 }
@@ -21,7 +23,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const all = getPagedProjects();
   const next = all[(all.findIndex((x) => x.slug === slug) + 1) % all.length];
   const leadChart = p.lead?.kind === "chart" && p.lead.chart !== undefined ? p.lead.chart : -1;
-  const files = p.links;
+  const files = [...(p.demo ? [{ label: "Live demo (may take ~30 s to wake)", href: p.demo }] : []), ...(p.code ? [{ label: codeLabel(p.code), href: p.code }] : []), ...p.links];
   let n = 0;
   const num = () => String(++n).padStart(2, "0");
 
@@ -43,6 +45,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div><span>Tools</span><p>{p.tools.join(", ")}</p></div>
         </div>
         <div className="answer2"><span>{p.answer ? "The answer" : "In one line"}</span><p>{p.answer ?? p.cardLine}</p></div>
+        {(p.demo || p.code) && (
+          <div className="actions">
+            {p.demo && <a className="btn" href={p.demo} target="_blank" rel="noopener">Live demo (may take ~30 s to wake) ↗</a>}
+            {p.code && <a className="outline" href={p.code} target="_blank" rel="noopener">{codeLabel(p.code)} ↗</a>}
+          </div>
+        )}
 
         {p.lead?.kind === "image" && p.lead.src && (
           <figure className="lead"><Image src={p.lead.src} alt={p.lead.alt} width={1600} height={1000} sizes="(max-width: 1080px) 100vw, 1040px" />{p.lead.caption && <figcaption>{p.lead.caption}</figcaption>}</figure>
@@ -78,7 +86,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         {p.story && <section className="csec"><h2><i>{num()}</i><b>{p.story.title}</b></h2><div><p>{p.story.text}</p></div></section>}
 
         {files.length > 0 && (
-          <section className="csec"><h2><i>{num()}</i><b>Files</b></h2><div className="files">{files.map((l) => <a key={l.href} href={l.href} rel="noopener">{l.label} ↗</a>)}</div></section>
+          <section className="csec"><h2><i>{num()}</i><b>Files</b></h2><div className="files">{files.map((l) => <a key={l.href} href={l.href} target="_blank" rel="noopener">{l.label} ↗</a>)}</div></section>
         )}
       </div></div>
 

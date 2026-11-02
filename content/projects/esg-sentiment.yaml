@@ -64,9 +64,7 @@ skills:
   - NLP
   - scikit-learn
   - Model evaluation
-links:
-  - label: Code and notebook on GitHub
-    href: https://github.com/ShubhamTanna/esg-sentiment-classifier
+links: []
 charts:
   - kind: heatmap
     file: chart-1.csv
@@ -75,3 +73,5 @@ charts:
     col: predicted
     value: count
     note: "Confusion matrix, 228 test sentences. Rows: actual label. Columns: predicted."
+code: https://github.com/ShubhamTanna/esg-sentiment-classifier
+demo: https://tanna-esg-sentiment-classifier.streamlit.app/

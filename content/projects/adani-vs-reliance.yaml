@@ -107,9 +107,7 @@ skills:
   - ESG analysis
   - Benchmarking
   - Scorecard design
-links:
-  - label: Deck on GitHub
-    href: https://github.com/ShubhamTanna/case-studies/tree/main/adani-vs-reliance
+links: []
 charts:
   - kind: paired
     file: chart-1.csv
@@ -123,3 +121,4 @@ charts:
 lead:
   kind: chart
   chart: 0
+code: https://github.com/ShubhamTanna/case-studies/tree/main/adani-vs-reliance

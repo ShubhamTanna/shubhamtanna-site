@@ -23,7 +23,6 @@ did:
   - Co-authored the 4-page IEEE-style paper.
 results: []
 skills: []
-links:
-  - label: Code and paper on GitHub
-    href: https://github.com/ShubhamTanna/autobot-ros2-simulation
+links: []
 charts: []
+code: https://github.com/ShubhamTanna/autobot-ros2-simulation

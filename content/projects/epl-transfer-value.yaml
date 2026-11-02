@@ -54,9 +54,7 @@ skills:
   - Regression
   - Hypothesis testing
   - Sports analytics
-links:
-  - label: Report on GitHub
-    href: https://github.com/ShubhamTanna/case-studies/tree/main/epl-transfer-value
+links: []
 charts:
   - kind: bar
     file: chart-1.csv
@@ -69,3 +67,4 @@ charts:
 lead:
   kind: chart
   chart: 0
+code: https://github.com/ShubhamTanna/case-studies/tree/main/epl-transfer-value

@@ -544,3 +544,8 @@ nav.top .who { display: inline-block; padding-block: 4px; }
 .chart .note.src { font-size: 11px; opacity: .85; }
 .csec .tsrc { font: 11px var(--mono); color: var(--muted); margin: -16px 0 28px; }
 .contacts a:not(.btn) { display: inline-block; padding-block: 6px; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin: -24px 0 48px; }
+.actions .btn, .actions .outline { padding: 12px 18px; font-size: 13px; }
+.outline { font: 600 13px var(--mono); border: 1.5px solid var(--ink); padding: 10.5px 16px; text-decoration: none; display: inline-block; }
+.outline:hover { background: var(--ink); color: var(--paper); }
+.smaller li a.demo { font: 600 12px var(--mono); color: var(--accent-text); white-space: nowrap; display: inline-block; padding-block: 4px; }

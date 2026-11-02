@@ -24,7 +24,7 @@ did:
   - Rebuilt it in 2026 with keys out of the code, per-source error handling and working AI summaries.
 results: []
 skills: []
-links:
-  - label: Code on GitHub
-    href: https://github.com/ShubhamTanna/research-buddy
+links: []
 charts: []
+code: https://github.com/ShubhamTanna/research-buddy
+demo: https://tanna-research-buddy.streamlit.app/

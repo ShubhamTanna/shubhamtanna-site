@@ -22,7 +22,6 @@ did:
   - Built the circuit and wrote the Arduino and Processing code.
 results: []
 skills: []
-links:
-  - label: Code on GitHub
-    href: https://github.com/ShubhamTanna/tilt-breakout-arduino
+links: []
 charts: []
+code: https://github.com/ShubhamTanna/tilt-breakout-arduino

@@ -138,9 +138,7 @@ skills:
   - Curriculum design
   - Hiring
   - Pricing
-links:
-  - label: Case files on GitHub
-    href: https://github.com/ShubhamTanna/case-studies/tree/main/code1o1
+links: []
 charts:
   - kind: bar
     file: chart-1.csv
@@ -156,3 +154,4 @@ lead:
   src: /img/build.jpg
   alt: The Code1o1 stall
   caption: The Code1o1 stall
+code: https://github.com/ShubhamTanna/case-studies/tree/main/code1o1

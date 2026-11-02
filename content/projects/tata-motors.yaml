@@ -72,9 +72,7 @@ skills:
   - Competitive analysis
   - Revenue sizing
   - Strategy
-links:
-  - label: Report and deck on GitHub
-    href: https://github.com/ShubhamTanna/case-studies/tree/main/tata-motors
+links: []
 charts:
   - kind: bar
     file: chart-1.csv
@@ -96,3 +94,4 @@ charts:
 lead:
   kind: chart
   chart: 0
+code: https://github.com/ShubhamTanna/case-studies/tree/main/tata-motors

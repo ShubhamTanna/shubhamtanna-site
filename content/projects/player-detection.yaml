@@ -67,9 +67,7 @@ skills:
   - Model evaluation
   - Clustering
   - OpenCV
-links:
-  - label: Code and notebook on GitHub
-    href: https://github.com/ShubhamTanna/football-player-detection
+links: []
 charts:
   - kind: paired
     file: chart-1.csv
@@ -96,3 +94,5 @@ lead:
   poster: /work/player-detection/lead-poster.jpg
   alt: Detections on a Bundesliga broadcast clip
   caption: Detections on a broadcast clip
+code: https://github.com/ShubhamTanna/football-player-detection
+demo: https://tanna-football-player-detection.streamlit.app/

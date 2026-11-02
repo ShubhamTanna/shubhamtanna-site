@@ -22,11 +22,10 @@ export default function WorkPage() {
           <p>Earlier and side projects, in one line each.</p>
           <ul>
             {smaller.map((p) => {
-              const repo = p.links.find((l) => /github\.com/.test(l.href));
               return (
                 <li key={p.slug}>
-                  <b>{repo ? <a href={repo.href}>{p.cardTitle}</a> : p.cardTitle}</b>
-                  <p>{p.cardLine}</p>
+                  <b>{p.code ? <a href={p.code} target="_blank" rel="noopener">{p.cardTitle}</a> : p.cardTitle}</b>
+                  <p>{p.cardLine}{p.demo && <> <a className="demo" href={p.demo} target="_blank" rel="noopener">Live demo (may take ~30 s to wake) ↗</a></>}</p>
                   <span>{p.year} · {p.team}</span>
                 </li>
               );

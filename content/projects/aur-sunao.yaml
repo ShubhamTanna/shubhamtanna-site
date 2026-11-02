@@ -79,8 +79,6 @@ skills:
   - Sensitivity analysis
   - Figma prototyping
 links:
-  - label: Deck, model and survey on GitHub
-    href: https://github.com/ShubhamTanna/case-studies/tree/main/aur-sunao
   - label: Figma prototype
     href: https://www.figma.com/proto/b5lymMQcj1m59Yzop4vkcD/AUR-SUNAO?node-id=317-769&t=QeVbKMk1CxHuieHL-1
 charts:
@@ -113,3 +111,4 @@ charts:
 lead:
   kind: chart
   chart: 0
+code: https://github.com/ShubhamTanna/case-studies/tree/main/aur-sunao

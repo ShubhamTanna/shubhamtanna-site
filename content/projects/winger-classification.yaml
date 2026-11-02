@@ -16,7 +16,7 @@ hero:
   label: from facts.md
 year: "2026"
 team: Solo
-tools: [Python, PCA, Clustering]
+tools: [ Python, PCA, Clustering ]
 problem: "TBD from facts.md: what question the clusters answer, and for whom."
 did:
   - "TBD from facts.md"
@@ -39,6 +39,5 @@ charts:
 lead:
   kind: chart
   chart: 0
-links:
-  - label: Code and paper on GitHub
-    href: https://github.com/ShubhamTanna/decoding-winger-playstyles
+links: []
+code: https://github.com/ShubhamTanna/decoding-winger-playstyles

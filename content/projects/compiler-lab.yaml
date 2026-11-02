@@ -23,7 +23,7 @@ did:
   - Added a lexer, conflict detection, code generation and constant folding.
 results: []
 skills: []
-links:
-  - label: Code on GitHub
-    href: https://github.com/ShubhamTanna/shift-reduce-parser
+links: []
 charts: []
+code: https://github.com/ShubhamTanna/shift-reduce-parser
+demo: https://tanna-shift-reduce-parser.streamlit.app/
