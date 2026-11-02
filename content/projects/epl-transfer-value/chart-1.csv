@@ -3,7 +3,7 @@ Age,Age,-12.319,0.000,1.092,yes,tables/table4a_regression_coefficients.png
 Club rank,CR,-9.927,0.000,1.647,yes,tables/table4a_regression_coefficients.png
 Average goals,AG,4.915,0.000,3.229,yes,tables/table4a_regression_coefficients.png
 Average playing time,APT1,3.887,0.000,3.463,yes,tables/table4a_regression_coefficients.png
-Average appearance time,APT2,1.921,0.056,4.732,no (borderline),tables/table4a_regression_coefficients.png
+Average appearance time,APT2,1.921,0.056,4.732,no,tables/table4a_regression_coefficients.png
 Average clean sheets,AC,1.745,0.080,3.076,no,tables/table4a_regression_coefficients.png
 Height,Height,1.664,0.097,1.692,no,tables/table4a_regression_coefficients.png
 Penalty goals,PG,-1.427,0.155,2.152,no,tables/table4a_regression_coefficients.png

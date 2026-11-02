@@ -1,100 +1,72 @@
-// Pulls a project's portfolio/ folder (from its GitHub repo) into the site.
+// Pulls a project's portfolio/ folder (from its GitHub repo) into the site, then checks that every
+// chart in the project's YAML can find the columns it needs.
 //
-//   node scripts/import-portfolio.mjs <path-to-repo-or-portfolio-folder> <slug> [--sub <folder>]
+//   npm run import -- <path-to-repo> <slug> [--sub <folder>]
+//   npm run import -- ../case-studies tata-motors --sub tata-motors
+//   npm run import -- --all ../repos          (re-import every project from a folder of clones)
 //
-// --sub is for the case-studies repo, e.g. --sub tata-motors reads case-studies/tata-motors/portfolio.
-// What it does:
-//   chart-*.csv, table.csv, other CSVs → content/projects/<slug>/
-//   lead.png|jpg|mp4 (+ lead-poster.png) → public/work/<slug>/ and sets `lead`
-//   files/*.pdf|xlsx                      → public/files/<slug>/ and adds them to `links`
-//   table.csv                             → added as a results table
-//   charts: wired from SPECS below; every column a chart needs is checked against the CSV header
-//   facts.md                              → copied to content/projects/<slug>/facts.md (source of truth for numbers)
+// Copies: *.csv and facts.md → content/projects/<slug>/ (old CSVs there are replaced)
+//         lead.mp4 / lead.jpg|png|webp / lead-poster.* → public/work/<slug>/
+// It never edits the YAML: chart specs, copy and links stay as written. Exit code 1 if a column is missing.
 import fs from "node:fs";
 import path from "node:path";
 import YAML from "yaml";
 
-const [, , src, slug, ...rest] = process.argv;
-if (!src || !slug) { console.error("Usage: node scripts/import-portfolio.mjs <repo-path> <slug> [--sub <folder>]"); process.exit(1); }
-const sub = rest[rest.indexOf("--sub") + 1];
-let dir = path.resolve(src);
-if (sub && rest.includes("--sub")) dir = path.join(dir, sub);
-if (fs.existsSync(path.join(dir, "portfolio"))) dir = path.join(dir, "portfolio");
-if (!fs.existsSync(dir)) { console.error(`No folder at ${dir}`); process.exit(1); }
-
-// Chart specs agreed in the outputs guide. `need` = columns that must exist in the CSV.
-const SPECS = {
-  "code1o1": [{ kind: "bar", file: "chart-1.csv", title: "Clients by channel", label: "channel", value: "clients", highlight: undefined }],
-  "aur-sunao": [
-    { kind: "bridge", file: "chart-1.csv", title: "From a loss to a profit on every subscriber", label: "line_item", before: "old_inr", after: "new_inr", startLabel: "Original plan", endLabel: "Recommended plan", unit: "₹", lead: true },
-    { kind: "line", file: "chart-2.csv", title: "Monthly profit by number of subscribers", x: "subscribers", y: "monthly_profit_inr", unit: "₹" },
-  ],
-  "tata-motors": [
-    { kind: "bar", file: "chart-1.csv", title: "Market share, FY20 vs FY23", label: "year", value: "share_pct", unit: "%", lead: true },
-    { kind: "range", file: "chart-2.csv", title: "What two of the fixes are worth a year", label: "fix", low: "low_inr_cr", high: "high_inr_cr", unit: " Cr" },
-  ],
-  "player-detection": [{ kind: "bar", file: "chart-1.csv", title: "Detection accuracy by class (mAP@0.5)", label: "class", value: "map50" }],
-  "epl-transfer-value": [{ kind: "bar", file: "chart-1.csv", title: "What moves a player's transfer value", label: "feature", value: "coefficient", lead: true }],
-  "getawayguru": [{ kind: "bar", file: "chart-1.csv", title: "Why people cancel a trip", label: "reason", value: "pct_respondents", unit: "%", lead: true }],
-  "winger-classification": [
-    { kind: "scatter", file: "chart-1.csv", title: "Wingers on the two main style axes", x: "pc1", y: "pc2", group: "cluster_name", name: "player", xLabel: "PC1", yLabel: "PC2", lead: true },
-    { kind: "heatmap", file: "chart-2.csv", title: "What each style does more or less of", row: "cluster_name", col: "feature", value: "value_z" },
-  ],
+const SOURCES = {
+  "code1o1": ["case-studies", "code1o1"], "aur-sunao": ["case-studies", "aur-sunao"], "tata-motors": ["case-studies", "tata-motors"],
+  "adani-vs-reliance": ["case-studies", "adani-vs-reliance"], "epl-transfer-value": ["case-studies", "epl-transfer-value"],
+  "getawayguru": ["case-studies", "getawayguru"], "hope-for-recovery": ["case-studies", "hope-for-recovery"], "linkup": ["case-studies", "linkup"],
+  "player-detection": ["football-player-detection"], "esg-sentiment": ["esg-sentiment-classifier"], "research-buddy": ["research-buddy"],
+  "compiler-lab": ["shift-reduce-parser"], "autobot": ["autobot-ros2-simulation"], "breakout": ["tilt-breakout-arduino"],
+  "winger-classification": ["decoding-winger-playstyles"],
 };
-const NEED = (s) => ["label", "value", "low", "high", "before", "after", "x", "y", "group", "name", "row", "col"].map((k) => s[k]).filter(Boolean);
 
-const yamlPath = `content/projects/${slug}.yaml`;
-const doc = fs.existsSync(yamlPath) ? YAML.parseDocument(fs.readFileSync(yamlPath, "utf8")) : null;
-if (!doc) console.warn(`! No ${yamlPath} yet: create it first (copy a Tier 1 file and edit), then re-run. Files are still copied.`);
-const contentDir = `content/projects/${slug}`, pubDir = `public/work/${slug}`, fileDir = `public/files/${slug}`;
-[contentDir, pubDir].forEach((d) => fs.mkdirSync(d, { recursive: true }));
-const header = (f) => fs.readFileSync(f, "utf8").replace(/^﻿/, "").split(/\r?\n/)[0].split(",").map((h) => h.trim().replace(/^"|"$/g, ""));
-const log = [];
-
-for (const f of fs.readdirSync(dir)) {
-  const full = path.join(dir, f);
-  if (/\.csv$/i.test(f)) { fs.copyFileSync(full, path.join(contentDir, f)); log.push(`csv   ${f}`); }
-  if (/^facts\.md$/i.test(f)) { fs.copyFileSync(full, path.join(contentDir, f)); log.push("facts facts.md"); }
-  if (/^lead(-poster)?\.(png|jpe?g|webp|mp4)$/i.test(f)) { fs.copyFileSync(full, path.join(pubDir, f)); log.push(`media ${f}`); }
-}
-const filesIn = path.join(dir, "files"), links = [];
-if (fs.existsSync(filesIn)) {
-  fs.mkdirSync(fileDir, { recursive: true });
-  for (const f of fs.readdirSync(filesIn).filter((f) => /\.(pdf|xlsx)$/i.test(f))) {
-    fs.copyFileSync(path.join(filesIn, f), path.join(fileDir, f));
-    const label = /deck/i.test(f) ? "Deck (PDF)" : /paper/i.test(f) ? "Paper (PDF)" : /\.xlsx$/i.test(f) ? "Excel model" : /questionnaire/i.test(f) ? "Questionnaire (PDF)" : f;
-    links.push({ label, href: `/files/${slug}/${f}` }); log.push(`file  ${f}`);
-  }
+const args = process.argv.slice(2);
+const jobs = [];
+if (args[0] === "--all") {
+  const root = path.resolve(args[1] ?? "..");
+  for (const [slug, parts] of Object.entries(SOURCES)) jobs.push([path.join(root, ...parts), slug]);
+} else {
+  const [src, slug] = args;
+  if (!src || !slug) { console.error("Usage: npm run import -- <repo-path> <slug> [--sub <folder>]  |  --all <folder-of-clones>"); process.exit(1); }
+  const sub = args.includes("--sub") ? args[args.indexOf("--sub") + 1] : "";
+  jobs.push([path.join(path.resolve(src), sub), slug]);
 }
 
-const problems = [];
-const charts = (SPECS[slug] ?? []).filter((s) => fs.existsSync(path.join(contentDir, s.file))).map(({ lead, ...s }) => {
-  const h = header(path.join(contentDir, s.file));
-  const missing = NEED(s).filter((col) => !h.includes(col));
-  if (missing.length) problems.push(`${s.file}: missing column(s) ${missing.join(", ")} (has: ${h.join(", ")})`);
-  return { ...Object.fromEntries(Object.entries(s).filter(([, v]) => v !== undefined)), _lead: !!lead };
-});
+const header = (f) => {
+  const line = fs.readFileSync(f, "utf8").replace(/^﻿/, "").split(/\r?\n/)[0];
+  return line.split(",").map((h) => h.trim().replace(/^"|"$/g, ""));
+};
+const NEEDS = (c) => [c.label, c.value, c.low, c.high, c.before, c.after, c.typeCol, c.x, c.y, c.group, c.name, c.row, c.col, c.seriesCol, c.unitCol, c.betterCol, c.highlightCol, ...(c.series ?? []).map((s) => s.col), ...[...(c.detail ?? "").matchAll(/\{(\w+)\}/g)].map((m) => m[1])].filter(Boolean);
 
-if (doc) {
-  if (charts.length) doc.set("charts", charts.map(({ _lead, ...c }) => c));
-  const leadIdx = charts.findIndex((c) => c._lead);
-  const media = ["lead.mp4", "lead.png", "lead.jpg", "lead.jpeg", "lead.webp"].find((f) => fs.existsSync(path.join(pubDir, f)));
-  if (media) doc.set("lead", { kind: media.endsWith(".mp4") ? "video" : "image", src: `/work/${slug}/${media}`, ...(fs.existsSync(path.join(pubDir, "lead-poster.png")) ? { poster: `/work/${slug}/lead-poster.png` } : {}), alt: "", caption: "" });
-  else if (leadIdx >= 0) doc.set("lead", { kind: "chart", chart: leadIdx });
-  const tbl = path.join(contentDir, "table.csv");
-  if (fs.existsSync(tbl)) {
-    const [h, ...rows] = fs.readFileSync(tbl, "utf8").trim().split(/\r?\n/).map((l) => l.split(",").map((x) => x.trim().replace(/^"|"$/g, "")));
-    const results = (doc.get("results")?.toJSON?.() ?? []).filter((t) => t.caption !== "From table.csv");
-    doc.set("results", [...results, { caption: "From table.csv", columns: h.map((x) => x.replace(/_/g, " ")), rows }]);
-    log.push("table table.csv → results (rename its caption in the YAML)");
+let problems = 0;
+for (const [repoDir, slug] of jobs) {
+  const dir = fs.existsSync(path.join(repoDir, "portfolio")) ? path.join(repoDir, "portfolio") : repoDir;
+  if (!fs.existsSync(dir)) { console.log(`- ${slug}: no folder at ${dir}, skipped`); continue; }
+  const contentDir = `content/projects/${slug}`, pubDir = `public/work/${slug}`;
+  fs.mkdirSync(contentDir, { recursive: true });
+  for (const f of fs.readdirSync(contentDir)) if (f.endsWith(".csv")) fs.unlinkSync(path.join(contentDir, f));
+  const copied = [];
+  for (const f of fs.readdirSync(dir)) {
+    const full = path.join(dir, f);
+    if (/\.csv$/i.test(f) || /^facts\.md$/i.test(f)) { fs.copyFileSync(full, path.join(contentDir, f)); copied.push(f); }
+    if (/^lead(-poster)?\.(png|jpe?g|webp|mp4)$/i.test(f)) { fs.mkdirSync(pubDir, { recursive: true }); fs.copyFileSync(full, path.join(pubDir, f)); copied.push(f); }
   }
-  if (links.length) {
-    const existing = doc.get("links")?.toJSON?.() ?? [];
-    doc.set("links", [...existing.filter((l) => !links.some((n) => n.href === l.href)), ...links]);
-  }
-  fs.writeFileSync(yamlPath, doc.toString({ lineWidth: 0 }));
+  // check the YAML's charts against the CSV headers
+  const yamlPath = `content/projects/${slug}.yaml`;
+  const issues = [];
+  if (fs.existsSync(yamlPath)) {
+    const p = YAML.parse(fs.readFileSync(yamlPath, "utf8"));
+    for (const c of p.charts ?? []) {
+      const f = path.join(contentDir, c.file);
+      if (!fs.existsSync(f)) { issues.push(`${c.file}: missing (chart "${c.title}")`); continue; }
+      const h = header(f), missing = NEEDS(c).filter((col) => !h.includes(col));
+      if (missing.length) issues.push(`${c.file}: chart needs ${missing.join(", ")}; CSV has ${h.join(", ")}`);
+    }
+    if (p.lead?.src?.startsWith(`/work/${slug}/`) && !fs.existsSync(`public${p.lead.src}`)) issues.push(`lead file ${p.lead.src} not found`);
+  } else issues.push(`no ${yamlPath}: create the project file first`);
+  problems += issues.length;
+  console.log(`${issues.length ? "✗" : "✓"} ${slug}: ${copied.length} file(s)${issues.length ? "\n    " + issues.join("\n    ") : ""}`);
 }
-
-console.log(`Imported into ${slug}:\n  ` + (log.join("\n  ") || "(nothing found)"));
-if (problems.length) { console.log("\nFix before launch:\n  " + problems.join("\n  ")); process.exitCode = 1; }
-console.log("\nNext: read facts.md and check every number on the page against it.");
+console.log(problems ? `\n${problems} problem(s). Fix the CSV or the chart spec, then re-run.` : "\nAll charts match their CSVs. Next: check every number on the page against facts.md.");
+process.exit(problems ? 1 : 0);
