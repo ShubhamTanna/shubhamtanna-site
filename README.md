@@ -28,10 +28,7 @@ npm run import -- ../case-studies tata-motors --sub tata-motors
 
 Each project file also takes `code:` (its GitHub repo, or its folder in `case-studies`) and `demo:` (a live Streamlit app). They show as buttons under the answer on the project page.
 
-```
-```
-
-It copies the files, wires the charts, and lists any CSV column the chart needs but can't find.
+The import copies the files, wires the charts, and lists any CSV column a chart needs but can't find.
 
 ## Commands
 
