@@ -1,0 +1,98 @@
+# Tier 1: full page.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: player-detection
+rank: 4
+tier: 1
+type: analytics
+section: Analytics & ML
+title: Football player detection and match analytics (YOLOv8)
+cardTitle: "Finding the ball: player detection from broadcast"
+cardLine: A computer-vision model that finds players, referees and the ball in Bundesliga broadcast frames, then splits teams and estimates possession.
+hero:
+  value: "0.83"
+  label: mAP@0.5, all classes
+year: 2025–26
+team: Solo
+tools:
+  - YOLOv8
+  - PyTorch
+  - OpenCV
+stats:
+  - value: "0.83"
+    label: test mAP@0.5, all classes (960 px)
+  - value: 0.29 → 0.43
+    label: ball mAP@0.5, 640 → 960 px (validation)
+  - value: ~4 fps
+    label: 244 ms a frame on a 2-core CPU
+context: Cognitive Sciences and Analytics course, Semester 7, 2025 · v1 built on Roboflow; rebuilt end to end in Python in 2026 (v2) · Solo
+answer: A small model can pull usable detections straight from broadcast frames on an ordinary CPU. Choosing the inference resolution on validation data lifted ball detection from 0.29 to 0.43 without retraining, and the rebuilt model matches v1 overall while beating it on 3 of 4 classes.
+problem: Tracking data normally needs expensive camera systems or manual tagging. Can a small model get usable detections straight from broadcast frames, on an ordinary CPU?
+did:
+  - Fine-tuned YOLOv8-nano on 372 labelled frames (Roboflow public dataset, CC BY 4.0).
+  - Chose the inference resolution on validation data, which lifted ball accuracy by half without retraining.
+  - Built team identification (jersey-colour clustering) and a possession estimate (nearest player to the ball).
+results:
+  - caption: Setup
+    columns:
+      - ""
+      - ""
+    rows:
+      - - Model
+        - YOLOv8-nano, 3,133,436 parameters, fine-tuned from COCO weights
+      - - Labelled frames (train / validation / test)
+        - 298 / 49 / 25
+      - - Labelled objects (train / validation / test)
+        - 7,133 / 1,174 / 598
+      - - Source clips
+        - 56 Bundesliga broadcast clips
+      - - Training
+        - 43 epochs at 640 px, 1.75 h on CPU
+      - - Inference size
+        - 960 px (chosen on validation set)
+      - - Speed
+        - 244 ms per frame at 960 px on a 2-core CPU (about 4 fps), no GPU
+      - - Test mAP@0.5
+        - 0.826 at 960 px (0.787 at 640 px)
+    source: notebook cell 12; notebook cell 4; notebook cell 23; notebook cell 9; notebook cell 19; notebook cell 15
+notes:
+  - Speed is about 4 frames per second on a 2-core CPU.
+story:
+  title: The ball is the bottleneck
+  text: When the model calls a ball it is right 95% of the time, but it finds only 38% of them, so possession can be estimated in only 47% of frames.
+skills:
+  - Computer vision
+  - PyTorch
+  - Ultralytics
+  - Model evaluation
+  - Clustering
+  - OpenCV
+links:
+  - label: Code and notebook on GitHub
+    href: https://github.com/ShubhamTanna/football-player-detection
+charts:
+  - kind: paired
+    file: chart-1.csv
+    title: Players are easy. The ball is the hard part.
+    label: class
+    series:
+      - col: map50_v2_yolov8n
+        label: "v2: YOLOv8-nano (2026)"
+      - col: map50_v1_roboflow
+        label: "v1: Roboflow (2025)"
+    note: Test-set mAP@0.5 by class. Test frames share clips with training frames, so these are an upper bound for unseen matches.
+  - kind: bar
+    file: chart-2.csv
+    title: 960 px finds the ball best, at a cost in speed
+    label: inference_size_px
+    value: map50_ball
+    labelSuffix: " px"
+    detail: "{ms_per_frame_cpu} ms a frame on CPU"
+    highlight: "960"
+    note: Ball mAP@0.5 on the validation set, by inference size.
+lead:
+  kind: video
+  src: /work/player-detection/lead.mp4
+  poster: /work/player-detection/lead-poster.jpg
+  alt: Detections on a Bundesliga broadcast clip
+  caption: Detections on a broadcast clip

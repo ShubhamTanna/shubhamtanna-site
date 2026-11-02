@@ -1,0 +1,70 @@
+# Tier 2: short page.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: getawayguru
+rank: 6
+tier: 2
+type: case
+section: Case study
+title: "GetawayGuru: a last-minute weekend getaway platform"
+cardTitle: "GetawayGuru: last-minute getaways"
+cardLine: A 91-person survey showed a cash-refund policy would subsidise deal-hoppers, so the plan offers free rebooking instead.
+hero:
+  value: 30.8%
+  label: of respondents cite a better deal as a reason to cancel
+year: "2024"
+team: Team of 6, my concept
+tools:
+  - Survey design
+  - Business model
+stats:
+  - value: "91"
+    label: people surveyed
+  - value: 30.8%
+    label: cite a better deal as a reason to cancel
+  - value: 69.2%
+    label: name Lonavala for a spontaneous trip
+context: Innovation Thinking, Semester 4, 2024 · Team of 6; my concept, I built the pitch deck and was lead presenter
+answer: Launch in the Mumbai and Pune drive-to market first, and offer free rebooking or travel credit, not cash refunds.
+problem: Can a last-minute getaway platform for young Mumbai and Pune travellers offer flexible cancellation without bleeding money?
+did:
+  - Came up with the concept and defined the target user.
+  - Designed and analysed the survey.
+  - Built the business model and the pitch deck; lead presenter.
+results:
+  - caption: The survey
+    columns:
+      - ""
+      - ""
+    rows:
+      - - Respondents
+        - "91"
+      - - Method
+        - Online survey (Google Forms); multi-select questions
+      - - Target user (the product definition; sample demographics were not recorded)
+        - 22–40, Mumbai/Pune, budget-conscious, impulsive weekend travellers
+      - - When
+        - 2024 (Innovation Thinking, Semester 4)
+    source: survey; README
+notes:
+  - Questions were multi-select, so percentages add to more than 100%.
+skills:
+  - Market research
+  - Survey analysis
+  - Business model design
+  - Pitching
+links:
+  - label: Deck and wireframes on GitHub
+    href: https://github.com/ShubhamTanna/case-studies/tree/main/getawayguru
+charts:
+  - kind: bar
+    file: chart-1.csv
+    title: Nearly a third would cancel for a better deal
+    label: cancellation_reason
+    value: pct_of_respondents
+    unit: "%"
+    highlight: Found a better deal
+    note: Reasons for last-minute cancellation, n = 91. Multi-select, so shares add up to more than 100%.
+lead:
+  kind: chart
+  chart: 0

@@ -1,0 +1,115 @@
+# Tier 1: full page.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: aur-sunao
+rank: 2
+tier: 1
+type: case
+section: Case study
+title: "Aur Sunao: the ₹499 plan that lost money on every user"
+cardTitle: "Aur Sunao: the ₹499 plan that lost money"
+cardLine: Found that a peer-listening app's flagship plan cost ₹761 to deliver at a ₹499 price, and redesigned it to earn ₹154 per subscriber.
+hero:
+  value: −₹262 → +₹154
+  label: per subscriber per month
+year: "2024"
+team: Team of 6
+tools:
+  - Unit economics
+  - Excel
+  - Figma
+stats:
+  - value: ₹761 → ₹357
+    label: cost to deliver
+  - value: +₹154
+    label: contribution per user
+  - value: "440"
+    label: subscribers to break even
+context: Concept app for anonymous peer listening and counselling · 6-person team project, Semester 5, 2024 · unit-economics review added in 2026
+answer: "Keep the ₹499 price, cut included listener minutes from 80 to 60, sell counsellor sessions separately at ₹450 and drop the AI chatbot. The plan stays profitable even if subscribers use every included minute: +₹67."
+problem: The Basic plan bundled ₹1,170 of pay-per-use value for ₹499, so every new subscriber made losses worse.
+did:
+  - Analysed the user survey (54 respondents) and built personas.
+  - Built a live unit-economics model with sensitivity analysis.
+  - Designed the pricing and wrote the recommendation.
+results:
+  - caption: Original vs recommended plan
+    columns:
+      - ""
+      - Original
+      - Recommended
+    rows:
+      - - Price per month (₹)
+        - "499"
+        - "499"
+      - - What's included
+        - 80 listener minutes + one 30-min counsellor session + AI chatbot
+        - 60 listener minutes; counsellor sessions sold separately at ₹450; no AI chatbot
+      - - Cost to deliver (₹ per subscriber per month)
+        - "761"
+        - "357"
+      - - Contribution (₹ per subscriber per month)
+        - "-262"
+        - "+154"
+      - - Fixed costs (₹ per month)
+        - 70,000
+        - 67,500
+      - - Break-even
+        - Never
+        - 440 subscribers
+    source: model Inputs sheet; model Unit Economics sheet row 22; model Unit Economics sheet row 18; model Unit Economics sheet row 20; model Unit Economics sheet row 21
+  - caption: What the survey said (n = 54)
+    columns:
+      - Finding
+      - Share
+    rows:
+      - - Prefer a human listener over AI
+        - 80% (2 of 54 chose AI)
+      - - Rate privacy 5 out of 5
+        - 78%
+      - - Need someone weekly or daily
+        - 39%
+      - - Have used such a platform
+        - 11%
+method: 80% payout share (the team's own split), 80% usage of included minutes, Razorpay's 2.36% gateway fee, 15% of subscribers buying one ₹450 counsellor session a month at ₹79 margin, and fixed costs from the team's FY25 snapshot. Break-even = ₹67,500 ÷ ₹153.5 = 440 subscribers. Across 50–100% usage and 60–85% payout share, break-even ranges from 193 to 1,837 subscribers.
+skills:
+  - Unit economics
+  - Pricing
+  - Survey research
+  - Sensitivity analysis
+  - Figma prototyping
+links:
+  - label: Deck, model and survey on GitHub
+    href: https://github.com/ShubhamTanna/case-studies/tree/main/aur-sunao
+  - label: Figma prototype
+    href: https://www.figma.com/proto/b5lymMQcj1m59Yzop4vkcD/AUR-SUNAO?node-id=317-769&t=QeVbKMk1CxHuieHL-1
+charts:
+  - kind: bridge
+    file: chart-1.csv
+    title: Same ₹499 price, from −₹262 to +₹154 a subscriber
+    label: line_item
+    before: original_plan_inr
+    after: recommended_plan_inr
+    typeCol: type
+    startLabel: Original plan
+    endLabel: Recommended plan
+    unit: ₹
+    note: Contribution per subscriber per month. Bars between show what changed.
+  - kind: line
+    file: chart-2.csv
+    title: The original plan loses more with every subscriber. The redesign breaks even at 440.
+    x: subscribers
+    xLabel: Subscribers
+    series:
+      - col: monthly_profit_recommended_plan_inr
+        label: Recommended plan
+      - col: monthly_profit_original_plan_inr
+        label: Original plan
+    unit: ₹
+    mark:
+      x: 440
+      label: "Break-even: 440"
+    note: Monthly profit after fixed costs (₹70,000 original, ₹67,500 recommended).
+lead:
+  kind: chart
+  chart: 0

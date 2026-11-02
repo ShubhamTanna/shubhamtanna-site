@@ -1,0 +1,158 @@
+# Tier 1: full page.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: code1o1
+rank: 1
+tier: 1
+type: case
+section: Case study
+title: "Code1o1: building a coding academy from zero"
+cardTitle: "Code1o1: a coding academy from zero"
+cardLine: Co-founded a youth-led coding academy in Mumbai and grew it to 14 paying clients and about ₹2.6L in revenue, with ₹0 spent on ads.
+hero:
+  value: "14"
+  label: paying clients, ₹0 on ads
+year: 2025–now
+team: Co-founder
+tools:
+  - Sales
+  - Curriculum
+  - Pricing
+stats:
+  - value: "14"
+    label: paying clients
+  - value: ~₹2.6L
+    label: revenue, Apr 2025 – Oct 2026
+  - value: ~400
+    label: hours taught
+context: Co-founded with Aditya Vaishnav · April 2025 to present · 1:1 and small-group coding classes for Grade 5 to college students, online and at home
+answer: Trust converts, reach doesn't. About 1% of cold calls became clients, but every home visit did. Growth is capped by teaching time, not demand.
+problem: School computer science in India is mostly theory, so kids lose interest before they build anything. Code1o1 teaches through a real project from the first session.
+did:
+  - Designed all 11 courses and their teaching materials.
+  - Built the lead list and wrote the cold-call script; split calling with Aditya and led most of the closing, including in-home consultations.
+  - Hired and managed 3 interns.
+  - Teach 1:1, about 4–5 hours a week.
+results:
+  - caption: The venture so far
+    columns:
+      - Metric
+      - Value
+    rows:
+      - - Paying clients
+        - "14"
+      - - Students taught
+        - 16, Grade 5 to college
+      - - Revenue
+        - About ₹2.6 lakh (Apr 2025 – Oct 2026)
+      - - Teaching delivered
+        - About 400 hours (about ₹650 per hour)
+      - - Courses
+        - 11, with 17 enrolments
+      - - Advertising spend
+        - ₹0
+    source: Founders' records and course catalogue
+  - caption: The course catalogue
+    columns:
+      - Course
+      - For
+      - Format
+      - Length
+      - Fee (₹)
+      - Enrolled
+    rows:
+      - - Coding Kickstart (summer camp)
+        - Any age, complete beginners
+        - Offline group
+        - 12 × 1 h
+        - 7,000 per student
+        - "5"
+      - - Foundations of Coding
+        - Grade 5–7
+        - Offline 1:1
+        - 24 × 1 h
+        - 21,600
+        - "1"
+      - - Python
+        - Grade 7+
+        - Online 1:1
+        - 28 × 1 h
+        - 19,600
+        - "3"
+      - - Python 2
+        - Grade 9+
+        - Online 1:1
+        - 28 × 1 h
+        - 22,400
+        - "1"
+      - - Python NextGen
+        - Grade 6/7+
+        - Offline 1:1
+        - 24 × 1 h
+        - 21,600
+        - "1"
+      - - Python in Finance
+        - BBA / BSc finance (18+)
+        - Online 1:1
+        - 40 × 1 h
+        - 30,000
+        - "1"
+      - - AI/ML
+        - Grade 9+
+        - Online 1:1
+        - 32 × 1 h
+        - 22,400
+        - "1"
+      - - Mastering AI
+        - Grade 11+
+        - Online 1:1
+        - 15 × 1 h
+        - 15,000
+        - "1"
+      - - Web Dev
+        - Grade 7+
+        - Online 1:1
+        - 30 × 1 h
+        - 22,400
+        - "0"
+      - - Object-Oriented Programming
+        - Grade 9+
+        - Online 1:1
+        - 32 × 1 h
+        - 22,400
+        - "0"
+      - - Computer tuitions
+        - Grade 5–10 (IGCSE/IB)
+        - Online 1:1
+        - Semester, 2 h/week
+        - 16,000
+        - "3"
+    source: courses/Code1o1_Course_Catalogue.csv
+story:
+  title: The ₹500 sign
+  text: Google Business verification needed a physical sign. We got it for ₹500 by laser-etching the logo onto spare plywood through a layer of plastic film.
+skills:
+  - Venture building
+  - B2C sales
+  - Outbound prospecting
+  - Curriculum design
+  - Hiring
+  - Pricing
+links:
+  - label: Case files on GitHub
+    href: https://github.com/ShubhamTanna/case-studies/tree/main/code1o1
+charts:
+  - kind: bar
+    file: chart-1.csv
+    title: Every home visit closed. About 1% of cold calls did.
+    label: channel
+    low: paying_clients_low
+    high: paying_clients_high
+    detail: "{effort_low}–{effort_high} {effort_measure}"
+    highlight: In-home consultations
+    note: "Paying clients by channel, with the effort behind each. Faded bars show a range (cold calls: 4–5 clients)."
+lead:
+  kind: image
+  src: /img/build.jpg
+  alt: The Code1o1 stall
+  caption: The Code1o1 stall

@@ -1,0 +1,28 @@
+# Tier 3: no page, one line in Smaller builds.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: breakout
+rank: 14
+tier: 3
+type: build
+section: Build
+title: Tilt-controlled Breakout
+cardTitle: Tilt-controlled Breakout
+cardLine: The classic Breakout game, played by tilting a motion sensor wired to an Arduino.
+hero:
+  value: Arduino
+  label: tilt-controlled game, first year
+year: "2022"
+team: Team of 4
+tools:
+  - Arduino
+  - C++
+problem: "A first-year physics project: control a game with a motion sensor."
+did:
+  - Built the circuit and wrote the Arduino and Processing code.
+results: []
+skills: []
+links:
+  - label: Code on GitHub
+    href: https://github.com/ShubhamTanna/tilt-breakout-arduino
+charts: []

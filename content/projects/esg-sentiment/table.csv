@@ -1,0 +1,6 @@
+sentence,human_label,model_prediction,correct,source
+The company announced a new plan to achieve net-zero emissions by 2040.,Positive,Positive,yes,notebook cell 11
+Regulators are investigating the firm over alleged human rights violations in its supply chain.,Negative,Positive,no,notebook cell 11
+The foundation's investment in renewable energy has yielded strong community support.,Positive,Negative,no,notebook cell 11
+Stakeholders expressed disappointment with the board's lack of diversity.,Negative,Negative,yes,notebook cell 11
+The company's carbon footprint remains a significant concern for investors.,Negative,Positive,no,notebook cell 11

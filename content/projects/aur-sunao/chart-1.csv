@@ -1,0 +1,8 @@
+line_item,original_plan_inr,recommended_plan_inr,type,source
+Plan price,499.0,499.0,start,model Unit Economics sheet row 5
+Listener (DilDost) payouts,-460.8,-345.6,cost,model Unit Economics sheet row 9
+Counsellor payouts,-288.0,0.0,cost,model Unit Economics sheet row 11
+Payment gateway fee,-11.8,-11.8,cost,model Unit Economics sheet row 12
+Contribution from the plan,-261.6,141.6,subtotal,model Unit Economics sheet row 13
+Paid counsellor sessions,0.0,11.9,revenue,model Unit Economics sheet row 17
+Total contribution per subscriber,-261.6,153.5,total,model Unit Economics sheet row 18

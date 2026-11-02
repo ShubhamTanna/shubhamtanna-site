@@ -1,0 +1,125 @@
+# Tier 1: full page.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: adani-vs-reliance
+rank: 5
+tier: 1
+type: case
+section: Case study
+title: "Adani vs Reliance: comparative ESG analysis"
+cardTitle: "Adani vs Reliance: an ESG scorecard"
+cardLine: Reliance edges Adani 5–3 on a 10-metric ESG scorecard, with 2 even; the deciding factors were net-zero timing, safety and CSR scale.
+hero:
+  value: 5–3
+  label: Reliance over Adani, 2 even
+year: "2025"
+team: Solo
+tools:
+  - ESG analysis
+  - Benchmarking
+stats:
+  - value: 5–3
+    label: Reliance, 2 even
+  - value: 2035 vs 2050
+    label: net-zero target
+  - value: ₹1,271 vs ₹175 Cr
+    label: CSR spend, FY23
+context: Solo project · Professional Communication & Ethics, Semester 6, 2025
+answer: For an ESG investor, Reliance is the lower-risk holding. Reliance should disclose Scope 3; Adani should make zero fatalities a board KPI.
+problem: Which conglomerate is the stronger ESG performer against the IFC guidelines, and what should each fix first?
+did:
+  - Compared both on Environmental, Social and Governance metrics from their FY23/FY24 disclosures.
+  - Scored 10 like-for-like metrics and wrote the verdict.
+results:
+  - caption: "The 10-metric scorecard: Reliance 5, Adani 3, even 2"
+    columns:
+      - Metric
+      - Measure
+      - Adani Enterprises
+      - Reliance Industries
+      - Edge
+      - Year
+    rows:
+      - - Emissions disclosure
+        - scopes reported
+        - Scope 1, 2 and 3
+        - Scope 1 and 2 only
+        - Adani
+        - Adani FY24 / Reliance FY23
+      - - Net-zero target
+        - target year
+        - 2050 (Scope 1 + 2)
+        - "2035"
+        - Reliance
+        - as disclosed
+      - - Renewable energy
+        - share
+        - 28% of electricity
+        - 1.4% of total energy
+        - Adani
+        - FY23/FY24
+      - - Water
+        - policy / outcome
+        - Water-positive target by 2030
+        - Zero liquid discharge achieved, 90%+ recycled
+        - Reliance
+        - FY23/FY24
+      - - Women in workforce
+        - "% of employees"
+        - 9.2%
+        - 12.2%
+        - Reliance
+        - FY23/FY24
+      - - Women on board
+        - seats
+        - 1 of 6
+        - 2 of 13
+        - Even
+        - FY23/FY24
+      - - Voluntary attrition
+        - "% per year"
+        - 8.4%
+        - 10.1%
+        - Adani
+        - FY23/FY24
+      - - Safety
+        - LTIFR and fatalities
+        - LTIFR 0.13, 6 fatalities
+        - LTIFR 0.1, 4 fatalities
+        - Reliance
+        - FY23
+      - - CSR spend
+        - ₹ crore
+        - "175"
+        - "1271"
+        - Reliance
+        - FY23
+      - - Governance and assurance
+        - structure
+        - Board ESG committees, BRSR, third-party assurance
+        - Board ESG committee, BRSR, independent assurance
+        - Even
+        - FY23/FY24
+    source: Adani ESG Factbook; Reliance BRSR; Adani ESG Factbook; Reliance Integrated Annual Report
+notes:
+  - "Absolute emissions are not scored: Reliance's Scope 1+2 total is about 34× Adani Enterprises', which reflects size, not performance."
+skills:
+  - ESG analysis
+  - Benchmarking
+  - Scorecard design
+links:
+  - label: Deck on GitHub
+    href: https://github.com/ShubhamTanna/case-studies/tree/main/adani-vs-reliance
+charts:
+  - kind: paired
+    file: chart-1.csv
+    title: Reliance leads on safety, women in the workforce and CSR
+    label: metric
+    seriesCol: company
+    value: value
+    unitCol: unit
+    betterCol: better_when
+    note: "Each metric is on its own scale. Red marks the better result. Renewable share isn't like-for-like: Adani reports share of electricity, Reliance share of total energy."
+lead:
+  kind: chart
+  chart: 0

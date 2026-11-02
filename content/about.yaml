@@ -1,0 +1,78 @@
+# About page: intro, off the clock, and the monthly 'Now' section.
+# now.updated is YYYY-MM; update it whenever you edit the Now lists.
+
+photo:
+  src: /img/hello.jpg
+  alt: Shubham waving from a stage
+lede: I co-founded Code1o1, a coding academy in Mumbai, and grew it to 14 paying clients without spending on ads. Right now I'm a Business Operations Intern at Yocket, finding and fixing leaks in a study-abroad sales funnel.
+body:
+  - "I studied Computer Science and Business Systems at NMIMS. The work I like most sits between the two: pricing a plan, sizing a market, or building a model and asking what it means for the decision."
+whyConsulting: "Every role I’ve enjoyed had the same shape: an unclear problem, a decision someone had to make, and the job of getting to the answer with real numbers. Consulting is that shape, full time. I do my best work when I own a problem from a blank page, and I’d rather be stretched by hard problems than comfortable in easy ones."
+facts:
+  - label: Education
+    value: B.Tech, CSBS, NMIMS, 2026
+  - label: Based in
+    value: Mumbai
+  - label: Languages
+    value: English, Hindi, Gujarati, Marathi
+  - label: Tools
+    value: Python, SQL, Excel, Tableau, Power BI
+off:
+  - title: Football
+    text: I play regularly and represent the Manchester City Mumbai Supporters Club on panels.
+    photo: /img/football.jpg
+  - title: Motorcycles
+    text: I ride, Mumbai traffic permitting.
+    photo: /img/bike.jpg
+  - title: Cats
+    text: Yes, plural.
+    photo: /img/cats.jpg
+now:
+  updated: 2026-11
+  building:
+    - name: Football winger classification
+      stage: Building
+      tech: Python, PCA
+      line: Grouping wingers into playing styles from match data; also being written up as a research paper.
+      doneWhen: The clusters are final and interpretable, and the paper is drafted.
+    - name: Wedding Concierge
+      stage: Building
+      tech: Next.js, Supabase, WhatsApp API, LLM
+      line: A WhatsApp concierge for wedding guests, built with Aditya Vaishnav. I own the AI layer and the guest bot.
+      doneWhen: Milestone 1 works on a test wedding.
+    - name: Monte Carlo Portfolio Simulator
+      stage: Testing
+      tech: Python, NumPy, Plotly, Streamlit
+      line: "The Code1o1 Python in Finance capstone, taught to a student: thousands of simulated futures for a portfolio of NSE stocks."
+      doneWhen: The student finishes her capstone and the app is live with real prices.
+    - name: Job-portal watcher
+      stage: Building
+      tech: Python, GitHub Actions
+      line: A daily automation that checks job portals for new roles and alerts me.
+      doneWhen: It runs reliably on GitHub Actions for 2 weeks.
+  learning:
+    - kind: Reading
+      topic: Game theory
+      detail: ""
+    - kind: Watching
+      topic: AI, from the maths up
+      detail: 3Blue1Brown's series on YouTube
+    - kind: Playing
+      topic: A new chess opening
+      detail: ""
+    - kind: Dancing
+      topic: Jive and bachata
+      detail: Learning both
+  log:
+    - date: Nov 2026
+      text: Launched this site.
+    - date: Oct 2026
+      text: "Rebuilt Research Buddy: keys out of the code, per-source error handling, working AI summaries."
+    - date: Sep 2026
+      text: Joined Yocket as a Business Operations Intern.
+    - date: Aug 2026
+      text: Finished my B.Tech in Computer Science and Business Systems at NMIMS.
+    - date: Feb–May 2026
+      text: Inside Sales Executive at a Jaguar Land Rover showroom, Worli.
+    - date: Apr 2025
+      text: Co-founded Code1o1.

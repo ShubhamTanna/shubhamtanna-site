@@ -1,0 +1,29 @@
+# Tier 3: no page, one line in Smaller builds.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: compiler-lab
+rank: 12
+tier: 3
+type: build
+section: Build
+title: Shift-reduce compiler lab
+cardTitle: Shift-reduce parsing visualiser
+cardLine: An interactive SLR(1) parser that shows every shift and reduce step, builds the parse tree and generates optimised three-address code.
+hero:
+  value: 15 tests
+  label: passing, with 9 worked examples
+year: 2024–26
+team: Solo
+tools:
+  - Python
+  - Compilers
+problem: Shift-reduce parsing is hard to see from a textbook.
+did:
+  - Replaced a greedy reduce algorithm with a table-driven SLR(1) parser.
+  - Added a lexer, conflict detection, code generation and constant folding.
+results: []
+skills: []
+links:
+  - label: Code on GitHub
+    href: https://github.com/ShubhamTanna/shift-reduce-parser
+charts: []

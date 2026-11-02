@@ -1,0 +1,83 @@
+# Experience page. Work roles first (newest first), then leadership and volunteering.
+
+photos:
+  - src: /img/x-code1o1.jpg
+    alt: Code1o1 launch
+    caption: Launching Code1o1 with Aditya Vaishnav
+  - src: /img/x-podium.jpg
+    alt: Shubham at a podium
+    caption: Startup Investors Conclave '24
+  - src: /img/x-colloquium.jpg
+    alt: Hosting a workshop
+    caption: Hosting the LinkedIn workshop
+work:
+  - org: Yocket
+    sub: Postgraduate sales team · Mumbai
+    role: Business Operations Intern
+    dates: Sep – Dec 2026
+    current: true
+    line: Finding and fixing leaks in a study-abroad sales funnel, from the moment a lead reaches a sales advisor, through the consultation, to the close.
+    owned:
+      - title: Call audits
+        text: "I audit consultation calls for the Sales team leader. I redesigned the audit format: six scored dimensions, the moments that went well, the ones that didn't, the chances missed, and one thing the advisor should do next time. Now I'm automating it: Whisper transcribes, an LLM drafts, and I review before anything is final."
+      - title: No-show research
+        text: "Full ownership of a problem the team couldn't explain: why leads book a consultation and never show up. I designed the questions and the call approach, and I'm building personas of no-shows and attendees, on a target of 200–300 call attempts a week."
+      - title: Re-engagement campaign
+        text: Emails for leads who've been cold for 180+ days. Four concepts, from an advisor's "your file is on my desk" to a letter from past you, each in a creative and a plain version.
+      - title: Funnel tools
+        text: "Built on my own initiative: a speed-to-lead tracker, a map of where leads drop off by source and stage, and tags that link audit findings to those drop-offs."
+    note: Results in progress. Numbers go here once the research lands.
+    tools:
+      - LeadSquared CRM
+      - Google Sheets
+      - Whisper
+      - LLMs
+  - org: Jaguar Land Rover
+    sub: Modi Auto Group · Worli showroom
+    role: Inside Sales Executive
+    dates: Feb – May 2026
+    current: false
+    line: Built an Excel model that replaced manual commission tracking for the whole sales team, made directly for the showroom's GM. Prospected high-net-worth buyers, and closed a luxury booking before formal floor training.
+    tools:
+      - Excel
+  - org: Code1o1
+    sub: Coding academy · Mumbai
+    role: Co-founder
+    dates: Apr 2025 – now
+    current: false
+    line: Zero to 14 paying clients and about ₹2.6L in revenue, with ₹0 spent on ads. I designed all 11 courses, closed most of the sales and hired 3 interns.
+    tools:
+      - Sales
+      - Curriculum
+      - Pricing
+    href: /work/code1o1
+  - org: BizDateUp
+    sub: Startup events · Mumbai
+    role: Intern, Sales and Strategic Partnerships
+    dates: Nov 2023 – Mar 2024
+    current: false
+    line: Sold 40+ premium tickets at ₹5,000 each through a Meta ads funnel and cold outreach. Negotiated venue contracts with The Lalit, JW Marriott and Novotel as the main point of contact.
+    tools:
+      - Sales
+      - Partnerships
+leadership:
+  - dates: Nov 2024 – Feb 2025
+    role: Vice Chairperson
+    org: Social Conclave
+    line: Paid registrations up 308%, from 81 to 331. Set sales targets for a 78-person team.
+  - dates: Aug 2022 – Mar 2025
+    role: Executive to Head of Publicity
+    org: Sattva, NMIMS
+    line: "Led publicity for the first off-campus edition: 3,000+ footfall against a 2,000 target, with 60 executives across 5 campuses."
+  - dates: Jul 2023 – Mar 2024
+    role: Director of Operations
+    org: Bizzneeti
+    line: Scaled it from a campus format to a national event at The Lalit.
+  - dates: Aug 2022 – Mar 2025
+    role: Joint Secretary, then Advisor
+    org: Colloquium, NMIMS MPSTME Student Council
+    line: Led operations for the Startup Investors Conclave 2024.
+  - dates: May – Jul 2023
+    role: Volunteer teacher
+    org: Spark-A-Change Foundation
+    line: Taught English and maths to underprivileged children.

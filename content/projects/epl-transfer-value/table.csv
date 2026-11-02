@@ -1,0 +1,7 @@
+metric,value,source
+Players,324 (2018–19 Premier League season),report; tables/table1_data_sample.png
+Predictors,15,report
+R² / adjusted R²,0.684 / 0.668,tables/table4b_model_fit.png
+F-statistic,44.237 (p < 0.001),tables/table4b_model_fit.png
+Max VIF,4.73,tables/table4a_regression_coefficients.png
+Durbin-Watson,1.82,tables/table4b_model_fit.png

@@ -1,0 +1,77 @@
+# Tier 2: short page.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: esg-sentiment
+rank: 8
+tier: 2
+type: analytics
+section: Analytics & ML
+title: ESG sentiment classifier
+cardTitle: ESG sentiment classifier
+cardLine: A TF-IDF and linear-SVM model that labels ESG statements positive or negative, and an honest look at why it struggles on real text.
+hero:
+  value: 2 of 5
+  label: real-world sentences right, after 86.84% on the test set
+year: "2025"
+team: Group · I built the SVM
+tools:
+  - NLP
+  - scikit-learn
+stats:
+  - value: 86.84%
+    label: test accuracy, 228 sentences
+  - value: 2 of 5
+    label: real-world sentences right
+  - value: "16"
+    label: test sentences also in training
+context: Group project, Semester 7, 2025 · I built the SVM, one of the models the group compared; a teammate prepared the dataset
+answer: The model scores well on the test set but partly learned the dataset's sentence templates, not sentiment. The next step is training on real sustainability reports and news.
+problem: Can a lightweight text classifier flag whether a statement about a company's ESG practice is positive or negative?
+did:
+  - Built and evaluated the SVM on 910 labelled sentences (75/25 stratified split).
+  - Read its feature weights to see what it had learned.
+  - Tested it on real-world sentences.
+results:
+  - caption: "Five real-world sentences: 2 right"
+    columns:
+      - Sentence
+      - Actual
+      - Model
+      - Right?
+    rows:
+      - - The company announced a new plan to achieve net-zero emissions by 2040.
+        - Positive
+        - Positive
+        - yes
+      - - Regulators are investigating the firm over alleged human rights violations in its supply chain.
+        - Negative
+        - Positive
+        - no
+      - - The foundation's investment in renewable energy has yielded strong community support.
+        - Positive
+        - Negative
+        - no
+      - - Stakeholders expressed disappointment with the board's lack of diversity.
+        - Negative
+        - Negative
+        - yes
+      - - The company's carbon footprint remains a significant concern for investors.
+        - Negative
+        - Positive
+        - no
+    source: notebook cell 11
+skills:
+  - NLP
+  - scikit-learn
+  - Model evaluation
+links:
+  - label: Code and notebook on GitHub
+    href: https://github.com/ShubhamTanna/esg-sentiment-classifier
+charts:
+  - kind: heatmap
+    file: chart-1.csv
+    title: On the test set, the errors are balanced
+    row: actual
+    col: predicted
+    value: count
+    note: "Confusion matrix, 228 test sentences. Rows: actual label. Columns: predicted."

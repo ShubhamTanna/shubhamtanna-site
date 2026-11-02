@@ -1,0 +1,29 @@
+# Tier 3: no page, one line in Smaller builds.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: autobot
+rank: 13
+tier: 3
+type: build
+section: Research
+title: Autobot
+cardTitle: Autobot
+cardLine: A two-wheeled robot with LIDAR and camera sensors, built and driven entirely in simulation before any hardware existed.
+hero:
+  value: ROS 2
+  label: LIDAR and camera, simulated in Gazebo
+year: "2025"
+team: Team of 4
+tools:
+  - ROS 2
+  - Gazebo
+problem: Test a robot's design and sensors before any hardware exists.
+did:
+  - Robot modelling, sensor integration and testing.
+  - Co-authored the 4-page IEEE-style paper.
+results: []
+skills: []
+links:
+  - label: Code and paper on GitHub
+    href: https://github.com/ShubhamTanna/autobot-ros2-simulation
+charts: []

@@ -1,0 +1,146 @@
+# The six story chapters. `text` is the short version (Home and Story page).
+# `long` is your longer story: a list of paragraphs. Empty = a 'your story goes here' note shows in development only.
+
+chapters:
+  - key: build
+    title: Build
+    years: 2025–now
+    pull: I started a company before I finished my degree.
+    text: April 2025. I co-founded Code1o1 with Aditya Vaishnav and took it from zero to 14 paying clients and about ₹2.6L in revenue, without spending on ads.
+    long:
+      - "School computer science in India is mostly theory, so kids lose interest before they build anything. In April 2025, Aditya Vaishnav and I started Code1o1 to fix that: coding classes where every student builds a real project from the first session, 1:1 or in small groups, from Grade 5 to college."
+      - We split the work the way two founders with no money have to. I designed all 11 courses and their materials, wrote the cold-call script and closed most of the deals. Aditya built the website and ran the interns’ creative work. We both teach. Along the way I hired and managed 3 interns.
+      - No ads, no funding. 14 paying clients and about ₹2.6L in revenue came from cold calls, home visits, referrals and a school collaboration. Today it runs on weekends with our existing students.
+    photo:
+      src: /img/build.jpg
+      alt: The Code1o1 stall
+      caption: The Code1o1 stall
+    proof:
+      - value: ~₹2.6L
+        what: revenue, from zero
+        source: Code1o1 · co-founder
+        href: /work/code1o1
+      - value: "14"
+        what: paying clients, ₹0 spent on ads
+        source: Code1o1
+        href: /work/code1o1
+      - value: 3,000+
+        what: footfall against a 2,000 target
+        source: Sattva, NMIMS · Head of Publicity
+        href: /experience
+  - key: sell
+    title: Sell
+    years: 2022–now
+    pull: 2,500 cold calls taught me what actually converts.
+    text: "About 2,500 cold calls: for college events, at a Jaguar Land Rover showroom, for Code1o1. At Code1o1, about 1% of calls became clients. Every home visit did. Trust converts. Reach doesn't."
+    long:
+      - I learned to sell in college, filling seats. As Vice Chairperson of Social Conclave I set targets for a 78-person team and took paid registrations from 81 to 331. At BizDateUp I sold 40+ premium tickets at ₹5,000 each and negotiated venue contracts with The Lalit, JW Marriott and Novotel.
+      - "Then Code1o1, where the product was me. About 500 cold calls brought in 4 or 5 clients, roughly 1%. Four home visits brought in four. That gap taught me the most useful thing I know about selling: trust converts, reach doesn’t."
+      - At the Jaguar Land Rover showroom in Worli I prospected high-net-worth buyers and closed a booking before my formal floor training. Sales isn’t where I’m headed. What I kept from it is the habit of finding out what the other person actually needs before I say anything.
+    photo:
+      src: /img/sell.jpg
+      alt: Shubham speaking on stage at Social Conclave
+      caption: On stage at Social Conclave
+    proof:
+      - value: +308%
+        what: paid registrations, 81 to 331
+        source: Social Conclave · Vice Chairperson
+        href: /experience
+      - value: 40+
+        what: premium tickets sold at ₹5,000 each
+        source: BizDateUp · Sales intern
+        href: /experience
+      - value: ~2,500
+        what: "cold calls: ~1,500 for college events, ~1,000 at work"
+        source: College · JLR · Code1o1
+        href: /experience
+  - key: teach
+    title: Teach
+    years: 2023–now
+    pull: It started as volunteering. It became a company.
+    text: "It started in 2023, volunteering with Spark-A-Change, teaching English and maths to underprivileged kids. Two years later, that is why I started Code1o1. Since then: 16 students, Grade 5 to college, about 400 hours, and I still teach 1:1 every week."
+    long:
+      - In the summer of 2023 I volunteered with Spark-A-Change, teaching English and maths to underprivileged children.
+      - That summer is why Code1o1 exists. Two years later, I wanted to teach again, properly, and to build something that could pay for itself.
+      - Since then I’ve taught 16 students, from Grade 5 to college, for about 400 hours. Every course ends in a project the student built; in the Python in Finance course, it’s a Monte Carlo simulation of a stock portfolio. I still teach 4 to 5 hours a week.
+    photo:
+      src: /img/teach.jpg
+      alt: Teaching children in a park
+      caption: Volunteer teaching with Spark-A-Change, 2023
+    proof:
+      - value: "16"
+        what: students, Grade 5 to college
+        source: Code1o1
+        href: /work/code1o1
+      - value: ~400
+        what: hours taught 1:1
+        source: Code1o1
+        href: /work/code1o1
+      - value: "2023"
+        what: "where it started: volunteer teaching"
+        source: Spark-A-Change
+        href: /experience
+  - key: price
+    title: Price
+    years: 2025–now
+    pull: Every price is a decision someone will push back on.
+    text: I priced 11 courses for parents deciding whether coding classes were worth paying for at all. Revenue came to about ₹18,600 per client, about ₹650 for every hour taught.
+    long:
+      - Parents weren’t comparing Code1o1 with another coding class. They were deciding whether coding classes were worth paying for at all.
+      - I priced 11 courses against that question. Revenue came to about ₹18,600 per client and about ₹650 for every hour taught, and a 5-student summer camp brought in ₹35,000.
+      - Pricing came up again in college. On Aur Sunao, a peer-listening app, our ₹499 flagship plan bundled ₹1,170 of pay-per-use value and lost ₹262 on every subscriber. I rebuilt the unit economics, kept the price, cut what the plan included, and turned it into +₹154 a subscriber.
+    photo:
+      src: /img/price.jpg
+      alt: Code1o1 stall with a 20% off banner
+      caption: "Pricing in public: the Code1o1 stall"
+    proof:
+      - value: ~₹18,600
+        what: revenue per client
+        source: Code1o1
+        href: /work/code1o1
+      - value: ~₹650
+        what: earned per hour taught
+        source: Code1o1
+        href: /work/code1o1
+      - value: ₹35,000
+        what: from a 5-student summer camp
+        source: Code1o1
+        href: /work/code1o1
+  - key: analyse
+    title: Analyse
+    years: 2023–now
+    pull: I like questions that end in a number you can act on.
+    text: "I like questions that end in a number someone can act on: which company is the safer ESG bet, what drives a transfer fee, where the ball is in a broadcast frame."
+    long:
+      - "For an ESG investor choosing between Adani and Reliance, I scored both on 10 like-for-like metrics: Reliance won 5–3, with 2 even. For Premier League transfer values, I replicated a published regression on 324 players: age, club rank, goals and minutes explain 68.4% of value. For broadcast football, I trained a small model to find players, referees and the ball at 0.83 mAP on an ordinary CPU."
+      - "At Yocket I’m doing it on a live funnel: why students book a consultation and never show up. And outside work, I’m grouping wingers into playing styles with PCA, written up as a research paper."
+    photo:
+      src: /img/analyse.jpg
+      alt: Shubham on a football panel
+      caption: Man City Mumbai Supporters Club panel
+    proof:
+      - value: 5–3
+        what: Reliance over Adani, 10 ESG metrics
+        source: ESG scorecard
+        href: /work/adani-vs-reliance
+      - value: R² 0.684
+        what: of transfer value explained
+        source: EPL regression
+        href: /work/epl-transfer-value
+      - value: "0.83"
+        what: mAP on broadcast frames
+        source: Player detection
+        href: /work/player-detection
+  - key: next
+    title: Next
+    years: 2026 →
+    pull: One business taught me the basics. I want bigger problems.
+    text: Management consulting, strategy and decision analytics. I've done this at the scale of one business. I want the bigger ones.
+    long:
+      - "I finished my B.Tech in Computer Science and Business Systems at NMIMS in 2026. Right now I’m a Business Operations Intern at Yocket: auditing sales calls, researching why leads don’t show up, and building the tools that show where the funnel leaks."
+      - Next, I want management consulting, strategy consulting or decision analytics. I’ve solved problems at the scale of one business I helped build. I want harder problems, and the people who solve them every day.
+    photo:
+      src: /img/next.jpg
+      alt: Graduation, Class of 2026
+      caption: NMIMS, Class of 2026
+    proof: []

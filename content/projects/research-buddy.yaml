@@ -1,0 +1,30 @@
+# Tier 2: short page.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: research-buddy
+rank: 11
+tier: 2
+type: build
+section: Build
+title: Research Buddy
+cardTitle: Research Buddy
+cardLine: A personal tool that searches arXiv, Crossref and IEEE at once and adds optional two-sentence AI summaries of each paper.
+hero:
+  value: 3 sources
+  label: arXiv, Crossref and IEEE in one search
+year: 2025–26
+team: Solo
+tools:
+  - Python
+  - Streamlit
+  - APIs
+problem: Literature reviews meant searching three databases one by one.
+did:
+  - Built the multi-source search in Streamlit.
+  - Rebuilt it in 2026 with keys out of the code, per-source error handling and working AI summaries.
+results: []
+skills: []
+links:
+  - label: Code on GitHub
+    href: https://github.com/ShubhamTanna/research-buddy
+charts: []

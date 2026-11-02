@@ -1,0 +1,7 @@
+metric,original_plan,recommended_plan,source
+Price per month (₹),499,499,model Inputs sheet
+What's included,"80 listener minutes + one 30-min counsellor session + AI chatbot","60 listener minutes; counsellor sessions sold separately at ₹450; no AI chatbot",model Inputs sheet
+Cost to deliver (₹ per subscriber per month),761,357,model Unit Economics sheet row 22
+Contribution (₹ per subscriber per month),-262,+154,model Unit Economics sheet row 18
+Fixed costs (₹ per month),"70,000","67,500",model Unit Economics sheet row 20
+Break-even,Never,440 subscribers,model Unit Economics sheet row 21

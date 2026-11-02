@@ -1,0 +1,71 @@
+# Tier 2: short page.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: epl-transfer-value
+rank: 7
+tier: 2
+type: analytics
+section: Analytics & ML
+title: What drives a Premier League player's transfer value?
+cardTitle: What drives a Premier League transfer value?
+cardLine: A 15-variable regression on 324 Premier League players explains 68.4% of market value; age, club rank, goals and minutes drive it.
+hero:
+  value: R² 0.684
+  label: of market value explained
+year: "2023"
+team: Solo · replication
+tools:
+  - Regression
+  - Statistics
+stats:
+  - value: "0.684"
+    label: R², 15 variables
+  - value: "324"
+    label: players
+  - value: −12.32
+    label: t-value for age
+context: Solo research project, Semester 2, 2023 · A replication of Li (2020)
+answer: Look for productive players with heavy minutes at lower-ranked clubs; discipline and physique barely register.
+problem: Which player attributes actually move transfer value, and which don't?
+did:
+  - Rebuilt the published model, as a replication of Li (2020).
+  - Ran correlations and a multiple regression with 15 predictors.
+  - Checked validity with an F-test, VIF and Durbin-Watson.
+results:
+  - caption: Model fit
+    columns:
+      - ""
+      - ""
+    rows:
+      - - Players
+        - 324 (2018–19 Premier League season)
+      - - Predictors
+        - "15"
+      - - R² / adjusted R²
+        - 0.684 / 0.668
+      - - F-statistic
+        - 44.237 (p < 0.001)
+      - - Max VIF
+        - "4.73"
+      - - Durbin-Watson
+        - "1.82"
+    source: report; tables/table1_data_sample.png; report; tables/table4b_model_fit.png; tables/table4a_regression_coefficients.png
+skills:
+  - Regression
+  - Hypothesis testing
+  - Sports analytics
+links:
+  - label: Report on GitHub
+    href: https://github.com/ShubhamTanna/case-studies/tree/main/epl-transfer-value
+charts:
+  - kind: bar
+    file: chart-1.csv
+    title: Age and club rank drag value down; goals and minutes push it up
+    label: predictor
+    value: t_value
+    highlightCol: significant_at_0_001
+    highlightWhen: yes
+    note: "t-values from the 15-variable regression. Red: significant at p < 0.001. Replication of Li (2020)."
+lead:
+  kind: chart
+  chart: 0

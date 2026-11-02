@@ -1,0 +1,30 @@
+# Tier 3: no page, one line in Smaller builds.
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: hope-for-recovery
+rank: 9
+tier: 3
+type: campaign
+section: Campaign
+title: Hope for Recovery
+cardTitle: Hope for Recovery
+cardLine: A student awareness campaign on substance abuse, for which I secured a psychiatrist and hosted a live expert session.
+hero:
+  value: Live
+  label: expert session I secured and hosted
+year: "2023"
+team: Team of 11
+tools:
+  - Outreach
+  - Interviewing
+problem: A student awareness campaign on substance abuse needed a credible expert voice.
+did:
+  - Contacted psychiatrists around Andheri and secured one for the campaign.
+  - Wrote the questions and hosted the Instagram Live.
+  - Built the team presentation.
+results: []
+skills: []
+links:
+  - label: Campaign files on GitHub
+    href: https://github.com/ShubhamTanna/case-studies/tree/main/hope-for-recovery
+charts: []

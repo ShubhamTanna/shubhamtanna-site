@@ -1,0 +1,13 @@
+metric,unit,company,value,better_when,source
+Women in workforce,%,Adani Enterprises,9.2,higher,scorecard (table.csv)
+Women in workforce,%,Reliance Industries,12.2,higher,scorecard (table.csv)
+Voluntary attrition,%,Adani Enterprises,8.4,lower,scorecard (table.csv)
+Voluntary attrition,%,Reliance Industries,10.1,lower,scorecard (table.csv)
+Lost-time injury frequency rate (FY23),LTIFR,Adani Enterprises,0.13,lower,scorecard (table.csv)
+Lost-time injury frequency rate (FY23),LTIFR,Reliance Industries,0.1,lower,scorecard (table.csv)
+Fatalities (FY23),count,Adani Enterprises,6,lower,scorecard (table.csv)
+Fatalities (FY23),count,Reliance Industries,4,lower,scorecard (table.csv)
+CSR spend (FY23),₹ crore,Adani Enterprises,175,higher,scorecard (table.csv)
+CSR spend (FY23),₹ crore,Reliance Industries,1271,higher,scorecard (table.csv)
+Renewable share,%,Adani Enterprises,28,higher,scorecard (table.csv); Adani = share of electricity
+Renewable share,%,Reliance Industries,1.4,higher,scorecard (table.csv); Reliance = share of total energy
