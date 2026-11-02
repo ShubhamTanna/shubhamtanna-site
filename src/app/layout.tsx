@@ -12,6 +12,7 @@ import { getSite } from "@/lib/content";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { SITE_URL } from "@/lib/config";
+import { Analytics } from "@vercel/analytics/next";
 
 const site = getSite();
 
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav resume={site.links.resume} />
         <main>{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
