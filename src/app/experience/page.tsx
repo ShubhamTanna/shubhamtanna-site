@@ -23,7 +23,7 @@ export default function ExperiencePage() {
       <div className="xjump">
         <a href="#work">Work <sup>{xp.work.length}</sup></a>
         <a href="#leadership">Leadership <sup>{xp.leadership.length}</sup></a>
-        <a href={site.links.resume}>Full resume →</a>
+        <a href={site.links.resume} target="_blank" rel="noopener">Full resume →</a>
       </div>
       <div id="work" className="xgroup">
         <h2 className="mono">Work</h2>

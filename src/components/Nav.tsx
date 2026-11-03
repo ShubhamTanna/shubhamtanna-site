@@ -25,7 +25,7 @@ export default function Nav({ resume }: { resume: string }) {
           {LINKS.map((l) => (
             <Link key={l.href} href={l.href} aria-current={current(l.href) ? "page" : undefined}>{l.label}</Link>
           ))}
-          <a href={resume}>Resume</a>
+          <a href={resume} target="_blank" rel="noopener">Resume</a>
         </div>
         <a className="btn" href="#contact">Hire me</a>
       </div>

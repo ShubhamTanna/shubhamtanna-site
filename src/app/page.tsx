@@ -24,7 +24,7 @@ export default function Home() {
             <h1 className="d">{site.positioning}</h1>
             <p className="sub">{site.subline}</p>
             <div className="proof">{site.proof.map((s) => <div key={s.label}><b className="d">{s.value}</b><span className="mono">{s.label}</span></div>)}</div>
-            <div className="herocta"><a className="btn" href="#homework">See the work ↓</a><a className="more-link" href={site.links.resume}>Download resume</a></div>
+            <div className="herocta"><a className="btn" href="#homework">See the work ↓</a><a className="more-link" href={site.links.resume} target="_blank" rel="noopener">Download resume</a></div>
           </div>
           <div className="portrait">
             <Image className="ph" src={site.heroPhoto.src} alt={site.heroPhoto.alt} width={1200} height={1500} preload sizes="(max-width: 860px) 340px, 440px" />
