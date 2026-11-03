@@ -5,6 +5,8 @@ slug: compiler-lab
 rank: 12
 tier: 3
 type: build
+origin: coursework
+originNote: "rebuilt in 2026"
 section: Build
 title: Shift-reduce compiler lab
 cardTitle: Shift-reduce parsing visualiser

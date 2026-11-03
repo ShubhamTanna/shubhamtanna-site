@@ -5,6 +5,8 @@ slug: esg-sentiment
 rank: 8
 tier: 2
 type: analytics
+origin: coursework
+originNote: "Semester 7"
 section: Analytics & ML
 title: ESG sentiment classifier
 cardTitle: ESG sentiment classifier

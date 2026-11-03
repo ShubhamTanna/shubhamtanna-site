@@ -5,6 +5,8 @@ slug: player-detection
 rank: 4
 tier: 1
 type: analytics
+origin: coursework
+originNote: "Semester 7, rebuilt solo"
 section: Analytics & ML
 title: Football player detection and match analytics (YOLOv8)
 cardTitle: "Finding the ball: player detection from broadcast"

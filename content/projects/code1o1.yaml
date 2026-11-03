@@ -4,10 +4,11 @@
 slug: code1o1
 rank: 1
 tier: 1
-type: case
-section: Case study
+type: venture
+origin: venture
+section: Co-founded venture
 title: "Code1o1: building a coding academy from zero"
-cardTitle: "Code1o1: a coding academy from zero"
+cardTitle: "Code1o1: the coding academy I co-founded and run"
 cardLine: Co-founded a youth-led coding academy in Mumbai and grew it to 14 paying clients and about ₹2.6L in revenue, with ₹0 spent on ads.
 hero:
   value: "14"

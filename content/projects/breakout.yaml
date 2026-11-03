@@ -5,6 +5,8 @@ slug: breakout
 rank: 14
 tier: 3
 type: build
+origin: coursework
+originNote: "Semester 1"
 section: Build
 title: Tilt-controlled Breakout
 cardTitle: Tilt-controlled Breakout

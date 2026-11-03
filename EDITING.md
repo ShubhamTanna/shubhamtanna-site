@@ -77,6 +77,8 @@ The file names: `code1o1`, `aur-sunao`, `tata-motors`, `adani-vs-reliance`, `pla
 | `demo` | **Live demo** button |
 | `links` | Other files (decks, PDFs, Figma) |
 | `charts` | Chart titles and notes. The numbers come from the CSVs, not from here |
+| `origin` | Where it came from: `venture` (Code1o1 only: gets the dark "Real business" block), `coursework` or `personal`. Shown as a badge on every card and page |
+| `originNote` | Short detail after the badge, e.g. `"Semester 7"` → COURSEWORK · SEMESTER 7 |
 | `tier` | `1` full page, `2` short page, `3` one line in "Smaller builds" |
 | `rank` | Order on the Work page (1 = first) |
 | `draft: true` | Hidden from the live site (winger project until it's ready) |

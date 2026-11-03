@@ -48,7 +48,10 @@ export const Project = z.object({
   draft: z.boolean().default(false), // true = built but hidden until ready (shown with SHOW_DRAFTS=1)
   rank: z.number(),
   tier: z.union([z.literal(1), z.literal(2), z.literal(3)]),
-  type: z.enum(["case", "analytics", "build", "campaign"]),
+  type: z.enum(["venture", "case", "analytics", "build", "campaign"]),
+  // Where it came from. Shown as a badge on every card and page so a reader never mistakes a class project for the business.
+  origin: z.enum(["venture", "coursework", "personal"]),
+  originNote: z.string().optional(), // short, e.g. "Semester 7"
   section: z.string(),
   title: z.string(),
   cardTitle: z.string(),
@@ -124,9 +127,10 @@ export function getProjects(): Project[] {
     .sort((a, b) => a.rank - b.rank);
 }
 /** The only project fields that may reach the browser (client components). Never pass a whole Project. */
-export type CardData = Pick<Project, "slug" | "type" | "section" | "cardTitle" | "cardLine" | "hero" | "year" | "team" | "tools">;
-export const toCard = ({ slug, type, section, cardTitle, cardLine, hero, year, team, tools }: Project): CardData =>
-  ({ slug, type, section, cardTitle, cardLine, hero, year, team, tools });
+export type CardData = Pick<Project, "slug" | "type" | "origin" | "originNote" | "section" | "cardTitle" | "cardLine" | "hero" | "year" | "team" | "tools">;
+export const toCard = ({ slug, type, origin, originNote, section, cardTitle, cardLine, hero, year, team, tools }: Project): CardData =>
+  ({ slug, type, origin, originNote, section, cardTitle, cardLine, hero, year, team, tools });
+export { originLabel } from "./origin";
 const showDrafts = () => !!process.env.SHOW_DRAFTS;
 export const getPagedProjects = () => getProjects().filter((p) => p.tier < 3 && (!p.draft || showDrafts()));
 export const getProject = (slug: string) => getPagedProjects().find((p) => p.slug === slug);
@@ -136,7 +140,7 @@ export const getExperience = () => parse(Experience, "experience.yaml");
 export const getAbout = () => parse(About, "about.yaml");
 
 /** Consulting side = case studies and campaigns; analytics side = models and builds. */
-export const side = (p: Project) => (p.type === "case" || p.type === "campaign" ? "consulting" : "analytics");
+export const side = (p: Project) => (p.type === "venture" || p.type === "case" || p.type === "campaign" ? "consulting" : "analytics");
 
 export const monthName = (ym: string) => {
   const [y, m] = ym.split("-").map(Number);

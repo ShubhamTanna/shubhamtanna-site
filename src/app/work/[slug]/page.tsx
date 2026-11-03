@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPagedProjects, getProject } from "@/lib/content";
+import { getPagedProjects, getProject, originLabel } from "@/lib/content";
+import { Origin } from "@/components/bits";
 import { ChartView } from "@/components/Charts";
 
 const codeLabel = (url: string) => (url.includes("/case-studies/") ? "Case files on GitHub" : "Code on GitHub");
@@ -32,7 +33,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <header className="cband"><div className="wrap">
         <Link className="back" href="/work">← All work</Link>
         <div className="grid2">
-          <div><span className="kicker">{p.section} · {p.year}</span><h1>{p.title}</h1></div>
+          <div><Origin p={p} /><span className="kicker">{p.section} · {p.year}</span><h1>{p.title}</h1></div>
           <div className="hero"><b>{p.hero.value}</b><span>{p.hero.label}</span></div>
         </div>
       </div></header>
@@ -41,7 +42,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <div className="glance">
           <div><span>Role</span><p>{p.team}</p></div>
           <div><span>Year</span><p>{p.year}</p></div>
-          <div><span>Type</span><p>{p.section}</p></div>
+          <div><span>Origin</span><p>{originLabel(p)}</p></div>
           <div><span>Tools</span><p>{p.tools.join(", ")}</p></div>
         </div>
         <div className="answer2"><span>{p.answer ? "The answer" : "In one line"}</span><p>{p.answer ?? p.cardLine}</p></div>

@@ -5,11 +5,11 @@ import type { CardData } from "@/lib/content";
 import { Card } from "./bits";
 
 const NOTES = {
-  consulting: "Pricing, strategy, market research and a real business. Problems that end in a decision.",
+  consulting: "Case studies on pricing, strategy and markets. Problems that end in a decision.",
   analytics: "Models, data and tools I built. Each one judged on whether it holds up.",
 };
 type Side = keyof typeof NOTES;
-const sideOf = (p: CardData): Side => (p.type === "case" || p.type === "campaign" ? "consulting" : "analytics");
+const sideOf = (p: CardData): Side => (p.type === "venture" || p.type === "case" || p.type === "campaign" ? "consulting" : "analytics");
 
 /** Home: Consulting / Analytics tabs, five cards each, the first one large. */
 export function SideTabs({ projects }: { projects: CardData[] }) {
@@ -31,7 +31,7 @@ export function SideTabs({ projects }: { projects: CardData[] }) {
       </div>
       <div className="below">
         <span className="mono" style={{ color: "var(--muted)" }}>{more > 0 ? `+${more} more ${side} projects on the Work page` : ""}</span>
-        <Link className="btn" href="/work">See all {projects.length} projects →</Link>
+        <Link className="btn" href="/work">See all work →</Link>
       </div>
     </>
   );
@@ -42,8 +42,9 @@ const TYPES = [["all", "All"], ["case", "Case studies"], ["analytics", "Analytic
 /** Work page: type filters with counts. */
 export function WorkGrid({ projects }: { projects: CardData[] }) {
   const [k, setK] = useState<string>("all");
-  const count = (t: string) => (t === "all" ? projects.length : projects.filter((p) => p.type === t).length);
-  const shown = projects.filter((p) => k === "all" || p.type === k);
+  const match = (p: CardData, t: string) => t === "all" || p.type === t || p.origin === t;
+  const count = (t: string) => projects.filter((p) => match(p, t)).length;
+  const shown = projects.filter((p) => match(p, k));
   return (
     <>
       <div className="filters" aria-label="Filter projects">

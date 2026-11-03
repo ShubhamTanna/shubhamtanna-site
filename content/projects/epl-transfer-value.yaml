@@ -5,6 +5,8 @@ slug: epl-transfer-value
 rank: 7
 tier: 2
 type: analytics
+origin: coursework
+originNote: "Semester 2"
 section: Analytics & ML
 title: What drives a Premier League player's transfer value?
 cardTitle: What drives a Premier League transfer value?

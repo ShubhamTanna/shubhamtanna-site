@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getAbout, getChapters, getExperience, getPagedProjects, getSite, monthName, toCard } from "@/lib/content";
 import StoryScene from "@/components/StoryScene";
 import { SideTabs } from "@/components/Pickers";
-import { SecHead } from "@/components/bits";
+import { SecHead, Venture } from "@/components/bits";
 import { OffTiles } from "@/components/Off";
 
 export default function Home() {
@@ -12,7 +12,9 @@ export default function Home() {
   const projects = getPagedProjects();
   const xp = getExperience();
   const about = getAbout();
-  const count = (t: string) => projects.filter((p) => p.type === t).length;
+  const business = projects.filter((p) => p.origin === "venture");
+  const rest = projects.filter((p) => p.origin !== "venture");
+  const from = (o: string) => rest.filter((p) => p.origin === o).length;
 
   return (
     <>
@@ -38,15 +40,16 @@ export default function Home() {
 
       <section className="workband" id="homework">
         <div className="wrap">
-          <SecHead eyebrow="02 · Work" title={`${projects.length} projects. Pick a side.`} more={{ href: "/work", label: `All ${projects.length} projects →` }} />
+          <SecHead eyebrow="02 · Work" title="One business. The rest is practice." more={{ href: "/work", label: "All work →" }} />
+          <p className="worklede">Code1o1 is a business I co-founded and still run, with paying clients. Everything below it is coursework or a project I started in my own time, and each one is labelled.</p>
+          {business.map((p) => <Venture key={p.slug} p={p} />)}
           <div className="tally">
-            <span><b>{projects.length}</b>projects</span>
-            <span><b>{count("case")}</b>case studies</span>
-            <span><b>{count("analytics")}</b>models</span>
-            <span><b>{count("build") + count("campaign")}</b>builds and products</span>
+            <span><b>{rest.length}</b>projects</span>
+            <span><b>{from("coursework")}</b>from coursework</span>
+            <span><b>{from("personal")}</b>personal</span>
             <span><b>{about.now.building.length}</b>in progress</span>
           </div>
-          <SideTabs projects={projects.map(toCard)} />
+          <SideTabs projects={rest.map(toCard)} />
         </div>
       </section>
 
