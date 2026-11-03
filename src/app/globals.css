@@ -596,3 +596,14 @@ figure.cph figcaption, .xstrip figcaption, .lead > figcaption { text-transform: 
 .workh { font-family: var(--display); font-weight: 900; font-size: clamp(1.6rem, 3.4vw, 2.4rem); margin: 48px 0 16px; }
 .workh-sub { color: var(--muted); margin: -6px 0 20px; max-width: 62ch; }
 .workband .venture { margin-bottom: 40px; }
+
+/* --- In action: screenshots and clips on project pages (3 Nov) --- */
+.shots { display: grid; gap: 32px; }
+.shots .row { display: grid; gap: 18px; }
+.shots .row.phone { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+.shots figure { margin: 0; min-width: 0; }
+.shots img, .shots video { width: 100%; height: auto; display: block; border: 1px solid var(--rule); background: var(--panel); }
+.shots a { display: block; }
+.shots a:hover img { border-color: var(--ink); }
+.shots figcaption { font: 12px/1.45 var(--mono); color: var(--muted); margin-top: 8px; }
+@media (max-width: 700px) { .shots .row.phone { grid-template-columns: 1fr 1fr; } }

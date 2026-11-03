@@ -256,6 +256,20 @@ It copies the CSVs and `facts.md`, and lists any chart whose columns don't match
 
 ---
 
+### Screenshots and clips ("In action" on a project page)
+
+They come from the project repo, like charts: `portfolio/screens/` holds the images (PNG or JPG) and short clips (MP4, under 8 MB), and `portfolio/screens.csv` says which ones show, in order:
+
+```
+file,alt,caption,size
+01-demo.png,"The live demo classifying a sentence as negative","The live demo: the call and the words that drove it",
+02-home.png,"The app's home screen","Home: listeners available now",phone
+```
+
+`size` is empty for full-width screenshots, or `phone` for phone screens (they sit three to a row). For a clip, add a same-named `.jpg` as its still frame (`03-search.mp4` + `03-search.jpg`). Then re-import. To reword a caption, edit `screens.csv` in the project repo and re-import.
+
+---
+
 ## 8. Rules that keep the site credible
 
 - **Every number must be in that project's `facts.md`.** If it isn't there, it doesn't go on the site.

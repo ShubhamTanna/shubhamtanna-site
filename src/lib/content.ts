@@ -163,3 +163,23 @@ function splitCsvLine(line: string): string[] {
   }
   out.push(cur); return out;
 }
+
+/**
+ * Screenshots and short clips for a project page. The project repo's portfolio/screens/ folder is copied to
+ * public/work/<slug>/screens/ and its screens.csv (file, alt, caption) to content/projects/<slug>/ by the import.
+ * Rows whose file is missing are skipped, so a half-finished import never shows a broken image.
+ */
+export type Screen = { src: string; alt: string; caption: string; video: boolean; poster?: string; phone: boolean };
+export function readScreens(slug: string): Screen[] {
+  const pub = path.join(process.cwd(), "public", "work", slug, "screens");
+  return readCsv(slug, "screens.csv")
+    .filter((r) => r.file && r.alt && fs.existsSync(path.join(pub, r.file)))
+    .map((r) => {
+      const video = /\.mp4$/i.test(r.file);
+      const posterFile = r.file.replace(/\.mp4$/i, ".jpg");
+      return {
+        src: `/work/${slug}/screens/${r.file}`, alt: r.alt, caption: r.caption ?? "", video, phone: r.size === "phone",
+        poster: video && fs.existsSync(path.join(pub, posterFile)) ? `/work/${slug}/screens/${posterFile}` : undefined,
+      };
+    });
+}

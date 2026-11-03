@@ -7,10 +7,13 @@
 //
 // Copies: *.csv and facts.md → content/projects/<slug>/ (old CSVs there are replaced)
 //         lead.mp4 / lead.jpg|png|webp / lead-poster.* → public/work/<slug>/
+//         screens/* (screenshots, short .mp4 clips) → public/work/<slug>/screens/, images over 2000 px wide scaled down;
+//         screens.csv (file, alt, caption) says which ones show on the page, in order
 // It never edits the YAML: chart specs, copy and links stay as written. Exit code 1 if a column is missing.
 import fs from "node:fs";
 import path from "node:path";
 import YAML from "yaml";
+import sharp from "sharp";
 
 const SOURCES = {
   "code1o1": ["case-studies", "code1o1"], "aur-sunao": ["case-studies", "aur-sunao"], "tata-motors": ["case-studies", "tata-motors"],
@@ -46,15 +49,42 @@ for (const [repoDir, slug] of jobs) {
   const contentDir = `content/projects/${slug}`, pubDir = `public/work/${slug}`;
   fs.mkdirSync(contentDir, { recursive: true });
   for (const f of fs.readdirSync(contentDir)) if (f.endsWith(".csv")) fs.unlinkSync(path.join(contentDir, f));
-  const copied = [];
+  const copied = [], issues0 = [];
   for (const f of fs.readdirSync(dir)) {
     const full = path.join(dir, f);
     if (/\.csv$/i.test(f) || /^facts\.md$/i.test(f)) { fs.copyFileSync(full, path.join(contentDir, f)); copied.push(f); }
     if (/^lead(-poster)?\.(png|jpe?g|webp|mp4)$/i.test(f)) { fs.mkdirSync(pubDir, { recursive: true }); fs.copyFileSync(full, path.join(pubDir, f)); copied.push(f); }
   }
+  // screenshots and clips
+  const shotSrc = path.join(dir, "screens"), shotDst = path.join(pubDir, "screens");
+  if (fs.existsSync(shotSrc)) {
+    fs.rmSync(shotDst, { recursive: true, force: true });
+    fs.mkdirSync(shotDst, { recursive: true });
+    for (const f of fs.readdirSync(shotSrc)) {
+      const from = path.join(shotSrc, f), to = path.join(shotDst, f);
+      if (/\.(png|jpe?g|webp)$/i.test(f)) {
+        const img = sharp(from), meta = await img.metadata();
+        if ((meta.width ?? 0) > 2000) await img.resize({ width: 2000 }).toFile(to); else fs.copyFileSync(from, to);
+        copied.push(`screens/${f}`);
+      } else if (/\.mp4$/i.test(f)) {
+        if (fs.statSync(from).size > 8e6) issues0.push(`screens/${f} is over 8 MB: trim or compress it`);
+        fs.copyFileSync(from, to); copied.push(`screens/${f}`);
+      }
+    }
+  }
   // check the YAML's charts against the CSV headers
   const yamlPath = `content/projects/${slug}.yaml`;
-  const issues = [];
+  const issues = [...issues0];
+  const shotsCsv = path.join(contentDir, "screens.csv");
+  if (fs.existsSync(shotsCsv)) {
+    const lines = fs.readFileSync(shotsCsv, "utf8").replace(/^\uFEFF/, "").trim().split(/\r?\n/);
+    const h = lines[0].split(",").map((x) => x.trim());
+    if (!["file", "alt", "caption"].every((c) => h.includes(c))) issues.push(`screens.csv needs columns file, alt, caption; has ${h.join(", ")}`);
+    for (const l of lines.slice(1)) {
+      const file = l.split(",")[0].trim().replace(/^"|"$/g, "");
+      if (file && !fs.existsSync(path.join(shotDst, file))) issues.push(`screens.csv lists ${file}, but it isn't in portfolio/screens/`);
+    }
+  } else if (fs.existsSync(shotDst) && fs.readdirSync(shotDst).length) issues.push("screens/ has files but no screens.csv: nothing will show on the page");
   if (fs.existsSync(yamlPath)) {
     const p = YAML.parse(fs.readFileSync(yamlPath, "utf8"));
     for (const c of p.charts ?? []) {

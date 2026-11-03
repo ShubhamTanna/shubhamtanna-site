@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPagedProjects, getProject, originLabel } from "@/lib/content";
+import { getPagedProjects, getProject, originLabel, readScreens, type Screen } from "@/lib/content";
 import { Origin } from "@/components/bits";
 import { ChartView } from "@/components/Charts";
 
@@ -25,6 +25,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const next = all[(all.findIndex((x) => x.slug === slug) + 1) % all.length];
   const leadChart = p.lead?.kind === "chart" && p.lead.chart !== undefined ? p.lead.chart : -1;
   const files = [...(p.demo ? [{ label: "Live demo (may take ~30 s to wake)", href: p.demo }] : []), ...(p.code ? [{ label: codeLabel(p.code), href: p.code }] : []), ...p.links];
+  const screens = readScreens(p.slug);
   let n = 0;
   const num = () => String(++n).padStart(2, "0");
 
@@ -65,6 +66,24 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         <section className="csec"><h2><i>{num()}</i><b>The problem</b></h2><div><p>{p.problem}</p>{p.context && <p className="ctx">{p.context}</p>}</div></section>
         <section className="csec"><h2><i>{num()}</i><b>What I did</b></h2><div><ul>{p.did.map((d) => <li key={d}>{d}</li>)}</ul></div></section>
+
+        {screens.length > 0 && (
+          <section className="csec"><h2><i>{num()}</i><b>In action</b></h2><div className="shots">
+            {/* consecutive phone-size screens share a row; everything else is full width */}
+            {screens.reduce<Screen[][]>((g, s) => { const last = g[g.length - 1]; if (s.phone && last?.[0].phone) last.push(s); else g.push([s]); return g; }, []).map((grp) => (
+              <div key={grp[0].src} className={grp[0].phone ? "row phone" : "row"}>
+                {grp.map((s) => (
+                  <figure key={s.src}>
+                    {s.video
+                      ? <video src={s.src} poster={s.poster} muted loop playsInline controls preload="metadata" aria-label={s.alt} />
+                      : <a href={s.src} target="_blank" rel="noopener" aria-label={`${s.alt} (opens full size)`}><Image src={s.src} alt={s.alt} width={1600} height={1000} sizes={s.phone ? "(max-width: 700px) 50vw, 300px" : "(max-width: 1080px) 100vw, 900px"} /></a>}
+                    {s.caption && <figcaption>{s.caption}</figcaption>}
+                  </figure>
+                ))}
+              </div>
+            ))}
+          </div></section>
+        )}
 
         {(p.charts.length > 0 || p.results.length > 0 || p.method || p.notes) && (
           <section className="csec"><h2><i>{num()}</i><b>Results</b></h2><div>
