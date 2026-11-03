@@ -16,7 +16,7 @@ facts:
   - label: Languages
     value: English, Hindi, Gujarati, Marathi
   - label: Tools
-    value: Python, SQL, Excel, Tableau, Power BI
+    value: Python, SQL, Excel, Tableau
 off:
   - title: Football
     text: I play regularly and represent the Manchester City Mumbai Supporters Club on panels.
