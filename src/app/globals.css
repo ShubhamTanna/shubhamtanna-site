@@ -532,6 +532,12 @@ body, .d, h1, h2, h3, b { font-variant-numeric: lining-nums tabular-nums; }
 /* static story (reduced motion / short screens): list starts at the top, not centred in a tall column */
 .scene:not(.live) .scene-stage { align-items: start; }
 .scene:not(.live) .words { position: sticky; top: calc(var(--nav-h) + 16px); }
+/* On one column (phones), a sticky word list slides over the chapter text. Each chapter already carries its own
+   label ("01 / 06 · BUILD"), so the static version drops the big list and the progress bars there. */
+@media (max-width: 760px) {
+  .scene:not(.live) .words, .scene:not(.live) .segs { display: none; }
+  .scene:not(.live) .scene-stage { margin-top: 30px; }
+}
 .csec p.ctx { font-size: 15px; color: var(--muted); max-width: 64ch; }
 .csec p.ctx b { color: var(--ink); }
 nav.top .who { display: inline-block; padding-block: 4px; }

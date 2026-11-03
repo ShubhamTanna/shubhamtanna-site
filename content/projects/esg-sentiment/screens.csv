@@ -1,0 +1,3 @@
+file,alt,caption,size
+01-demo.png,"The demo labelling a sentence about board diversity as negative, with the words that drove the call","A sentence it gets right: ""disappointment"" and ""lack"" push the call to negative",
+02-why-it-fails.png,"The demo labelling a sentence about carbon concerns as positive, marked wrong, with the explanation open","A sentence it gets wrong: ""significant"" and ""company"" outweigh the sentiment",

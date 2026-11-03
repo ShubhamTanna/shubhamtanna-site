@@ -1,0 +1,3 @@
+file,alt,caption,size
+01-regression-table.png,"Regression table: t-value, p-value and VIF for the constant and all 15 predictors","Four predictors are significant at p < 0.001: age, club rank, goals, minutes",
+02-model-fit.png,"Model fit table: F 44.237, R² 0.684, adjusted R² 0.668, Durbin-Watson 1.82","Model fit: R² 0.684, with no sign of autocorrelation",
