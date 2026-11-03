@@ -9,20 +9,20 @@ origin: personal
 section: Build
 title: Research Buddy
 cardTitle: Research Buddy
-cardLine: A personal tool that searches arXiv, Crossref and IEEE at once and adds optional two-sentence AI summaries of each paper.
+cardLine: A personal tool that searches arXiv and Crossref at once and adds optional two-sentence AI summaries of each paper.
 hero:
-  value: 3 sources
-  label: arXiv, Crossref and IEEE in one search
+  value: 2 databases
+  label: arXiv and Crossref, searched at once
 year: 2025–26
 team: Solo
 tools:
   - Python
   - Streamlit
   - APIs
-problem: Literature reviews meant searching three databases one by one.
+problem: Literature reviews meant searching each database one by one.
 did:
   - Built the multi-source search in Streamlit.
-  - Rebuilt it in 2026 with keys out of the code, per-source error handling and working AI summaries.
+  - Rebuilt it in 2026 with keys out of the code, per-source error handling and working AI summaries, narrowed to arXiv and Crossref.
 results: []
 skills: []
 links: []
