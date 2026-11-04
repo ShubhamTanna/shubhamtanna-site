@@ -52,3 +52,9 @@ Short sentences, numbers first, no adjectives where a number fits. Every number 
 ## Checks before any deploy
 
 `npm run build` (fails on leaked internal notes) and `npm run qa` (8 screen sizes: no sideways scroll, tap targets ≥ 24px, no text under 11px, no console errors, no broken links).
+
+## Phone-width rules (learned 5 Nov 2026)
+
+- Grid columns are always `minmax(0, 1fr)`, never a bare `1fr`. A bare `1fr` lets unbreakable content (a big number, a long badge) stretch the column; the page then gets wider than the phone and the browser zooms out, leaving a strip on the right.
+- Big numbers that don't wrap size to their own box with container units (`min(clamp(...), 15cqi)`), not to the screen.
+- `npm run qa` compares every page against the device width itself. `innerWidth` hides overflow on phones because the browser widens the layout to fit it.

@@ -35,15 +35,19 @@ for (const [w, h, mobile] of SIZES) {
     errors.length = 0;
     const res = await page.goto(BASE + p, { waitUntil: "networkidle" });
     if (!res?.ok()) { fail(`${p}: HTTP ${res?.status()}`); continue; }
-    const r = await page.evaluate(() => {
-      const vw = innerWidth;
+    const r = await page.evaluate((w) => {
+      // Compare against the device width, not innerWidth: a phone browser widens the layout to fit anything too wide
+      // and zooms out, so innerWidth grows with the overflow and hides it.
+      const vw = w;
+      const scrolls = (e) => { for (let s = e.parentElement; s; s = s.parentElement) { const o = getComputedStyle(s).overflowX; if (o !== "visible") return true; } return false; };
+      const wide = [...document.querySelectorAll("body *")].filter((e) => { const b = e.getBoundingClientRect(); return b.width && b.right > vw + 1 && !e.closest("svg") && !scrolls(e) && ![...e.children].some((c) => c.getBoundingClientRect().right > vw + 1); }).map((e) => (e.textContent || "").trim().slice(0, 30));
       const small = [...document.querySelectorAll("a, button")].filter((e) => { const b = e.getBoundingClientRect(); return b.width && b.height && b.height < 24 && getComputedStyle(e).visibility !== "hidden"; }).map((e) => (e.textContent || "").trim().slice(0, 30));
       const tiny = [...document.querySelectorAll("p, span, li, a, time, b, figcaption, text")].filter((e) => e.textContent.trim() && !e.closest("svg") && parseFloat(getComputedStyle(e).fontSize) < 11).map((e) => e.textContent.trim().slice(0, 30));
       const noAlt = [...document.querySelectorAll("img")].filter((i) => !i.hasAttribute("alt")).map((i) => i.src);
       const links = [...document.querySelectorAll("a[href^='/']")].map((a) => a.getAttribute("href"));
-      return { overflow: document.documentElement.scrollWidth > vw + 1, small, tiny, noAlt, links };
-    });
-    if (r.overflow) fail(`${p}: scrolls sideways`);
+      return { overflow: document.documentElement.scrollWidth > vw + 1 || innerWidth > vw + 1, wide, small, tiny, noAlt, links };
+    }, w);
+    if (r.overflow) fail(`${p}: wider than the screen${r.wide.length ? ": " + r.wide.slice(0, 3).join(" | ") : ""}`);
     if (r.small.length) fail(`${p}: ${r.small.length} tap target(s) under 24px: ${r.small.slice(0, 3).join(" | ")}`);
     if (r.tiny.length) fail(`${p}: text under 11px: ${r.tiny.slice(0, 3).join(" | ")}`);
     if (r.noAlt.length) fail(`${p}: image(s) without alt`);
