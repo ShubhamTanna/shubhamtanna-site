@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "qa": "node scripts/qa.mjs",
-    "import": "node scripts/import-portfolio.mjs"
+    "import": "node scripts/import-portfolio.mjs",
+    "import:winger": "node scripts/import-winger.mjs",
+    "predev": "node scripts/winger-derive.mjs",
+    "prebuild": "node scripts/winger-derive.mjs"
   },
   "dependencies": {
     "@fontsource-variable/newsreader": "^5.3.0",
