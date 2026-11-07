@@ -8,5 +8,5 @@ export default function StylesPage() {
     const f = m.featured.find((x) => x.cluster === a.id);
     return f ? { slug: f.slug, name: f.name, club: f.club, season: getRow(f.slug)!.season } : null;
   });
-  return <StylesView archetypes={m.archetypes} features={m.features} reps={reps} featured={featured} />;
+  return <StylesView meta={m} reps={reps} featured={featured} />;
 }

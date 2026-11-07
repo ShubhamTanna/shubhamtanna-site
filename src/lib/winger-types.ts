@@ -25,6 +25,13 @@ export type Meta = {
   pca: { component: string; pct: number }[];
   zObserved: [number, number];
   nearestQuartiles: [number, number, number];
+  // Display helper: z histograms (index 0 = below lo, last = at/above hi) and member quartiles.
+  distribution: {
+    lo: number; hi: number; step: number;
+    all: number[][];                                                   // [feature][bin]
+    byCluster: { hist: number[][]; quartiles: [number, number, number][] }[];
+    median: number[];                                                  // all-spell median z per feature
+  };
   features: Feature[]; archetypes: Archetype[];
   featured: { slug: string; name: string; club: string; cluster: number }[];
 };

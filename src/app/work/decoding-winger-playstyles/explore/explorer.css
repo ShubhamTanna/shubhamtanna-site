@@ -206,3 +206,83 @@
 
 /* Inline links still get a 24px tap target */
 .wx-foot a, .wx-phead .assign a, .wx-tap { display: inline-block; padding-block: 4px; }
+
+/* Behavioural signature concepts (review). Drawn in currentColor so it follows the panel ink. */
+.wx-review { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; margin: -8px 0 22px; padding: 8px; border: 1px dashed color-mix(in srgb, currentColor 50%, transparent); }
+.wx-review span { margin-right: 4px; opacity: .8; }
+.wx-review button { all: unset; cursor: pointer; padding: 6px 10px; border: 1px solid color-mix(in srgb, currentColor 45%, transparent); font: inherit; min-height: 24px; box-sizing: border-box; }
+.wx-review button[aria-pressed="true"] { color: inherit; background: color-mix(in srgb, currentColor 18%, transparent); border-color: currentColor; font-weight: 700; }
+.wx-review button:focus-visible, .wx-all:focus-visible { outline: 2px solid var(--sel); outline-offset: 2px; }
+.wx-all { all: unset; cursor: pointer; margin-top: 18px; padding: 10px 14px; border: 1.5px solid currentColor; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+.wx-all:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+
+.sig { --line: color-mix(in srgb, currentColor 30%, transparent); }
+.sig-read { font-size: 21px; line-height: 1.35; margin: 0 0 22px; max-width: 44ch; text-wrap: pretty; }
+.sig-foot { font-size: 14px; margin: 16px 0 0; opacity: .85; max-width: 62ch; }
+.sig-h { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin: 0 0 4px; padding-top: 10px; border-top: 1.5px solid currentColor; }
+.sig-h b { font-weight: 700; }
+.sig-h span { opacity: .75; letter-spacing: .06em; }
+.sig-groups section + section { margin-top: 18px; }
+.sig-row { display: grid; grid-template-columns: minmax(0, 15fr) minmax(0, 17fr); gap: 4px 20px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.sig-row .lab b { display: block; font-size: 17px; font-weight: 600; line-height: 1.2; }
+.sig-row .lab span { font-size: 14px; opacity: .85; }
+.sig-row.ctx { border-bottom-style: dashed; }
+.sig-row.ctx .lab b::after { content: "context"; font: 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; border: 1px dashed currentColor; padding: 1px 5px; margin-left: 8px; vertical-align: 2px; }
+.sig-key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 12px; letter-spacing: .06em; }
+.sig-key span { display: inline-flex; gap: 6px; align-items: center; }
+.sig-key i { display: inline-block; width: 14px; height: 10px; }
+
+/* A · strips */
+.strip { position: relative; height: 44px; }
+.strip svg { position: absolute; inset: 0 0 8px; width: 100%; height: 36px; overflow: visible; }
+.strip .mem { fill: currentColor; opacity: .5; }
+.sig-row.ctx .strip .mem { opacity: .28; }
+.strip .pop { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.strip .zero, .lad .zero { position: absolute; top: 0; bottom: 0; border-left: 1px dashed currentColor; opacity: .7; }
+.strip .iqr { position: absolute; bottom: 0; height: 5px; background: currentColor; }
+.strip .avg { position: absolute; top: -2px; bottom: 0; border-left: 2.5px solid currentColor; transform: translateX(-1px); }
+.strip .avg span { position: absolute; top: -12px; left: 3px; font-size: 9.5px; letter-spacing: .04em; font-weight: 700; }
+.strip .ov { position: absolute; bottom: 8px; font-size: 9.5px; letter-spacing: 0; }
+.strip .ov.l { left: -2px; transform: translateX(-100%); } .strip .ov.r { right: -2px; transform: translateX(100%); }
+.k-mem { background: color-mix(in srgb, currentColor 50%, transparent); }
+.k-pop { border: 1.5px solid currentColor; border-bottom: 0; }
+.k-iqr { height: 5px !important; background: currentColor; }
+.k-zero { width: 0 !important; height: 12px !important; border-left: 1px dashed currentColor; }
+
+/* B · ledger */
+.sig-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; }
+.sig-cols ol { list-style: none; margin: 0; padding: 0; }
+.sig-cols li { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; align-items: end; padding: 12px 0 14px; border-bottom: 1px solid var(--line); }
+.sig-cols li.ctx { border-bottom-style: dashed; opacity: .82; }
+.sig-cols .big { font-size: clamp(2.6rem, 4.2vw, 3.6rem); line-height: .9; grid-row: span 2; letter-spacing: -.02em; }
+.sig-cols li.ctx .big { font-size: clamp(1.9rem, 3vw, 2.5rem); font-weight: 700; }
+.sig-cols .big small { font-size: .45em; margin-left: 2px; }
+.sig-cols .cap { font-size: 13px; line-height: 1.25; opacity: .85; }
+.sig-cols .rk { position: relative; height: 6px; border: 1px solid currentColor; margin-bottom: 2px; background: linear-gradient(90deg, transparent 49.6%, currentColor 49.6% 50.4%, transparent 50.4%); }
+.sig-cols .rk i { position: absolute; top: -5px; width: 4px; height: 14px; margin-left: -2px; background: currentColor; }
+.sig-cols b { grid-column: 1 / -1; font-size: 17px; font-weight: 600; line-height: 1.2; margin-top: 10px; }
+.sig-cols .sd { grid-column: 1 / -1; font-size: 10.5px; letter-spacing: .06em; opacity: .85; margin-top: 2px; }
+
+/* C · ladder */
+.sig-axis { display: grid; grid-template-columns: minmax(0, 15fr) minmax(0, 17fr); column-gap: 20px; letter-spacing: .06em; opacity: .85; }
+.sig-axis span { grid-column: 2; grid-row: 1; }
+.sig-axis span:nth-child(2) { justify-self: center; } .sig-axis span:nth-child(3) { justify-self: end; }
+.lad { position: relative; height: 40px; }
+.lad::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid var(--line); }
+.lad .stem { position: absolute; top: calc(50% - 2px); height: 4px; background: currentColor; }
+.lad .oth { position: absolute; top: 50%; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border: 1.5px solid currentColor; border-radius: 50%; box-sizing: border-box; background: transparent; }
+.lad .oth span { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 9px; letter-spacing: 0; opacity: .85; }
+.lad .oth.dn span { top: 10px; }
+.lad .me { position: absolute; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; background: currentColor; transform: rotate(45deg); }
+.sig-row.ctx .lad .me { background: transparent; border: 2px solid currentColor; box-sizing: border-box; }
+.k-me { width: 10px !important; background: currentColor; transform: rotate(45deg); }
+.k-oth { width: 10px !important; border: 1.5px solid currentColor; border-radius: 50%; }
+
+@media (max-width: 640px) {
+  .sig-row, .sig-axis { grid-template-columns: minmax(0, 1fr); }
+  .sig-axis span { grid-column: 1; }
+  .sig-read { font-size: 19px; }
+  .strip { margin: 10px 22px 0; }
+  .sig-cols { grid-template-columns: minmax(0, 1fr); }
+  .lad { margin-top: 10px; }
+}

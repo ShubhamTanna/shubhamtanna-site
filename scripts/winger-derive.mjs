@@ -62,6 +62,26 @@ const archetypes = b["archetypes.csv"].map((a) => {
 });
 for (const a of archetypes) if (a.nSpells !== spells.filter((s) => s.k5_cluster === a.id).length) throw new Error(`C${a.id} count mismatch`);
 
+// Display helper (derived): z-score histograms per feature, for all spells and for each archetype's members,
+// plus each archetype's member quartiles. Bins cover −3 to +3 SD; values outside are counted, never dropped.
+const H = { lo: -3, hi: 3, step: 0.25 };
+const nBins = Math.round((H.hi - H.lo) / H.step);
+const hist = (zs) => {
+  const h = new Array(nBins + 2).fill(0); // [under, ...bins, over]
+  for (const z of zs) h[z < H.lo ? 0 : z >= H.hi ? nBins + 1 : 1 + Math.floor((z - H.lo) / H.step)]++;
+  return h;
+};
+const quart = (zs) => { const s = [...zs].sort((a, c) => a - c); const q = (p) => s[Math.floor(p * (s.length - 1))]; return [q(0.25), q(0.5), q(0.75)]; };
+const distribution = {
+  ...H,
+  all: F.map((_, k) => hist(spells.map((s) => fp.get(s.spell_id)[k][1]))),
+  byCluster: b["archetypes.csv"].map((a) => {
+    const zs = F.map((_, k) => spells.filter((s) => s.k5_cluster === a.cluster_id).map((s) => fp.get(s.spell_id)[k][1]));
+    return { hist: zs.map(hist), quartiles: zs.map(quart) };
+  }),
+  median: zCol.map((col) => col[Math.floor(0.5 * (col.length - 1))]),
+};
+
 const features = b["features.csv"].map((f) => ({
   key: f.feature, name: f.display_name, family: f.macro_family, interpretation: f.interpretation, limitations: f.limitations,
   unit: f.unit, unitStatus: f.unit_status, precision: f.display_precision, multiplier: f.display_multiplier, suffix: f.display_suffix,
@@ -74,7 +94,7 @@ const meta = {
   limitations: m.limitations, families: m.family_order,
   pca: m.pca_variance.map((p) => ({ component: p.component, pct: p.explained_variance_pct })),
   zObserved: m.visualization.fingerprint.observed_z,
-  features, archetypes,
+  features, archetypes, distribution,
   // Display reference (derived): how far a spell's closest other footballer usually is.
   nearestQuartiles: (() => { const d = spells.map((s) => s.nearest_distance).sort((a, c) => a - c); const q = (p) => d[Math.floor(p * (d.length - 1))]; return [q(0.25), q(0.5), q(0.75)]; })(),
   featured: m.featured_spells.map((f) => ({ slug: slugOf.get(f.spell_id), name: f.display_name, club: f.display_club, cluster: f.cluster_id })),

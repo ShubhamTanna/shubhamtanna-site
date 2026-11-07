@@ -1,22 +1,36 @@
 "use client";
 import Link from "next/link";
-import { useEffect } from "react";
-import { EXPLORE, type Archetype, type CatalogRow, type Feature } from "@/lib/winger-types";
-import { fmtDist, onColor, season, shareText, strength, topTendencies } from "@/lib/winger-format";
+import { useEffect, useState } from "react";
+import { EXPLORE, type CatalogRow, type Meta } from "@/lib/winger-types";
+import { fmtDist, onColor, season } from "@/lib/winger-format";
+import Signature, { SIG_VARIANTS, type SigVariant } from "./Signature";
 import { useSelection } from "./Selection";
 
 type Props = {
-  archetypes: Archetype[]; features: Feature[];
+  meta: Meta;
   reps: CatalogRow[][];                       // per archetype, closest to its centre first
   featured: ({ slug: string; name: string; club: string; season: string } | null)[];
 };
 
-export default function StylesView({ archetypes, features, reps, featured }: Props) {
+export default function StylesView({ meta, reps, featured }: Props) {
+  const { archetypes } = meta;
   const { style, set } = useSelection();
+  // Review only: ?sig=strips|ledger|ladder switches the signature concept. Removed once one is chosen.
+  const [variant, setVariant] = useState<SigVariant>("strips");
+  const [all, setAll] = useState(false);
   useEffect(() => {
-    const m = /^c([0-4])$/i.exec(new URLSearchParams(location.search).get("style") ?? "");
+    const p = new URLSearchParams(location.search);
+    const m = /^c([0-4])$/i.exec(p.get("style") ?? "");
     if (m) set({ style: Number(m[1]) });
+    const v = p.get("sig");
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- browser-only state, read after hydration
+    if (v && SIG_VARIANTS.some((x) => x.id === v)) setVariant(v as SigVariant);
+    if (p.get("all") === "1") setAll(true);
   }, [set]);
+  const pickVariant = (v: SigVariant) => {
+    setVariant(v);
+    const u = new URL(location.href); u.searchParams.set("sig", v); history.replaceState(null, "", u);
+  };
   const pick = (id: number) => {
     set({ style: id });
     const u = new URL(location.href); u.searchParams.set("style", `c${id}`); history.replaceState(null, "", u);
@@ -47,21 +61,15 @@ export default function StylesView({ archetypes, features, reps, featured }: Pro
           </ul>
         </div>
 
-        <div className="wx-panel" style={{ background: a.color, color: ink }} aria-live="polite">
+        <div className="wx-panel" style={{ background: a.color, color: ink }}>
           <div className="top"><span className="mono">{a.code} · Behavioural signature</span><span className="mono">{a.nSpells} spells · {a.nPlayers} footballers</span></div>
-          <h2 className="d">{a.label}</h2>
-          <div className="wx-sigslot" style={{ borderColor: ink }}>
-            <span className="mono">Signature visual · options in review</span>
+          <h2 className="d" aria-live="polite">{a.label}</h2>
+          <div className="wx-review mono" role="group" aria-label="Signature concept (review only)">
+            <span>Review · concept</span>
+            {SIG_VARIANTS.map((v) => <button key={v.id} type="button" aria-pressed={variant === v.id} onClick={() => pickVariant(v.id)}>{v.name}</button>)}
           </div>
-          <p className="mono wx-label" style={{ color: ink }}>What sets it apart</p>
-          <ol className="wx-tend">
-            {topTendencies(a.centroid).map(({ k, z }) => (
-              <li key={k}>
-                <span className="feat">{features[k].name}</span>
-                <span className="how">{strength(z)} than the typical winger · its average is {shareText(a.shareBelow[k])}</span>
-              </li>
-            ))}
-          </ol>
+          <Signature a={a} meta={meta} variant={variant} all={all} />
+          <button type="button" className="wx-all mono" aria-expanded={all} onClick={() => setAll(!all)}>{all ? "Back to the signature" : "Show all 20 behaviours"}</button>
         </div>
       </section>
 
