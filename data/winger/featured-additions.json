@@ -1,0 +1,7 @@
+{
+  "source": "decoding-winger-playstyles docs/frontend_research_support.md (PR #4, commit cce578a): approved editorial examples additional to the schema 1.1.0 manifest",
+  "spells": [
+    { "spell_id": "spell_225fb582e4861300f9a3cadfe6255de04b61f89abdcea60b26cce593433be72f", "cluster_id": 0, "display_name": "Richarlison", "display_club": "Everton" },
+    { "spell_id": "spell_ce2703937ee6aa10ba5dde04a39713ffc6cf7ce8efdec98838b40799399e6b9b", "cluster_id": 2, "display_name": "Carlos Soler", "display_club": "Valencia" }
+  ]
+}

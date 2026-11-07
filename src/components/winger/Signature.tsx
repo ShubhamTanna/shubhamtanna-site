@@ -6,11 +6,11 @@ import { fmtZ, lc, listText, sdText, signature, type SigItem } from "@/lib/winge
 // One-line football reading of each style, grounded only in its signature features.
 // DRAFT: pending research sign-off. Falls back to a generated sentence if labels change.
 const READING: Record<string, string> = {
-  "Penalty-area attacking and shooting": "Lives in and around the box: more of its touches come in the penalty area and it shoots from closer in. It crosses and passes the ball forward much less than most wingers.",
+  "Penalty-area attacking and shooting": "Lives in and around the box: more of its touches come in the penalty area and it shoots from closer in. It crosses and passes the ball forward much less than the average winger.",
   "Crossing-oriented wide play": "Stays wide and delivers: far more of its passes are crosses and long balls. It gets fewer touches in the penalty area and shoots from further out.",
   "Deeper passing progression": "Plays deeper and moves the ball on by passing: fewer touches in the final third and fewer forward carries and receptions, but more progressive passes.",
-  "Direct carrying and dribbling": "Takes the ball forward itself: carries and dribbles into the final third and the box far more than most wingers, and plays fewer long passes.",
-  "Advanced creative progression": "Creates from advanced areas: far more passes into the box and progressive passes, while also carrying and shooting more than most wingers.",
+  "Direct carrying and dribbling": "Takes the ball forward itself: carries and dribbles into the final third and the box far more than the average winger, and plays fewer long passes.",
+  "Advanced creative progression": "Creates from advanced areas: far more passes into the box and progressive passes, while also carrying and shooting more than the average winger.",
 };
 export const readingOf = (a: Archetype, F: Feature[]) => {
   const sig = signature(a.centroid);
@@ -65,7 +65,7 @@ function Guide({ code }: { code: string }) {
       <ul>
         <li><i className="g-pop" />Grey outline: <b>all 1,396 winger seasons</b>, from doing this least (left) to most (right).</li>
         <li><i className="g-mem" />Coloured shape: <b>the {code} seasons</b>. Where it sits shows how this style differs.</li>
-        <li><i className="g-avg" /><b>{code} average</b> (solid line) against <i className="g-zero" /><b>the average winger</b> (dashed).</li>
+        <li><i className="g-avg" /><b>{code} centre</b>, the average of its seasons (solid line), against <i className="g-zero" /><b>the average of all winger seasons</b> (dashed). The number is the gap in standard deviations (SD).</li>
         <li><span className="mono g-n">+12</span>A few seasons are too extreme to fit; the number counts them.</li>
       </ul>
     </div>
@@ -89,17 +89,17 @@ function Strip({ a, meta, k, z, context }: { a: Archetype; meta: Meta } & SigIte
     for (let i = 1; i < p.length; i++) { const mx = (p[i - 1][0] + p[i][0]) / 2; s += ` C${mx},${p[i - 1][1]} ${mx},${p[i][1]} ${p[i][0]},${p[i][1]}`; }
     return close ? `${s} L${W},${H} Z` : s;
   };
-  const f = meta.features[k], sb = a.shareBelow[k];
+  const f = meta.features[k];
   const over = all[all.length - 1], under = all[0];
-  const words = z >= 0 ? `More than ${Math.round(sb)}% of winger seasons` : `Less than ${Math.round(100 - sb)}% of winger seasons`;
+  // Archetype copy stays on the centroid scale: the centre is the mean of its members' z-scores.
+  const words = `${a.code} centre ${sdText(z)} of all winger seasons`;
   return (
     <div className={`sig-row${context ? " ctx" : ""}`}>
       <div className="lab">
         <b>{f.name}{star(f)}{context && <em className="mono">for context</em>}</b>
-        <span>{a.code} average: {words.charAt(0).toLowerCase() + words.slice(1)}</span>
-        <span className="mono sd">{sdText(z)}</span>
+        <span>{words}</span>
       </div>
-      <div className="strip" role="img" aria-label={`${f.name}. ${a.code} seasons against all winger seasons. ${a.code} average ${sdText(z)}, ${words.toLowerCase()}.`}>
+      <div className="strip" role="img" aria-label={`${f.name}. ${a.code} seasons against all winger seasons. ${words}.`}>
         <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
           <path d={path(dm, true)} className="mem" />
           <path d={path(da, false)} className="pop" vectorEffect="non-scaling-stroke" />

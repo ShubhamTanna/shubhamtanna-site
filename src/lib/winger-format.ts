@@ -11,8 +11,8 @@ export const ordinal = (n: number) => { const r = Math.round(n); const s = ["th"
 
 // Words come from percentile rank (share of all spells below a value). SD values are shown alongside as
 // distance from the all-spell mean. On skewed behaviours the two can point different ways; see skewNote.
-export const shareText = (shareBelow: number) =>
-  shareBelow >= 50 ? `higher than ${Math.round(shareBelow)}% of spells` : `lower than ${Math.round(100 - shareBelow)}% of spells`;
+// Percentile is a rank among all 1,396 spells (average ranks for ties), not an exact share below.
+export const shareText = (pct: number) => `around the ${ordinal(pct)} percentile`;
 export const sdText = (z: number) =>
   Math.abs(z) < 0.005 ? "at the mean" : `${Math.abs(z).toFixed(2)} SD ${z > 0 ? "above" : "below"} the mean`;
 // True when percentile and mean point opposite ways (above the median but below the mean, or the reverse).
@@ -68,3 +68,12 @@ export const fold = (s: string) => s.normalize("NFKD").replace(/[\u0300-\u036f]/
 export const alias = (club: string) => club.replace(/^Manchester United$/, "Man Utd Man United").replace(/^Manchester /, "Man ").replace(/^Paris Saint-Germain$/, "PSG");
 export const haystack = (r: { player: string; club: string; season?: string }) => fold(`${r.player} ${r.club} ${alias(r.club)} ${r.season ?? ""}`);
 export const SEARCH_HINT = "e.g. Foden, Man City";
+
+// What the saved map's directions go with, from the research handoff (docs/frontend_research_support.md,
+// PR #4): feature–score correlations from Notebook 05, in the released orientation. Strongest only; each
+// direction mixes all 20 behaviours. Descriptions of behaviour, not quality.
+export const PCA_AXES = [
+  { pc: "PC1", high: "more carries into the box and more of the progress made by carrying", low: "a higher long-pass share and longer average shots", short: ["Long passes, longer shots", "Carrying into the box"] },
+  { pc: "PC2", high: "more passes into the box and more crosses", low: "more of the attacking-third touches inside the box and more shots per touch", short: ["Box touches, shots", "Passes into the box, crosses"] },
+  { pc: "PC3", high: "a bigger cross share of passes and more crosses", low: "a higher progressive-pass share and more progressive passes", short: ["Progressive passing", "Cross share"] },
+] as const;

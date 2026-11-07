@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EXPLORE, type CatalogRow, type Meta } from "@/lib/winger-types";
-import { season } from "@/lib/winger-format";
+import { PCA_AXES, season } from "@/lib/winger-format";
 import { loadCatalog } from "./PlayerSearch";
 import { useSelection } from "./Selection";
 
@@ -41,7 +41,7 @@ export default function MapView({ meta }: { meta: Meta }) {
       <div className="wx-map-guide">
         <div><b>Each dot is one footballer’s season at one club.</b> Its colour is the style it sits closest to.</div>
         <div><b>Close dots played alike.</b> Seasons with similar numbers across all 20 behaviours land near each other; very different seasons land far apart.</div>
-        <div><b>The axes have no simple name.</b> To fit 20 behaviours onto a flat page, the map uses the directions in which wingers differ most (principal components). Each mixes several behaviours, so read the map by who is near whom, not by left or right.</div>
+        <div><b>What the directions mean.</b> The map uses the directions in which wingers differ most (principal components). <b className="dir">Right</b> goes with {PCA_AXES[0].high}; left with {PCA_AXES[0].low}. <b className="dir">Up</b> goes with {PCA_AXES[1].high}; down with {PCA_AXES[1].low}.{mode === "3d" && <> <b className="dir">PC3</b> goes with {PCA_AXES[2].high} at one end and {PCA_AXES[2].low} at the other.</>}</div>
       </div>
 
       <div className="wx-map-tools">
@@ -139,7 +139,13 @@ function Flat({ meta, rows, off, picked, centres, onHover, onPick }: ViewProps) 
           <b>{picked.player}</b> {season(picked.season)}
         </span>
       )}
-      <figcaption className="mono"><span>PC1 · {meta.pca[0].pct.toFixed(1)}% →</span><span>↑ PC2 · {meta.pca[1].pct.toFixed(1)}%</span></figcaption>
+      {W > 0 && <>
+        <span className="ax-lab mono x0" style={{ top: py(0) }}>← {PCA_AXES[0].short[0]}</span>
+        <span className="ax-lab mono x1" style={{ top: py(0) }}>{PCA_AXES[0].short[1]} →</span>
+        <span className="ax-lab mono y1" style={{ left: px(0) }}>↑ {PCA_AXES[1].short[1]}</span>
+        <span className="ax-lab mono y0" style={{ left: px(0), top: H }}>↓ {PCA_AXES[1].short[0]}</span>
+      </>}
+      <figcaption className="mono"><span>PC1 · {meta.pca[0].pct.toFixed(1)}% of variation</span><span>PC2 · {meta.pca[1].pct.toFixed(1)}%</span></figcaption>
     </figure>
   );
 }
@@ -169,10 +175,11 @@ function Cube({ meta, rows, off, picked, centres, onHover, onPick }: ViewProps) 
     };
     // Axes through the origin.
     g.lineWidth = 1; g.font = "11px ui-monospace, monospace";
-    ([["PC1", [9, 0, 0]], ["PC2", [0, 7, 0]], ["PC3", [0, 0, 7]]] as const).forEach(([lab, [ax, ay, az]]) => {
+    ([[0, [9, 0, 0]], [1, [0, 7, 0]], [2, [0, 0, 7]]] as const).forEach(([n, [ax, ay, az]]) => {
       const a = P(-ax, -ay, -az), b = P(ax, ay, az);
       g.strokeStyle = muted; g.setLineDash([4, 4]); g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke(); g.setLineDash([]);
-      g.fillStyle = ink; g.fillText(`${lab} →`, b.x + 4, b.y - 4);
+      g.fillStyle = ink; g.fillText(`${PCA_AXES[n].pc}: ${PCA_AXES[n].short[1]}`, b.x + 4, b.y - 4);
+      g.fillStyle = muted; g.fillText(PCA_AXES[n].short[0], a.x + 4, a.y + 14);
     });
     // Points, far to near.
     const pts = rows.map((r, i) => ({ r, i, ...P(r.pc1, r.pc2, r.pc3) })).filter((p) => !off.has(p.r.cluster)).sort((a, b) => a.d - b.d);

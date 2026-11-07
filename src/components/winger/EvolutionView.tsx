@@ -4,12 +4,15 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { EXPLORE, type CatalogRow, type Meta, type Spell } from "@/lib/winger-types";
-import { distanceParts, fmtDist, fmtZ, fold, haystack, lc, ordinal, SEARCH_HINT, season } from "@/lib/winger-format";
+import { distanceParts, fmtDist, fmtZ, fold, haystack, lc, ordinal, PCA_AXES, SEARCH_HINT, season } from "@/lib/winger-format";
 import { loadCatalog } from "./PlayerSearch";
 import { loadSpell } from "./CompareView";
 import { useSelection } from "./Selection";
 
 const DEFAULT = "riyad-mahrez-leicester-city-2017-18";
+// Spells in the same season share one time slot: the data does not say which club came first.
+const slots = (spells: { season: string }[]) => { const u = [...new Set(spells.map((s) => s.season))]; return spells.map((s) => u.indexOf(s.season)); };
+const clubShort = (c: string) => c.split(" ")[0];
 const tag = (r: { season: string; club: string }, multiClub: boolean) => (multiClub ? `${season(r.season)} · ${r.club}` : season(r.season));
 
 export default function EvolutionView({ meta }: { meta: Meta }) {
@@ -137,6 +140,8 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
           );
         })}
       </ol>
+      {multiClub && <p className="wx-small">Two clubs in the same season share one place on the timeline: the data does not say which came first.</p>}
+      <p className="wx-small">Only seasons with at least 1,125 minutes appear, so a gap does not mean he stopped playing. Changes describe how his measured style moved, not whether he got better or worse.</p>
 
       <div className="wx-evo-grid">
         {/* 2 · Distance to each style centre */}
@@ -149,7 +154,7 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
         <section>
           <h3 className="mono wx-label">Path on the style map</h3>
           <Path meta={meta} spells={spells} multiClub={multiClub} pair={pair} />
-          <p className="wx-small">PC1 and PC2 keep {(meta.pca[0].pct + meta.pca[1].pct).toFixed(0)}% of the variation in all 20 behaviours, so distances on the map are approximate.</p>
+          <p className="wx-small">Right goes with {PCA_AXES[0].high}; up goes with {PCA_AXES[1].high}. The two directions keep {(meta.pca[0].pct + meta.pca[1].pct).toFixed(0)}% of the variation in all 20 behaviours, so distances on the map are approximate.</p>
         </section>
       </div>
 
@@ -187,7 +192,7 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
           <div className="wx-dumb-key mono" aria-hidden="true">
             <span><i className="o" style={{ borderColor: A[S1.cluster].color }} />{tag(S1, true)}</span>
             <span><i className="f" style={{ background: A[S2.cluster].color }} />{tag(S2, true)}</span>
-            <span><i className="m" />Average winger</span><span><i className="b" />Middle of all seasons</span>
+            <span><i className="m" />Average winger</span><span><i className="b" />Within 1 SD of the mean</span>
           </div>
           <ol className="wx-dumb" style={{ ["--c1" as string]: A[S1.cluster].color, ["--c2" as string]: A[S2.cluster].color }}>
             {ks.map((k) => {
@@ -224,7 +229,8 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
 function Distances({ meta, spells, multiClub, pair }: { meta: Meta; spells: Spell[]; multiClub: boolean; pair: [number, number] }) {
   const W = 520, H = 240, L = 34, R = 44, T = 12, B = 46;
   const max = Math.ceil(Math.max(...spells.flatMap((s) => s.distToCluster)));
-  const xs = (n: number) => L + (spells.length === 1 ? 0.5 : n / (spells.length - 1)) * (W - L - R);
+  const slot = slots(spells), nSlots = Math.max(...slot) + 1;
+  const xs = (n: number) => L + (nSlots === 1 ? 0.5 : slot[n] / (nSlots - 1)) * (W - L - R);
   const ys = (d: number) => H - B - (d / max) * (H - T - B); // 0 at the bottom: lower means closer
   // End labels, nudged apart so they don't collide.
   const ends = meta.archetypes.map((a) => ({ a, y: ys(spells[spells.length - 1].distToCluster[a.id]) })).sort((p, q) => p.y - q.y);
@@ -232,7 +238,7 @@ function Distances({ meta, spells, multiClub, pair }: { meta: Meta; spells: Spel
   return (
     <svg className="wx-dist-chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Distance to each style centre by season. ${spells.map((s) => `${season(s.season)}: closest ${meta.archetypes[s.cluster].code}`).join("; ")}.`}>
       {[0, max / 2, max].map((d) => <g key={d}><line x1={L} x2={W - R} y1={ys(d)} y2={ys(d)} className="g" /><text x={L - 6} y={ys(d) + 3} textAnchor="end">{d.toFixed(d % 1 ? 1 : 0)}</text></g>)}
-      {spells.map((s, n) => <text key={s.slug} x={xs(n)} y={H - B + 16} textAnchor="middle" className={n === pair[0] || n === pair[1] ? "on" : undefined}>{season(s.season).replace(/^20/, "")}{multiClub ? `·${n + 1}` : ""}</text>)}
+      {spells.map((s, n) => slot.indexOf(slot[n]) === n && <text key={s.slug} x={xs(n)} y={H - B + 16} textAnchor="middle" className={spells.some((_, m) => slot[m] === slot[n] && (m === pair[0] || m === pair[1])) ? "on" : undefined}>{season(s.season).replace(/^20/, "")}{multiClub && slot.filter((v) => v === slot[n]).length > 1 ? "×2" : ""}</text>)}
       {meta.archetypes.map((a) => (
         <g key={a.id}>
           <polyline points={spells.map((s, n) => `${xs(n)},${ys(s.distToCluster[a.id])}`).join(" ")} fill="none" stroke={a.color} strokeWidth={2} />
@@ -249,7 +255,7 @@ function Distances({ meta, spells, multiClub, pair }: { meta: Meta; spells: Spel
 
 // The footballer's seasons on PC1/PC2, joined in order, over nearby spells in faint style colour.
 // Zoomed to this footballer's seasons (equal scale on both axes, at least 6 units across).
-function Path({ meta, spells, multiClub, pair }: { meta: Meta; spells: Spell[]; multiClub: boolean; pair: [number, number] }) {
+function Path({ meta, spells, pair }: { meta: Meta; spells: Spell[]; multiClub?: boolean; pair: [number, number] }) {
   const [rows, setRows] = useState<CatalogRow[]>([]);
   useEffect(() => { loadCatalog().then(setRows); }, []);
   const W = 520, H = 360;
@@ -260,6 +266,7 @@ function Path({ meta, spells, multiClub, pair }: { meta: Meta; spells: Spell[]; 
   const px = (v: number) => W / 2 + (v - cx) * k, py = (v: number) => H / 2 - (v - cy) * k;
   const inView = (r: CatalogRow) => { const x = px(r.pc1), y = py(r.pc2); return x >= 0 && x <= W && y >= 0 && y <= H; };
   const pts = spells.map((s) => [px(s.pc[0]), py(s.pc[1])] as const);
+  const slot = slots(spells);
   const tick = Math.max(1, Math.round(span / 6));
   const gx: number[] = [], gy: number[] = [];
   for (let t = Math.ceil((cx - span / 2) / tick) * tick; t <= cx + span / 2; t += tick) gx.push(t);
@@ -271,14 +278,16 @@ function Path({ meta, spells, multiClub, pair }: { meta: Meta; spells: Spell[]; 
       {gx.map((t) => <g key={`x${t}`}><line x1={px(t)} x2={px(t)} y1={0} y2={H} className={t ? "g" : "g0"} /><text x={px(t) + 3} y={H - 4} className="ax">{t}</text></g>)}
       {gy.map((t) => <g key={`y${t}`}><line y1={py(t)} y2={py(t)} x1={0} x2={W} className={t ? "g" : "g0"} /><text x={4} y={py(t) - 3} className="ax">{t}</text></g>)}
       {rows.filter(inView).map((r) => <circle key={r.slug} cx={px(r.pc1)} cy={py(r.pc2)} r={2.4} fill={meta.archetypes[r.cluster].color} fillOpacity={0.4} />)}
-      {pts.slice(1).map((p, n) => {
-        const [x0, y0] = pts[n], dx = p[0] - x0, dy = p[1] - y0, len = Math.hypot(dx, dy) || 1, r = 9;
-        return len > 2 * r ? <line key={n} x1={x0 + (dx / len) * r} y1={y0 + (dy / len) * r} x2={p[0] - (dx / len) * r} y2={p[1] - (dy / len) * r} className="seg" markerEnd="url(#wx-ar)" /> : null;
+      {spells.flatMap((_, a) => spells.map((__, b) => [a, b] as const)).filter(([a, b]) => slot[b] === slot[a] + 1 || (slot[b] === slot[a] && b > a)).map(([a, b]) => {
+        const [x0, y0] = pts[a], [x1, y1] = pts[b], dx = x1 - x0, dy = y1 - y0, len = Math.hypot(dx, dy) || 1, r = 9;
+        if (len <= 2 * r) return null;
+        const tie = slot[a] === slot[b];
+        return <line key={`${a}-${b}`} x1={x0 + (dx / len) * r} y1={y0 + (dy / len) * r} x2={x1 - (dx / len) * r} y2={y1 - (dy / len) * r} className={tie ? "seg tie" : "seg"} markerEnd={tie ? undefined : "url(#wx-ar)"} />;
       })}
       {spells.map((s, n) => (
         <g key={s.slug}>
           <circle cx={pts[n][0]} cy={pts[n][1]} r={n === pair[0] || n === pair[1] ? 8 : 6} fill={meta.archetypes[s.cluster].color} stroke="var(--ink)" strokeWidth={1.6} />
-          <text x={pts[n][0] + 10} y={pts[n][1] - 8} className="lbl">{season(s.season).replace(/^20/, "")}{multiClub ? `·${n + 1}` : ""}</text>
+          <text x={pts[n][0] + 10} y={pts[n][1] - 8} className="lbl">{season(s.season).replace(/^20/, "")}{slot.filter((v) => v === slot[n]).length > 1 ? ` ${clubShort(s.club)}` : ""}</text>
         </g>
       ))}
       <text x={W - 6} y={14} textAnchor="end" className="ax">PC1 → · ↑ PC2 · zoomed to these seasons</text>

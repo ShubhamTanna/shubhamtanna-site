@@ -430,3 +430,16 @@
 .wx-dumb .ln.dn::after { left: 6px; border-right: 11px solid var(--ink); }
 .wx-dumb .o { width: 18px !important; height: 18px !important; margin: -9px 0 0 -9px !important; border: 4px solid var(--c1) !important; background: var(--paper) !important; }
 .wx-dumb .f { width: 20px !important; height: 20px !important; margin: -10px 0 0 -10px !important; background: var(--c2) !important; box-shadow: 0 0 0 2px var(--ink); }
+.wx-map-guide b.dir { display: inline; font-size: inherit; margin: 0; }
+.wx-flat .ax-lab { position: absolute; pointer-events: none; font-size: 11px; letter-spacing: .02em; color: var(--ink); background: color-mix(in srgb, var(--paper) 85%, transparent); padding: 1px 5px; white-space: nowrap; }
+.wx-flat .ax-lab.x0 { left: 34px; transform: translateY(-130%); }
+.wx-flat .ax-lab.x1 { right: 10px; transform: translateY(-130%); }
+.wx-flat .ax-lab.y1 { top: 2px; transform: translateX(6px); }
+.wx-flat .ax-lab.y0 { transform: translate(6px, -130%); }
+.wx-path .seg.tie { stroke-dasharray: 4 4; }
+.wx-featured .why { list-style: none; margin: 12px 0 14px; padding: 0; display: grid; gap: 8px; }
+.wx-featured .why li { display: grid; grid-template-columns: 70px minmax(0, 1fr); column-gap: 10px; border-top: 1px solid var(--rule); padding-top: 8px; }
+.wx-featured .why b { grid-row: span 2; font-size: 15px; }
+.wx-featured .why span { font-size: 15px; line-height: 1.2; }
+.wx-featured .why small { color: var(--muted); font-size: 13px; }
+@media (max-width: 760px) { .wx-flat .ax-lab { white-space: normal; max-width: 44%; line-height: 1.25; } .wx-flat .ax-lab.x0, .wx-flat .ax-lab.x1 { max-width: 36%; } .wx-flat .ax-lab.x1 { text-align: right; } }

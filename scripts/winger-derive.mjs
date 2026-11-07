@@ -18,6 +18,16 @@ const F = m.feature_order;
 // Display names only. Canonical keys and spell ids are never changed.
 const CLUB = { "Paris S-G": "Paris Saint-Germain", "Manchester Utd": "Manchester United", "Newcastle Utd": "Newcastle United", "Nott'ham Forest": "Nottingham Forest", "Eint Frankfurt": "Eintracht Frankfurt", "Gladbach": "Mönchengladbach", "West Brom": "West Bromwich Albion", "Wolves": "Wolverhampton" };
 const playerName = new Map(m.featured_spells.map((f) => [f.player_id, f.display_name]));
+// Approved featured examples published after schema 1.1.0 (research handoff, not the manifest). Checked here:
+// each spell must exist, carry the stated cluster, and not duplicate a style already featured.
+const extraPath = path.join(SRC, "featured-additions.json");
+const extraFeatured = fs.existsSync(extraPath) ? JSON.parse(fs.readFileSync(extraPath, "utf8")).spells : [];
+for (const f of extraFeatured) {
+  const sp = b["spells.csv"].find((s) => s.spell_id === f.spell_id);
+  if (!sp) throw new Error(`featured addition not in bundle: ${f.spell_id}`);
+  if (sp.k5_cluster !== f.cluster_id) throw new Error(`featured addition cluster mismatch: ${f.display_name}`);
+  if (m.featured_spells.some((x) => x.cluster_id === f.cluster_id)) throw new Error(`style C${f.cluster_id} already featured`);
+}
 const club = (s) => CLUB[s] ?? s;
 const name = (s) => playerName.get(s.player_id) ?? s.player;
 
@@ -97,7 +107,7 @@ const meta = {
   features, archetypes, distribution,
   // Display reference (derived): how far a spell's closest other footballer usually is.
   nearestQuartiles: (() => { const d = spells.map((s) => s.nearest_distance).sort((a, c) => a - c); const q = (p) => d[Math.floor(p * (d.length - 1))]; return [q(0.25), q(0.5), q(0.75)]; })(),
-  featured: m.featured_spells.map((f) => ({ slug: slugOf.get(f.spell_id), name: f.display_name, club: f.display_club, cluster: f.cluster_id })),
+  featured: [...m.featured_spells, ...extraFeatured].map((f) => ({ slug: slugOf.get(f.spell_id), name: f.display_name, club: f.display_club, cluster: f.cluster_id })),
 };
 
 // Catalog numbers are for drawing and sorting only, so 4 decimals is plenty; every per-spell file keeps full precision.

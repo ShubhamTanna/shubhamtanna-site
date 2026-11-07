@@ -9,7 +9,7 @@ import { useSelection } from "./Selection";
 type Props = {
   meta: Meta;
   reps: CatalogRow[][];                       // per archetype, closest to its centre first
-  featured: ({ slug: string; name: string; club: string; season: string } | null)[];
+  featured: ({ slug: string; name: string; club: string; season: string; points: { name: string; value: string; pct: string }[] } | null)[];
 };
 
 export default function StylesView({ meta, reps, featured }: Props) {
@@ -86,6 +86,11 @@ export default function StylesView({ meta, reps, featured }: Props) {
             {f ? (<>
               <p className="d big">{f.name}</p>
               <p>{f.club} · {season(f.season)}</p>
+              {f.points.length > 0 && (
+                <ul className="why">
+                  {f.points.map((pt) => <li key={pt.name}><b className="mono">{pt.value}</b><span>{pt.name}</span><small>around the {pt.pct} percentile</small></li>)}
+                </ul>
+              )}
               <Link className="more-link" href={`${EXPLORE}/players/${f.slug}`}>Open profile →</Link>
             </>) : <p className="wx-pending">A recognisable example for this style is still being chosen with the research.</p>}
           </aside>
