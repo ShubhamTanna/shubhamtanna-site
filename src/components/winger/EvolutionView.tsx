@@ -53,9 +53,16 @@ export default function EvolutionView({ meta }: { meta: Meta }) {
   useEffect(() => {
     if (!career.length) return;
     let live = true;
-    Promise.all(career.map((c) => loadSpell(c.slug))).then((s) => { if (live) { setSpells(s); setPair([0, s.length - 1]); } });
+    // Default pair: the first season against the season most different from it in style.
+    Promise.all(career.map((c) => loadSpell(c.slug))).then((s) => {
+      if (!live) return;
+      const d = s.map((x) => distanceParts(s[0].fp.map((r) => r[1]), x.fp.map((r) => r[1])).distance);
+      setSpells(s); setPair([0, d.indexOf(Math.max(...d))]);
+    });
+    if (!focus) set({ focus: career[0].slug });
     const u = new URL(location.href); u.searchParams.set("p", career[0].slug); history.replaceState(null, "", u);
     return () => { live = false; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [career]);
 
   const hits = useMemo(() => {
