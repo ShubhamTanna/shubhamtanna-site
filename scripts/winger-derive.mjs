@@ -102,10 +102,10 @@ const meta = {
 
 // Catalog numbers are for drawing and sorting only, so 4 decimals is plenty; every per-spell file keeps full precision.
 const r4 = (x) => Math.round(x * 1e4) / 1e4;
-const CAT_COLS = ["slug", "player", "club", "comp", "season", "cluster", "pc1", "pc2", "minutes", "age", "centroidDist", "pctWithin", "stable", "playerKey"];
+const CAT_COLS = ["slug", "player", "club", "comp", "season", "cluster", "pc1", "pc2", "pc3", "minutes", "age", "centroidDist", "pctWithin", "stable", "playerKey"];
 const playerKeys = [...career.keys()];
 const pk = new Map(playerKeys.map((k, i) => [k, i]));
-const catalog = { cols: CAT_COLS, rows: spells.map((s) => [slugOf.get(s.spell_id), name(s), club(s.squad), s.comp, shortSeason(s.season), s.k5_cluster, r4(s.PC1), r4(s.PC2), s.Minutes, s.age, r4(s.k5_centroid_distance), r4(s.centroid_distance_pct_within_cluster), s.k5_label_preserved_all_three_tests, pk.get(s.player_id)]) };
+const catalog = { cols: CAT_COLS, rows: spells.map((s) => [slugOf.get(s.spell_id), name(s), club(s.squad), s.comp, shortSeason(s.season), s.k5_cluster, r4(s.PC1), r4(s.PC2), r4(s.PC3), s.Minutes, s.age, r4(s.k5_centroid_distance), r4(s.centroid_distance_pct_within_cluster), s.k5_label_preserved_all_three_tests, pk.get(s.player_id)]) };
 
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(path.join(OUT, "spells"), { recursive: true });

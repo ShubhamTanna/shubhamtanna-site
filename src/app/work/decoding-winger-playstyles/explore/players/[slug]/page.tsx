@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Closeness from "@/components/winger/Closeness";
 import Fingerprint from "@/components/winger/Fingerprint";
 import { FocusOn } from "@/components/winger/Selection";
 import { EXPLORE, getMeta, getRow, loadSpell, prerenderedSlugs } from "@/lib/winger";
@@ -21,10 +22,8 @@ export default async function PlayerPage({ params }: { params: Promise<{ slug: s
   const s = await loadSpell(slug);
   if (!s) notFound();
   const m = getMeta();
-  const a = m.archetypes[s.cluster], alt = m.archetypes[s.alt];
-  const maxD = Math.max(...s.distToCluster);
-  const order = s.distToCluster.map((d, k) => ({ d, k })).sort((p, q) => p.d - q.d);
-  const career = s.career.map((c) => getRow(c)!);
+  const a = m.archetypes[s.cluster];
+      const career = s.career.map((c) => getRow(c)!);
   const nbs = s.nb.map(([c, d]) => ({ r: getRow(c)!, d }));
   const robustCount = [s.robust.familyBalanced, s.robust.equalPlayerWeight, s.robust.extremeTrimmed].filter((x) => x === s.cluster).length;
 
@@ -65,24 +64,16 @@ export default async function PlayerPage({ params }: { params: Promise<{ slug: s
       </header>
 
       <section className="wrap">
-        <div className="head"><h2 className="d">Where this season sits</h2>
-          <p className="wx-note">Distance to the centre of each style across all 20 behaviours. The spell is assigned to the nearest one. Styles overlap, so a second style close behind means a mixed profile.</p>
+        <div className="head"><h2 className="d">Which style is it closest to?</h2>
+          <p className="wx-note">Each style has a centre: its average across all 20 behaviours. This season is placed at the left and each centre sits as far away as it is. The nearest centre decides the style. Styles overlap, so a second centre close behind means a mixed profile.</p>
         </div>
-        <ol className="wx-dists">
-          {order.map(({ d, k }) => (
-            <li key={k} className={k === s.cluster ? "on" : undefined}>
-              <span className="lab"><i style={{ background: m.archetypes[k].color }} />{m.archetypes[k].code} · {m.archetypes[k].label}</span>
-              <span className="bar"><i style={{ width: `${(d / maxD) * 100}%`, background: k === s.cluster ? m.archetypes[k].color : undefined }} /></span>
-              <span className="mono">{fmtDist(d)}</span>
-            </li>
-          ))}
-        </ol>
-        <p className="wx-small">Second closest: {alt.code} {alt.label}, {fmtDist(s.altDist - s.centroidDist)} further away. {robustCount === 3 ? `It stayed in ${a.code} in all three robustness tests.` : `It moved style in ${3 - robustCount} of three robustness tests, so treat the assignment as borderline.`}</p>
+        <Closeness dist={s.distToCluster} cluster={s.cluster} archetypes={m.archetypes} label={`${s.player.split(" ").slice(-1)[0]} ${season(s.season)}`} />
+        <p className="wx-small">{robustCount === 3 ? `It stayed closest to ${a.code} in all three robustness tests.` : `It moved style in ${3 - robustCount} of three robustness tests, so treat the assignment as borderline.`}</p>
       </section>
 
       <section className="wrap">
         <div className="head"><h2 className="d">Behavioural fingerprint</h2>
-          <p className="wx-note">All 20 behaviours for this season, against every winger spell and against the {a.label.toLowerCase()} average.</p>
+          <p className="wx-note">What this season did more or less than the average winger, across all 20 behaviours, with the {a.code} {a.label.toLowerCase()} average marked for reference.</p>
         </div>
         <Fingerprint fp={s.fp} features={m.features} families={m.families} color={a.color} code={a.code} />
         <p className="wx-small"><Link href={`${EXPLORE}/compare?a=${s.slug}`} style={{ display: "inline-block", paddingBlock: 4 }}>Compare this season with another →</Link></p>

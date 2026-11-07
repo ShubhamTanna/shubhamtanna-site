@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { EXPLORE, type CatalogRow, type Meta } from "@/lib/winger-types";
 import { fmtDist, onColor, season } from "@/lib/winger-format";
-import Signature, { SIG_VARIANTS, type SigVariant } from "./Signature";
+import Signature, { readingOf } from "./Signature";
 import { useSelection } from "./Selection";
 
 type Props = {
@@ -15,22 +15,14 @@ type Props = {
 export default function StylesView({ meta, reps, featured }: Props) {
   const { archetypes } = meta;
   const { style, set } = useSelection();
-  // Review only: ?sig=strips|ledger|ladder switches the signature concept. Removed once one is chosen.
-  const [variant, setVariant] = useState<SigVariant>("strips");
   const [all, setAll] = useState(false);
   useEffect(() => {
     const p = new URLSearchParams(location.search);
     const m = /^c([0-4])$/i.exec(p.get("style") ?? "");
     if (m) set({ style: Number(m[1]) });
-    const v = p.get("sig");
     // eslint-disable-next-line react-hooks/set-state-in-effect -- browser-only state, read after hydration
-    if (v && SIG_VARIANTS.some((x) => x.id === v)) setVariant(v as SigVariant);
     if (p.get("all") === "1") setAll(true);
   }, [set]);
-  const pickVariant = (v: SigVariant) => {
-    setVariant(v);
-    const u = new URL(location.href); u.searchParams.set("sig", v); history.replaceState(null, "", u);
-  };
   const pick = (id: number) => {
     set({ style: id });
     const u = new URL(location.href); u.searchParams.set("style", `c${id}`); history.replaceState(null, "", u);
@@ -41,36 +33,37 @@ export default function StylesView({ meta, reps, featured }: Props) {
 
   return (
     <>
-      <section className="wx-styles wrap">
-        <div className="wx-intro">
-          <p className="mono">Decoding winger playstyles · {archetypes.reduce((s, x) => s + x.nSpells, 0).toLocaleString("en-US")} spells</p>
+      <section className="wrap wx-hero">
+        <p className="mono">Decoding winger playstyles · {archetypes.reduce((s, x) => s + x.nSpells, 0).toLocaleString("en-US")} spells</p>
+        <div className="grid">
           <h1 className="d">One position.<br /><em>Many ways to play.</em></h1>
           <p className="wx-lede">Five recurring ways wingers attacked in Europe’s top five leagues, 2017–2024, found from 20 measured behaviours. The styles overlap: they describe tendencies, not fixed identities.</p>
-          <p className="mono wx-label">Choose a style</p>
-          <ul className="wx-picker">
-            {archetypes.map((x) => (
-              <li key={x.id}>
-                <button type="button" aria-pressed={x.id === a.id} onClick={() => pick(x.id)} style={{ ["--c" as string]: x.color, ["--on" as string]: onColor(x.color) }}>
-                  <i aria-hidden="true" />
-                  <span className="code">{x.code}</span>
-                  <span className="name">{x.label}</span>
-                  <span className="n">{x.nSpells}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
         </div>
+      </section>
 
-        <div className="wx-panel" style={{ background: a.color, color: ink }}>
-          <div className="top"><span className="mono">{a.code} · Behavioural signature</span><span className="mono">{a.nSpells} spells · {a.nPlayers} footballers</span></div>
+      <section className="wrap">
+        <p className="mono wx-label">Choose a style</p>
+        <ul className="wx-cards" role="list">
+          {archetypes.map((x) => (
+            <li key={x.id}>
+              <button type="button" aria-pressed={x.id === a.id} onClick={() => pick(x.id)} style={{ ["--c" as string]: x.color, ["--on" as string]: onColor(x.color) }}>
+                <span className="code mono">{x.code}</span>
+                <span className="name">{x.label}</span>
+                <span className="n mono">{x.nSpells} spells</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="wrap wx-style" style={{ ["--c" as string]: a.color, ["--on" as string]: ink }}>
+        <header>
+          <p className="mono"><span className="chip">{a.code}</span> Behavioural signature · {a.nSpells} spells · {a.nPlayers} footballers</p>
           <h2 className="d" aria-live="polite">{a.label}</h2>
-          <div className="wx-review mono" role="group" aria-label="Signature concept (review only)">
-            <span>Review · concept</span>
-            {SIG_VARIANTS.map((v) => <button key={v.id} type="button" aria-pressed={variant === v.id} onClick={() => pickVariant(v.id)}>{v.name}</button>)}
-          </div>
-          <Signature a={a} meta={meta} variant={variant} all={all} />
-          <button type="button" className="wx-all mono" aria-expanded={all} onClick={() => setAll(!all)}>{all ? "Back to the signature" : "Show all 20 behaviours"}</button>
-        </div>
+          {!all && <p className="read">{readingOf(a, meta.features)}</p>}
+        </header>
+        <Signature a={a} meta={meta} all={all} />
+        <button type="button" className="wx-all mono" aria-expanded={all} onClick={() => setAll(!all)}>{all ? "Back to the six that define it" : "Show all 20 behaviours"}</button>
       </section>
 
       <section className="wrap wx-reps">

@@ -4,13 +4,12 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { EXPLORE, type CatalogRow, type Meta, type Spell } from "@/lib/winger-types";
-import { distanceParts, fmtDist, fmtZ, ordinal, season } from "@/lib/winger-format";
+import { distanceParts, fmtDist, fmtZ, fold, haystack, lc, ordinal, SEARCH_HINT, season } from "@/lib/winger-format";
 import { loadCatalog } from "./PlayerSearch";
 import { loadSpell } from "./CompareView";
 import { useSelection } from "./Selection";
 
-const fold = (s: string) => s.normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase();
-const DEFAULT = "marcus-rashford-manchester-united-2017-18";
+const DEFAULT = "riyad-mahrez-leicester-city-2017-18";
 const tag = (r: { season: string; club: string }, multiClub: boolean) => (multiClub ? `${season(r.season)} · ${r.club}` : season(r.season));
 
 export default function EvolutionView({ meta }: { meta: Meta }) {
@@ -31,12 +30,21 @@ export default function EvolutionView({ meta }: { meta: Meta }) {
   }, [rows]);
   const multi = (s: string | null) => { const r = rows?.find((x) => x.slug === s); return r && byPlayer.get(r.playerKey)!.length > 1 ? r : undefined; };
 
-  // Footballer from ?p=, else the explorer's focus if it has several seasons, else a default.
+  // Footballer from ?p=, else the explorer's footballer if they have several seasons, else a default.
+  // Afterwards, follow the footballer bar whenever it changes to someone with several seasons.
+  const [single, setSingle] = useState<CatalogRow | null>(null);
   useEffect(() => {
-    if (!rows || slug) return;
-    const p = new URLSearchParams(location.search).get("p");
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- browser-only state, read after hydration
-    setSlug((multi(p) ?? multi(focus) ?? multi(DEFAULT))?.slug ?? null);
+    if (!rows) return;
+    const cur = rows.find((x) => x.slug === slug);
+    if (!slug) {
+      const p = new URLSearchParams(location.search).get("p");
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- browser-only state, read after hydration
+      setSlug((multi(p) ?? multi(focus) ?? multi(DEFAULT))?.slug ?? null);
+    } else if (focus && cur) {
+      const f = rows.find((x) => x.slug === focus);
+      if (f && f.playerKey !== cur.playerKey) { if (multi(focus)) { setSlug(focus); setSpells(null); setSingle(null); } else setSingle(f); }
+    }
+    if (!slug && focus && !multi(focus)) setSingle(rows.find((x) => x.slug === focus) ?? null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows, focus]);
 
@@ -54,10 +62,10 @@ export default function EvolutionView({ meta }: { meta: Meta }) {
     const w = fold(q).split(/\s+/).filter(Boolean);
     if (!w.length) return [];
     const seen = new Set<number>();
-    return (rows ?? []).filter((r) => byPlayer.get(r.playerKey)!.length > 1 && w.every((x) => fold(`${r.player} ${r.club}`).includes(x)) && !seen.has(r.playerKey) && seen.add(r.playerKey)).slice(0, 8);
+    return (rows ?? []).filter((r) => byPlayer.get(r.playerKey)!.length > 1 && w.every((x) => haystack(r).includes(x)) && !seen.has(r.playerKey) && seen.add(r.playerKey)).slice(0, 8);
   }, [q, rows, byPlayer]);
 
-  const pick = (s: string) => { setSlug(s); setSpells(null); setQ(""); setAll(false); };
+  const pick = (s: string) => { setSlug(s); setSpells(null); setQ(""); setAll(false); setSingle(null); set({ focus: s }); };
   const nMulti = useMemo(() => [...byPlayer.values()].filter((l) => l.length > 1).length, [byPlayer]);
 
   if (!rows) return <p className="wx-pending">Loading 1,396 spells…</p>;
@@ -68,11 +76,14 @@ export default function EvolutionView({ meta }: { meta: Meta }) {
     <div className="wx-evo2">
       <div className="wx-pick wx-evo-pick">
         <label><span className="mono">Footballer · {nMulti} with two or more seasons</span>
-          <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={row ? `${row.player}` : "Search a footballer"} autoComplete="off" />
+          <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={SEARCH_HINT} autoComplete="off" />
         </label>
         {hits.length > 0 && <ul>{hits.map((r) => <li key={r.slug}><button type="button" onClick={() => pick(r.slug)}>{r.player} <span>{byPlayer.get(r.playerKey)!.length} seasons</span></button></li>)}</ul>}
       </div>
 
+      {single && row && single.playerKey !== row.playerKey && (
+        <p className="wx-note-box">{single.player} has only one qualifying season ({single.club}, {season(single.season)}), so there is no change to show. Showing {row.player} instead; search above for another footballer.</p>
+      )}
       {!row || !ok ? <p className="wx-pending">Loading seasons…</p> : (
         <Journey meta={meta} spells={spells} multiClub={multiClub} pair={pair} setPair={setPair} all={all} setAll={setAll}
           onCompare={() => set({ focus: spells[pair[0]].slug, compare: spells[pair[1]].slug })} />
@@ -150,25 +161,43 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
           </div>
         </div>
         {i === j ? <p className="wx-pending">Choose two different seasons.</p> : (<>
-          <p className="wx-evo-sum">
-            Style distance between the two seasons: <b className="mono">{fmtDist(cmp.distance)}</b>. For reference, half of all spells have another footballer’s season within {fmtDist(q2)}.{" "}
-            {S1.cluster === S2.cluster ? `Both seasons sit closest to ${A[S1.cluster].label}.` : `Closest style moved from ${A[S1.cluster].code} ${A[S1.cluster].label} to ${A[S2.cluster].code} ${A[S2.cluster].label}.`}{" "}
-            <Link href={`${EXPLORE}/compare?a=${S1.slug}&b=${S2.slug}`} onClick={onCompare}>Open in Compare →</Link>
-          </p>
-          <div className="wx-dumb-key mono" aria-hidden="true"><span><i className="o" />{tag(S1, true)}</span><span><i className="f" />{tag(S2, true)}</span><span><i className="m" />All-spell mean</span><span>Scale ±{lim} SD</span></div>
-          <ol className="wx-dumb">
+          <div className="wx-evo-sum">
+            <div className="move">
+              <span className="season" style={{ ["--c" as string]: A[S1.cluster].color }}><b className="mono">{tag(S1, true)}</b><span>{A[S1.cluster].code} {A[S1.cluster].label}</span></span>
+              <span className="arrow" aria-hidden="true">→</span>
+              <span className="season" style={{ ["--c" as string]: A[S2.cluster].color }}><b className="mono">{tag(S2, true)}</b><span>{A[S2.cluster].code} {A[S2.cluster].label}</span></span>
+            </div>
+            <p>
+              {S1.cluster === S2.cluster ? `Both seasons sit closest to ${A[S1.cluster].label}, ` : `The closest style changed from ${A[S1.cluster].label} to ${A[S2.cluster].label}, `}
+              {`and the two seasons are ${fmtDist(cmp.distance)} apart in style (half of all spells have another footballer’s season within ${fmtDist(q2)}). `}
+              Biggest changes: {cmp.parts.slice(0, 3).map((pp, n) => {
+                const [, a1, r1] = S1.fp[pp.k], [, a2, r2] = S2.fp[pp.k];
+                return <span key={pp.k}>{n ? (n === 2 ? " and " : ", ") : ""}<b>{lc(F[pp.k].name)}</b> {a2 > a1 ? "up" : "down"} from the {ordinal(r1)} to the {ordinal(r2)} percentile</span>;
+              })}.{" "}
+              <Link href={`${EXPLORE}/compare?a=${S1.slug}&b=${S2.slug}`} onClick={onCompare}>Open both in Compare →</Link>
+            </p>
+          </div>
+          <div className="wx-dumb-key mono" aria-hidden="true">
+            <span><i className="o" style={{ borderColor: A[S1.cluster].color }} />{tag(S1, true)}</span>
+            <span><i className="f" style={{ background: A[S2.cluster].color }} />{tag(S2, true)}</span>
+            <span><i className="m" />Average winger</span><span><i className="b" />Middle of all seasons</span>
+          </div>
+          <ol className="wx-dumb" style={{ ["--c1" as string]: A[S1.cluster].color, ["--c2" as string]: A[S2.cluster].color }}>
             {ks.map((k) => {
               const f = F[k], [, z1, p1] = S1.fp[k], [, z2, p2] = S2.fp[k];
               const share = cmp.parts.find((p) => p.k === k)!.sq / cmp.total;
+              const up = z2 >= z1;
               return (
                 <li key={k}>
                   <div className="lab">
                     <b>{f.name}{f.unitStatus === "unresolved_physical_unit" ? "*" : ""}</b>
-                    <span>Rank among all spells: {ordinal(p1)} → {ordinal(p2)} percentile · {fmtZ(z1)} → {fmtZ(z2)} SD from the mean{all ? "" : ` · ${Math.round(share * 100)}% of the squared distance`}</span>
+                    <span className={`chg ${up ? "up" : "dn"}`}><i aria-hidden="true">{up ? "▲" : "▼"}</i> {up ? "Up" : "Down"} from the {ordinal(p1)} to the {ordinal(p2)} percentile</span>
+                    <span className="mono sd">{fmtZ(z1)} → {fmtZ(z2)} SD from the mean{all ? "" : ` · ${Math.round(share * 100)}% of the change`}</span>
                   </div>
-                  <div className="trk" role="img" aria-label={`${f.name}: ${fmtZ(z1)} to ${fmtZ(z2)} SD from the mean`}>
+                  <div className="trk" role="img" aria-label={`${f.name}: ${up ? "up" : "down"} from the ${ordinal(p1)} to the ${ordinal(p2)} percentile (${fmtZ(z1)} to ${fmtZ(z2)} SD)`}>
+                    <i className="b" style={{ left: `${x(-1)}%`, width: `${x(1) - x(-1)}%` }} />
                     <i className="m" style={{ left: `${x(0)}%` }} />
-                    <i className={`ln ${z2 >= z1 ? "up" : "dn"}`} style={{ left: `${Math.min(x(z1), x(z2))}%`, width: `${Math.abs(x(z2) - x(z1))}%` }} />
+                    <i className={`ln ${up ? "up" : "dn"}`} style={{ left: `${Math.min(x(z1), x(z2))}%`, width: `${Math.abs(x(z2) - x(z1))}%` }} />
                     <i className="o" style={{ left: `${x(z1)}%` }} />
                     <i className="f" style={{ left: `${x(z2)}%` }} />
                   </div>
@@ -177,7 +206,7 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
             })}
           </ol>
           <button type="button" className="wx-all mono" aria-expanded={all} onClick={() => setAll(!all)}>{all ? "Show the six biggest changes" : "Show all 20 behaviours"}</button>
-          <p className="wx-small">{all ? "All 20 behaviours in research order." : "The six behaviours that account for most of the distance between the two seasons."} Percentile rank and SD from the mean can disagree on lopsided behaviours; both are shown as measured.</p>
+          <p className="wx-small">{all ? "All 20 behaviours in research order." : "The six behaviours that account for most of the style distance between the two seasons."} The hollow dot is the first season, the filled dot the second; the arrow shows the direction of change. Percentile rank and SD from the mean can disagree on lopsided behaviours; both are shown as measured.</p>
         </>)}
       </section>
     </>

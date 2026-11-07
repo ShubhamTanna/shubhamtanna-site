@@ -39,7 +39,7 @@ export type Meta = {
 // One row of catalog.json, decoded.
 export type CatalogRow = {
   slug: string; player: string; club: string; comp: string; season: string; cluster: number;
-  pc1: number; pc2: number; minutes: number; age: number; centroidDist: number; pctWithin: number;
+  pc1: number; pc2: number; pc3: number; minutes: number; age: number; centroidDist: number; pctWithin: number;
   stable: boolean; playerKey: number;
 };
 

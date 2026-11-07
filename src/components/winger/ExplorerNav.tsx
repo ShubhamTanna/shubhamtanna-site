@@ -1,12 +1,25 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { EXPLORE } from "@/lib/winger-types";
 import { useSelection } from "./Selection";
 
 // Tool links carry the current selection, so moving between tools keeps the same footballer.
 export default function ExplorerNav() {
   const path = usePathname();
+  // The explorer bar sticks directly under the site header, whose height varies with screen size.
+  useEffect(() => {
+    const nav = document.querySelector("nav.top"), bar = document.querySelector(".wx-bar");
+    if (!nav || !bar) return;
+    const root = document.documentElement.style;
+    const ro = new ResizeObserver(() => {
+      root.setProperty("--wx-top", `${Math.round(nav.getBoundingClientRect().height)}px`);
+      root.setProperty("--wx-bar-h", `${Math.round(bar.getBoundingClientRect().height)}px`);
+    });
+    ro.observe(nav); ro.observe(bar);
+    return () => ro.disconnect();
+  }, []);
   const { focus, compare, style } = useSelection();
   const q = (o: Record<string, string | null | undefined>) => {
     const p = new URLSearchParams(Object.entries(o).filter((e): e is [string, string] => !!e[1]));

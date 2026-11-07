@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./explorer.css";
 import { SelectionProvider } from "@/components/winger/Selection";
 import ExplorerNav from "@/components/winger/ExplorerNav";
+import FocusBar from "@/components/winger/FocusBar";
 import { BASE, EXPLORE, getMeta } from "@/lib/winger";
 
 // Not indexed until the coordinated launch.
@@ -26,6 +27,7 @@ export default function ExplorerLayout({ children }: { children: React.ReactNode
             <ExplorerNav />
           </div>
         </header>
+        <FocusBar archetypes={m.archetypes} />
         {children}
         <footer className="wx-foot">
           <div className="wrap">

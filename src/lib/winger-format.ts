@@ -62,3 +62,9 @@ export function signature(centroid: number[]) {
 export const listText = (names: string[]) =>
   names.length < 2 ? names.join("") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
 export const lc = (name: string) => name.charAt(0).toLowerCase() + name.slice(1);
+
+// Search: accent-insensitive, with common short club names ("Man City" finds Manchester City).
+export const fold = (s: string) => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+export const alias = (club: string) => club.replace(/^Manchester United$/, "Man Utd Man United").replace(/^Manchester /, "Man ").replace(/^Paris Saint-Germain$/, "PSG");
+export const haystack = (r: { player: string; club: string; season?: string }) => fold(`${r.player} ${r.club} ${alias(r.club)} ${r.season ?? ""}`);
+export const SEARCH_HINT = "e.g. Foden, Man City";

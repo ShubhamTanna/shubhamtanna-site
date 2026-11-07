@@ -2,9 +2,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { DATA, EXPLORE, decodeCatalog, type Archetype, type CatalogRow } from "@/lib/winger-types";
-import { season } from "@/lib/winger-format";
+import { fold, haystack, SEARCH_HINT, season } from "@/lib/winger-format";
 
-const fold = (s: string) => s.normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase();
 let cache: Promise<CatalogRow[]> | null = null;
 export const loadCatalog = () => (cache ??= fetch(`${DATA}/catalog.json`).then((r) => r.json()).then(decodeCatalog));
 
@@ -23,7 +22,7 @@ export default function PlayerSearch({ archetypes, leagues, seasons }: { archety
     const words = fold(q).split(/\s+/).filter(Boolean);
     return rows
       .filter((r) => (style === null || r.cluster === style) && (!league || r.comp === league) && (!yr || r.season === yr))
-      .filter((r) => { const h = fold(`${r.player} ${r.club}`); return words.every((w) => h.includes(w)); })
+      .filter((r) => { const h = haystack(r); return words.every((w) => h.includes(w)); })
       .sort((a, b) => a.player.localeCompare(b.player) || a.season.localeCompare(b.season));
   }, [rows, q, style, league, yr]);
 
@@ -31,7 +30,7 @@ export default function PlayerSearch({ archetypes, leagues, seasons }: { archety
     <div className="wx-search">
       <div className="wx-filters">
         <label className="q"><span className="mono">Search footballer or club</span>
-          <input type="search" value={q} onChange={(e) => { setQ(e.target.value); setN(40); }} placeholder="e.g. Saka, Leverkusen" autoComplete="off" />
+          <input type="search" value={q} onChange={(e) => { setQ(e.target.value); setN(40); }} placeholder={SEARCH_HINT} autoComplete="off" />
         </label>
         <label><span className="mono">League</span>
           <select value={league} onChange={(e) => setLeague(e.target.value)}><option value="">All</option>{leagues.map((l) => <option key={l}>{l}</option>)}</select>
