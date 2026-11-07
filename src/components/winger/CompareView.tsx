@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { DATA, EXPLORE, type CatalogRow, type Meta, type Spell } from "@/lib/winger-types";
-import { distanceParts, fmtDist, fmtZ, season, shareText } from "@/lib/winger-format";
+import { distanceParts, fmtDist, sdText, season, shareText, skewed, skewNote } from "@/lib/winger-format";
 import { loadCatalog } from "./PlayerSearch";
 import { useSelection } from "./Selection";
 
@@ -86,13 +86,14 @@ export default function CompareView({ meta }: { meta: Meta }) {
               return (
                 <li key={k}>
                   <b>{f.name}</b>
-                  <span>A {shareText(A.fp[k][2])} ({fmtZ(A.fp[k][1])} SD) · B {shareText(B.fp[k][2])} ({fmtZ(B.fp[k][1])} SD)</span>
+                  <span>A: {shareText(A.fp[k][2])}, {sdText(A.fp[k][1])}{skewed(A.fp[k][2], A.fp[k][1]) ? " †" : ""}</span>
+                  <span>B: {shareText(B.fp[k][2])}, {sdText(B.fp[k][1])}{skewed(B.fp[k][2], B.fp[k][1]) ? " †" : ""}</span>
                   <span className="mono">{((cmp!.parts.find((p) => p.k === k)!.sq / cmp!.total) * 100).toFixed(0)}% of the squared distance</span>
                 </li>
               );
             })}
           </ol>
-          <p className="wx-small">Distance is the research’s own measure: straight-line distance across all 20 standardized behaviours. It is not a similarity percentage, and it says nothing about which player is better. {ca && cb && ca.id === cb.id ? `Both seasons sit closest to ${ca.label}.` : ""}</p>
+          <p className="wx-small">Distance is the research’s own measure: straight-line distance across all 20 standardized behaviours. It is not a similarity percentage, and it says nothing about which player is better. Percent figures are percentile rank among all spells; SD is distance from the all-spell mean.{cmp!.parts.slice(0, 5).some(({ k }) => skewed(A.fp[k][2], A.fp[k][1]) || skewed(B.fp[k][2], B.fp[k][1])) ? ` † ${skewNote}` : ""} {ca && cb && ca.id === cb.id ? `Both seasons sit closest to ${ca.label}.` : ""}</p>
         </>
       )}
     </div>

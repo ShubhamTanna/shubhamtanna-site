@@ -18,7 +18,7 @@ export default function ExplorerNav() {
     { href: focus ? `${EXPLORE}/players/${focus}` : `${EXPLORE}/players`, base: `${EXPLORE}/players`, label: "Footballers" },
     { href: `${EXPLORE}/compare${q({ a: focus, b: compare })}`, base: `${EXPLORE}/compare`, label: "Compare" },
     { href: `${EXPLORE}/map${q({ p: focus })}`, base: `${EXPLORE}/map`, label: "Map" },
-    { href: `${EXPLORE}/evolution`, base: `${EXPLORE}/evolution`, label: "Evolution" },
+    { href: `${EXPLORE}/evolution${q({ p: focus })}`, base: `${EXPLORE}/evolution`, label: "Evolution" },
   ];
   const on = (t: (typeof tools)[number]) => (t.exact ? path === t.base : path === t.base || path.startsWith(t.base + "/"));
   return (

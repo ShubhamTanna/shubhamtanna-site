@@ -1,7 +1,7 @@
 // Working fingerprint: one row per behaviour, grouped by family. Plain words first, numbers second.
 // The axis widens to fit every value shown (the research contract forbids clipping). Not the final visual.
 import type { Feature } from "@/lib/winger-types";
-import { fmtRaw, fmtZ, shareText } from "@/lib/winger-format";
+import { fmtRaw, fmtZ, shareText, skewed, skewNote } from "@/lib/winger-format";
 
 type Row = [raw: number, z: number, pct: number, centroidZ: number];
 
@@ -18,13 +18,13 @@ export default function Fingerprint({ fp, features, families, color, code, selec
     <div className="wx-fp">
       <div className="wx-fp-key mono">
         <span><i className="k-band" />Most spells (middle band, ±1 SD)</span>
-        <span><i className="k-mid" />Typical spell</span>
+        <span><i className="k-mid" />All-spell mean</span>
         <span><i className="k-dia" style={{ borderColor: color }} />{code} style average</span>
         <span><i className="k-dot" style={{ background: color }} />This spell</span>
       </div>
       <div className="wx-fp-axis mono" aria-hidden="true">
         <span />
-        <div className="track">{ticks.map((t) => <span key={t} style={{ left: x(t) }}>{t === 0 ? "typical" : fmtZ(t).replace(".00", "")}</span>)}</div>
+        <div className="track">{ticks.map((t) => <span key={t} style={{ left: x(t) }}>{t === 0 ? "mean" : fmtZ(t).replace(".00", "")}</span>)}</div>
         <span />
       </div>
       {families.map((fam) => {
@@ -40,9 +40,9 @@ export default function Fingerprint({ fp, features, families, color, code, selec
                 <div key={f.key} className={`wx-fp-row${sel ? " sel" : ""}`}>
                   <div className="lab">
                     <b>{f.name}</b>
-                    <span>{shareText(pct)}</span>
+                    <span>{shareText(pct)}{skewed(pct, z) ? " †" : ""}</span>
                   </div>
-                  <div className="track" role="img" aria-label={`${f.name}: ${fmtZ(z)} standard deviations from the typical spell; ${code} average ${fmtZ(cz)}`}>
+                  <div className="track" role="img" aria-label={`${f.name}: ${fmtZ(z)} standard deviations from the all-spell mean; ${code} average ${fmtZ(cz)}`}>
                     <i className="band" style={{ left: x(-1), width: `calc(${x(1)} - ${x(-1)})` }} />
                     <i className="mid" style={{ left: x(0) }} />
                     <i className="dia" style={{ left: x(cz), borderColor: color }} />
@@ -59,7 +59,7 @@ export default function Fingerprint({ fp, features, families, color, code, selec
           </div>
         );
       })}
-      <p className="wx-small">Dots show how far this spell sits from the typical winger spell, in standard deviations (SD). Percent figures compare it with all 1,396 spells; they describe behaviour, not quality.{features.some((f) => f.unitStatus === "unresolved_physical_unit") ? " * Average shot distance is source-reported; its physical unit is not confirmed." : ""}</p>
+      <p className="wx-small">Dots show how far this spell sits from the all-spell mean, in standard deviations (SD); the tick marks the mean. Percent figures are percentile rank among all 1,396 spells. Both describe behaviour, not quality.{fp.some((r) => skewed(r[2], r[1])) ? ` † ${skewNote}` : ""}{features.some((f) => f.unitStatus === "unresolved_physical_unit") ? " * Average shot distance is source-reported; its physical unit is not confirmed." : ""}</p>
     </div>
   );
 }

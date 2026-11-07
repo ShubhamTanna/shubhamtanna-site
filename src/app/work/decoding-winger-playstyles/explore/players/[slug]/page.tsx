@@ -48,7 +48,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ slug: s
           </div>
           {career.length > 1 && (
             <nav className="wx-career" aria-label={`${s.player}’s seasons`}>
-              <span className="mono">Seasons in the data</span>
+              <span className="mono">Seasons in the data · <Link href={`${EXPLORE}/evolution?p=${s.slug}`} style={{ display: "inline-block", paddingBlock: 4 }}>Follow across seasons →</Link></span>
               <ol>
                 {career.map((c) => (
                   <li key={c.slug}>
@@ -85,6 +85,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ slug: s
           <p className="wx-note">All 20 behaviours for this season, against every winger spell and against the {a.label.toLowerCase()} average.</p>
         </div>
         <Fingerprint fp={s.fp} features={m.features} families={m.families} color={a.color} code={a.code} />
+        <p className="wx-small"><Link href={`${EXPLORE}/compare?a=${s.slug}`} style={{ display: "inline-block", paddingBlock: 4 }}>Compare this season with another →</Link></p>
       </section>
 
       <section className="wrap">
