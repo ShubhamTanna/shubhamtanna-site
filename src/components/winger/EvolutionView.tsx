@@ -183,7 +183,7 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
         <div className="head">
           <h3 className="d">What changed</h3>
           <div className="wx-evo-sel">
-            {(["From", "To"] as const).map((lab, side) => (
+            {(["Spell", "Compared with"] as const).map((lab, side) => (
               <label key={lab}><span className="mono">{lab}</span>
                 <select value={pair[side]} onChange={(e) => { const v = Number(e.target.value); setPair(side ? [i, v] : [v, j]); }}>
                   {spells.map((s, n) => <option key={s.slug} value={n}>{tag(s, true)} · {A[s.cluster].code}</option>)}
