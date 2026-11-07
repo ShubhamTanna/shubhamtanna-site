@@ -47,7 +47,11 @@ export default function EvolutionView({ meta }: { meta: Meta }) {
       const f = rows.find((x) => x.slug === focus);
       if (f && f.playerKey !== cur.playerKey) { if (multi(focus)) { setSlug(focus); setSpells(null); setSingle(null); } else setSingle(f); }
     }
-    if (!slug && focus && !multi(focus)) setSingle(rows.find((x) => x.slug === focus) ?? null);
+    if (!slug) {
+      const p = new URLSearchParams(location.search).get("p");
+      const asked = rows.find((x) => x.slug === p) ?? rows.find((x) => x.slug === focus);
+      if (asked && !multi(asked.slug)) setSingle(asked);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows, focus]);
 

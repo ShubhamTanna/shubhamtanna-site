@@ -17,10 +17,9 @@ export default function MapView({ meta }: { meta: Meta }) {
   const [hover, setHover] = useState<CatalogRow | null>(null);
   const [mode, setMode] = useState<"2d" | "3d">("2d");
   useEffect(() => {
-    loadCatalog().then(setRows);
     const p = new URLSearchParams(location.search);
     const slug = p.get("p");
-    if (slug) set({ focus: slug });
+    loadCatalog().then((r) => { setRows(r); if (slug && r.some((x) => x.slug === slug)) set({ focus: slug }); });
     // eslint-disable-next-line react-hooks/set-state-in-effect -- browser-only state, read after hydration
     if (p.get("view") === "3d") setMode("3d");
   }, [set]);
@@ -113,7 +112,13 @@ function Flat({ meta, rows, off, picked, centres, onHover, onPick }: ViewProps) 
       {W > 0 && (
         <svg width={W} height={H + padB} role="img" aria-label={`Map of ${meta.nSpells} spells on the first two principal components, coloured by closest style`}
           onMouseLeave={() => onHover(null)}
-          onClick={(e) => { const i = (e.target as SVGElement).dataset?.i; if (i) onPick(rows[+i]); }}>
+          onClick={(e) => {
+            // Nearest visible dot within ~16px of the tap or click: dots are small, fingers are not.
+            const bb = (e.currentTarget as SVGSVGElement).getBoundingClientRect(), cx = e.clientX - bb.left, cy = e.clientY - bb.top;
+            let best: CatalogRow | null = null, bd = 16 * 16;
+            for (const s of rows) { if (off.has(s.cluster)) continue; const d = (px(s.pc1) - cx) ** 2 + (py(s.pc2) - cy) ** 2; if (d < bd) { bd = d; best = s; } }
+            if (best) onPick(best);
+          }}>
           {ticksX.map((t) => <g key={`x${t}`}><line x1={px(t)} x2={px(t)} y1={0} y2={H} className={t ? "g" : "g0"} /><text x={px(t)} y={H + 16} textAnchor="middle">{t}</text></g>)}
           {ticksY.map((t) => <g key={`y${t}`}><line y1={py(t)} y2={py(t)} x1={padL} x2={W - 8} className={t ? "g" : "g0"} /><text x={padL - 8} y={py(t) + 4} textAnchor="end">{t}</text></g>)}
           <g className="dots">
@@ -135,7 +140,7 @@ function Flat({ meta, rows, off, picked, centres, onHover, onPick }: ViewProps) 
         <span key={c.a.id} className="ctr-lab mono" style={{ left: px(c.x), top: py(c.y), ["--c" as string]: c.a.color }}>{c.a.code} {c.a.label}</span>
       ))}
       {W > 0 && picked && !off.has(picked.cluster) && (
-        <span className={`pick-lab${px(picked.pc1) > W * 0.6 ? " left" : ""}`} style={{ left: px(picked.pc1), top: py(picked.pc2) }}>
+        <span className={`pick-lab${px(picked.pc1) > W * (W < 600 ? 0.45 : 0.6) ? " left" : ""}`} style={{ left: px(picked.pc1), top: py(picked.pc2) }}>
           <b>{picked.player}</b> {season(picked.season)}
         </span>
       )}

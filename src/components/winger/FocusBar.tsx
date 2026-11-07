@@ -10,13 +10,18 @@ import { loadCatalog } from "./PlayerSearch";
 import { useSelection } from "./Selection";
 
 export default function FocusBar({ archetypes }: { archetypes: Archetype[] }) {
-  const { focus, set } = useSelection();
+  const { focus, compare, set } = useSelection();
   const path = usePathname();
   const router = useRouter();
   const [rows, setRows] = useState<CatalogRow[]>([]);
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   useEffect(() => { loadCatalog().then(setRows); }, []);
+  useEffect(() => {
+    if (!rows.length) return;
+    if (focus && !rows.some((x) => x.slug === focus)) set({ focus: null });
+    if (compare && !rows.some((x) => x.slug === compare)) set({ compare: null });
+  }, [rows, focus, compare, set]);
   const r = rows.find((x) => x.slug === focus);
   const hits = useMemo(() => {
     const w = fold(q).split(/\s+/).filter(Boolean);

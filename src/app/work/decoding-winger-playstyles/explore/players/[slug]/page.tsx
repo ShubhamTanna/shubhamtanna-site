@@ -19,6 +19,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function PlayerPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  // Existence check before anything suspends, so an unknown footballer gets a real 404 status (once streaming
+  // starts the status is fixed at 200). getRow is a synchronous lookup in the catalogue.
+  if (!getRow(slug)) notFound();
   const s = await loadSpell(slug);
   if (!s) notFound();
   const m = getMeta();

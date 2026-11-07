@@ -10,7 +10,11 @@ import { useSelection } from "./Selection";
 
 const spellCache = new Map<string, Promise<Spell>>();
 export const loadSpell = (slug: string) => {
-  if (!spellCache.has(slug)) spellCache.set(slug, fetch(`${DATA}/spells/${slug}.json`).then((r) => { if (!r.ok) throw new Error(slug); return r.json(); }));
+  // Check the catalogue first, so an unknown footballer (old link, edited URL) never triggers a 404 request.
+  if (!spellCache.has(slug)) spellCache.set(slug, loadCatalog().then((rows) => {
+    if (!rows.some((r) => r.slug === slug)) throw new Error(`unknown footballer: ${slug}`);
+    return fetch(`${DATA}/spells/${slug}.json`).then((r) => { if (!r.ok) { void r.body?.cancel(); throw new Error(slug); } return r.json(); });
+  }));
   return spellCache.get(slug)!;
 };
 
@@ -62,8 +66,12 @@ export default function CompareView({ meta }: { meta: Meta }) {
     const u = new URL(location.href);
     for (const [k, v] of [["a", a], ["b", b]] as const) { if (v) u.searchParams.set(k, v); else u.searchParams.delete(k); }
     history.replaceState(null, "", u);
-    set({ ...(a ? { focus: a } : {}), ...(b ? { compare: b } : {}) });
-    Promise.all([a ? loadSpell(a).catch(() => null) : null, b ? loadSpell(b).catch(() => null) : null]).then((x) => setSpells(x as [Spell | null, Spell | null]));
+    // Share the choice with the other tools only once each footballer has actually loaded.
+    Promise.all([a ? loadSpell(a).catch(() => null) : null, b ? loadSpell(b).catch(() => null) : null]).then((x) => {
+      const [A, B] = x as [Spell | null, Spell | null];
+      setSpells([A, B]);
+      if (A || B) set({ ...(A ? { focus: A.slug } : {}), ...(B ? { compare: B.slug } : {}) });
+    });
   }, [ab, set]);
 
   const row = (slug: string | null) => rows.find((r) => r.slug === slug);
