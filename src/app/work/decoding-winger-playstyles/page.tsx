@@ -13,7 +13,7 @@ export default function CaseStudy() {
         <Link className="back" href="/work">← All work</Link>
         <div className="grid2">
           <div><span className="kicker">Analytics &amp; ML · 2026 · Personal project</span><h1>Decoding winger playstyles</h1></div>
-          <div className="hero"><b>{m.archetypes.length}</b><span>attacking styles from {m.nSpells.toLocaleString("en-US")} winger seasons</span></div>
+          <div className="hero"><b>{m.archetypes.length}</b><span>attacking styles from {m.nSpells.toLocaleString("en-US")} player–club–season spells</span></div>
         </div>
       </div></header>
       <section className="wrap">

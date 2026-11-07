@@ -8,8 +8,8 @@ export default function MapPage() {
     <section className="wrap wx-page">
       <div className="wx-pagehead">
         <p className="mono">Map</p>
-        <h1 className="d">All 1,396 seasons on one map</h1>
-        <p>Every winger season from 2017 to 2024 on one picture. Seasons that played alike sit together, so you can see where each style lives, where styles overlap, and which footballers sit between them.</p>
+        <h1 className="d">All 1,396 spells on one map</h1>
+        <p>All 1,396 qualifying spells from 2017–18 to 2023–24 on one picture, placed by the directions in which wingers differ most. You can see where each style gathers, where styles overlap, and which spells sit between them.</p>
       </div>
       <MapView meta={getMeta()} />
     </section>

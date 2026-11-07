@@ -19,7 +19,7 @@ export default function EvolutionPage() {
         <div className="wx-pagehead">
           <p className="mono">Evolution</p>
           <h1 className="d">How a footballer’s style changed</h1>
-          <p>Follow one winger through every season that met the 1,125-minute bar: the style each season sat closest to, how far it was from every style’s centre, its path across the style map, and which behaviours changed most between any two seasons.</p>
+          <p>Follow one winger through every club spell that met the 1,125-minute bar on its own: the style centre each spell sat nearest, how far it was from every centre, its path across the style map, and the largest measured differences between any two spells.</p>
         </div>
         <EvolutionView meta={m} />
       </section>

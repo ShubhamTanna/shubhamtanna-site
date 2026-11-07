@@ -4,9 +4,10 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { EXPLORE, type CatalogRow, type Meta, type Spell } from "@/lib/winger-types";
-import { distanceParts, fmtDist, fmtZ, fold, haystack, lc, ordinal, PCA_AXES, SEARCH_HINT, season } from "@/lib/winger-format";
+import { distanceParts, fmtDist, fmtZ, fold, haystack, lc, PCA_AXES, pctShort, SEARCH_HINT, season, shareText, SHOT_UNIT_NOTE } from "@/lib/winger-format";
 import { loadCatalog } from "./PlayerSearch";
 import { loadSpell } from "./CompareView";
+import Definitions from "./Definitions";
 import { useSelection } from "./Selection";
 
 const DEFAULT = "riyad-mahrez-leicester-city-2017-18";
@@ -114,10 +115,25 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
   const first = spells[0];
   const styles = new Set(spells.map((s) => s.cluster));
   const [i, j] = pair;
-  const S1 = spells[i], S2 = spells[j];
+  // Always compare in time order; two clubs in the same season have no known order, so they are A and B.
+  const slot = slots(spells);
+  const [a1, b1] = slot[i] <= slot[j] ? [i, j] : [j, i];
+  const S1 = spells[a1], S2 = spells[b1], tie = slot[a1] === slot[b1];
   const cmp = distanceParts(S1.fp.map((r) => r[1]), S2.fp.map((r) => r[1]));
-  const ks = all ? F.map((_, k) => k) : cmp.parts.slice(0, 6).map((p) => p.k);
+  const same = cmp.total === 0;
+  const ks = same ? [] : all ? F.map((_, k) => k) : cmp.parts.slice(0, 6).map((p) => p.k);
   const [, q2] = meta.nearestQuartiles;
+  const nSeasons = new Set(spells.map((s) => s.season)).size;
+  const L1 = tie ? `Spell A · ${S1.club}` : tag(S1, true), L2 = tie ? `Spell B · ${S2.club}` : tag(S2, true);
+  // Change in words: exact tie = unchanged; same rounded rank = say so and give the measured direction.
+  const change = (k: number) => {
+    const [, z1, p1] = S1.fp[k], [, z2, p2] = S2.fp[k];
+    if (z1 === z2) return { dir: 0, text: `Unchanged, ${shareText(p1)}` };
+    const up = z2 > z1, verb = tie ? (up ? "Higher at" : "Lower at") : up ? "Up" : "Down";
+    const where = tie ? ` ${S2.club} than at ${S1.club}` : "";
+    if (pctShort(p1) === pctShort(p2)) return { dir: up ? 1 : -1, text: `${verb}${where}: still ${shareText(p2)}, ${fmtZ(z1)} → ${fmtZ(z2)} SD` };
+    return { dir: up ? 1 : -1, text: tie ? `${verb}${where}: ${pctShort(p1)} vs ${pctShort(p2)} percentile` : `${verb} from the ${pctShort(p1)} to the ${pctShort(p2)} percentile` };
+  };
   // One scale for every row shown, widened to fit (never clipped).
   const lim = Math.max(3, Math.ceil(Math.max(...ks.flatMap((k) => [Math.abs(S1.fp[k][1]), Math.abs(S2.fp[k][1])]))));
   const x = (z: number) => ((z + lim) / (2 * lim)) * 100;
@@ -126,7 +142,7 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
     <>
       <header className="wx-evo-head">
         <h2 className="d">{first.player}</h2>
-        <p>{spells.length} qualifying seasons · {styles.size === 1 ? `closest to ${A[first.cluster].label} every time` : `closest to ${styles.size} different styles over time`}</p>
+        <p>{spells.length} qualifying club spells{spells.length !== nSeasons ? ` across ${nSeasons} seasons` : ""} · {styles.size === 1 ? `nearest to the ${A[first.cluster].label} centre every time` : `nearest to ${styles.size} different style centres over time`}</p>
       </header>
 
       {/* 1 · Style by season */}
@@ -139,13 +155,13 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
               <Link href={`${EXPLORE}/players/${s.slug}`} style={{ borderTopColor: a.color }}>
                 <b>{a.code}</b><span>{a.label}</span>
               </Link>
-              <small className="mono">{s.club}{s.robust.allThree ? "" : " · borderline"}</small>
+              <small className="mono">{s.club}{s.robust.allThree ? "" : ` · changed in ${[s.robust.familyBalanced, s.robust.equalPlayerWeight, s.robust.extremeTrimmed].filter((x) => x !== s.cluster).length} of 3 sensitivity checks`}</small>
             </li>
           );
         })}
       </ol>
       {multiClub && <p className="wx-small">Two clubs in the same season share one place on the timeline: the data does not say which came first.</p>}
-      <p className="wx-small">Only seasons with at least 1,125 minutes appear, so a gap does not mean he stopped playing. Changes describe how his measured style moved, not whether he got better or worse.</p>
+      <p className="wx-small">Each club spell needed at least 1,125 minutes on its own, so a gap does not mean he stopped playing. Changes describe how measured behaviour moved, not whether he got better or worse, or why.</p>
 
       <div className="wx-evo-grid">
         {/* 2 · Distance to each style centre */}
@@ -176,44 +192,42 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
             ))}
           </div>
         </div>
-        {i === j ? <p className="wx-pending">Choose two different seasons.</p> : (<>
+        {i === j ? <p className="wx-pending">Choose two different spells.</p> : (<>
           <div className="wx-evo-sum">
             <div className="move">
-              <span className="season" style={{ ["--c" as string]: A[S1.cluster].color }}><b className="mono">{tag(S1, true)}</b><span>{A[S1.cluster].code} {A[S1.cluster].label}</span></span>
-              <span className="arrow" aria-hidden="true">→</span>
-              <span className="season" style={{ ["--c" as string]: A[S2.cluster].color }}><b className="mono">{tag(S2, true)}</b><span>{A[S2.cluster].code} {A[S2.cluster].label}</span></span>
+              <span className="season" style={{ ["--c" as string]: A[S1.cluster].color }}><b className="mono">{L1}{tie ? ` · ${season(S1.season)}` : ""}</b><span>{A[S1.cluster].code} {A[S1.cluster].label}</span></span>
+              <span className="arrow" aria-hidden="true">{tie ? "vs" : "→"}</span>
+              <span className="season" style={{ ["--c" as string]: A[S2.cluster].color }}><b className="mono">{L2}{tie ? ` · ${season(S2.season)}` : ""}</b><span>{A[S2.cluster].code} {A[S2.cluster].label}</span></span>
             </div>
             <p>
-              {S1.cluster === S2.cluster ? `Both seasons sit closest to ${A[S1.cluster].label}, ` : `The closest style changed from ${A[S1.cluster].label} to ${A[S2.cluster].label}, `}
-              {`and the two seasons are ${fmtDist(cmp.distance)} apart in style (half of all spells have another footballer’s season within ${fmtDist(q2)}). `}
-              Biggest changes: {cmp.parts.slice(0, 3).map((pp, n) => {
-                const [, a1, r1] = S1.fp[pp.k], [, a2, r2] = S2.fp[pp.k];
-                return <span key={pp.k}>{n ? (n === 2 ? " and " : ", ") : ""}<b>{lc(F[pp.k].name)}</b> {a2 > a1 ? "up" : "down"} from the {ordinal(r1)} to the {ordinal(r2)} percentile</span>;
-              })}.{" "}
+              {tie && "Two club spells in the same season, compared side by side: the data does not say which came first. "}
+              {S1.cluster === S2.cluster ? `Both spells sit nearest the ${A[S1.cluster].label} centre, ` : tie ? `Spell A sits nearest ${A[S1.cluster].label}, Spell B nearest ${A[S2.cluster].label}, ` : `The nearest style centre changed from ${A[S1.cluster].label} to ${A[S2.cluster].label}, `}
+              {same ? "and the two measured profiles coincide: distance 0, so there are no differences to apportion. " : `and the two spells are ${fmtDist(cmp.distance)} apart in style. For reference, half of all spells have their nearest other footballer within ${fmtDist(q2)}. `}
+              {!same && <>Largest differences: {cmp.parts.slice(0, 3).map((pp, n) => <span key={pp.k}>{n ? (n === 2 ? " and " : ", ") : ""}<b>{lc(F[pp.k].name)}</b> {change(pp.k).text.charAt(0).toLowerCase() + change(pp.k).text.slice(1)}</span>)}.{" "}</>}
               <Link href={`${EXPLORE}/compare?a=${S1.slug}&b=${S2.slug}`} onClick={onCompare}>Open both in Compare →</Link>
             </p>
           </div>
           <div className="wx-dumb-key mono" aria-hidden="true">
-            <span><i className="o" style={{ borderColor: A[S1.cluster].color }} />{tag(S1, true)}</span>
-            <span><i className="f" style={{ background: A[S2.cluster].color }} />{tag(S2, true)}</span>
+            <span><i className="o" style={{ borderColor: A[S1.cluster].color }} />{L1}</span>
+            <span><i className="f" style={{ background: A[S2.cluster].color }} />{L2}</span>
             <span><i className="m" />Average winger</span><span><i className="b" />Within 1 SD of the mean</span>
           </div>
           <ol className="wx-dumb" style={{ ["--c1" as string]: A[S1.cluster].color, ["--c2" as string]: A[S2.cluster].color }}>
             {ks.map((k) => {
-              const f = F[k], [, z1, p1] = S1.fp[k], [, z2, p2] = S2.fp[k];
+              const f = F[k], [, z1] = S1.fp[k], [, z2] = S2.fp[k];
               const share = cmp.parts.find((p) => p.k === k)!.sq / cmp.total;
-              const up = z2 >= z1;
+              const ch = change(k), up = ch.dir > 0;
               return (
                 <li key={k}>
                   <div className="lab">
                     <b>{f.name}{f.unitStatus === "unresolved_physical_unit" ? "*" : ""}</b>
-                    <span className={`chg ${up ? "up" : "dn"}`}><i aria-hidden="true">{up ? "▲" : "▼"}</i> {up ? "Up" : "Down"} from the {ordinal(p1)} to the {ordinal(p2)} percentile</span>
-                    <span className="mono sd">{fmtZ(z1)} → {fmtZ(z2)} SD from the mean{all ? "" : ` · ${Math.round(share * 100)}% of the change`}</span>
+                    <span className={`chg ${ch.dir > 0 ? "up" : ch.dir < 0 ? "dn" : ""}`}>{ch.dir !== 0 && <i aria-hidden="true">{up ? "▲" : "▼"}</i>} {ch.text}</span>
+                    <span className="mono sd">{fmtZ(z1)} {tie ? "vs" : "→"} {fmtZ(z2)} SD from the mean{all ? "" : ` · ${Math.round(share * 100)}% of the total squared difference`}</span>
                   </div>
-                  <div className="trk" role="img" aria-label={`${f.name}: ${up ? "up" : "down"} from the ${ordinal(p1)} to the ${ordinal(p2)} percentile (${fmtZ(z1)} to ${fmtZ(z2)} SD)`}>
+                  <div className="trk" role="img" aria-label={`${f.name}: ${ch.text} (${fmtZ(z1)} ${tie ? "versus" : "to"} ${fmtZ(z2)} SD)`}>
                     <i className="b" style={{ left: `${x(-1)}%`, width: `${x(1) - x(-1)}%` }} />
                     <i className="m" style={{ left: `${x(0)}%` }} />
-                    <i className={`ln ${up ? "up" : "dn"}`} style={{ left: `${Math.min(x(z1), x(z2))}%`, width: `${Math.abs(x(z2) - x(z1))}%` }} />
+                    {ch.dir !== 0 && <i className={`ln ${up ? "up" : "dn"}${tie ? " tie" : ""}`} style={{ left: `${Math.min(x(z1), x(z2))}%`, width: `${Math.abs(x(z2) - x(z1))}%` }} />}
                     <i className="o" style={{ left: `${x(z1)}%` }} />
                     <i className="f" style={{ left: `${x(z2)}%` }} />
                   </div>
@@ -221,8 +235,9 @@ function Journey({ meta, spells, multiClub, pair, setPair, all, setAll, onCompar
               );
             })}
           </ol>
-          <button type="button" className="wx-all mono" aria-expanded={all} onClick={() => setAll(!all)}>{all ? "Show the six biggest changes" : "Show all 20 behaviours"}</button>
-          <p className="wx-small">{all ? "All 20 behaviours in research order." : "The six behaviours that account for most of the style distance between the two seasons."} The hollow dot is the first season, the filled dot the second; the arrow shows the direction of change. Percentile rank and SD from the mean can disagree on lopsided behaviours; both are shown as measured.</p>
+          <button type="button" className="wx-all mono" aria-expanded={all} onClick={() => setAll(!all)}>{all ? "Show the six largest differences" : "Show all 20 behaviours"}</button>
+          <p className="wx-small">{all ? "All 20 behaviours in research order." : "The six largest differences: each behaviour’s squared difference as a share of the total squared difference across all 20 (the style distance is the square root of that total)."} {tie ? "The hollow dot is Spell A, the filled dot Spell B; no order in time is implied." : "The hollow dot is the earlier spell, the filled dot the later; the arrow shows the direction of change."} The page opens on the first spell and the spell most different from it; choose any two. Percentile rank and SD from the mean can disagree on uneven distributions; both are shown as measured.{F.some((f) => f.unitStatus === "unresolved_physical_unit") ? ` ${SHOT_UNIT_NOTE}` : ""}</p>
+          <Definitions features={F} />
         </>)}
       </section>
     </>
@@ -245,7 +260,10 @@ function Distances({ meta, spells, multiClub, pair }: { meta: Meta; spells: Spel
       {spells.map((s, n) => slot.indexOf(slot[n]) === n && <text key={s.slug} x={xs(n)} y={H - B + 16} textAnchor="middle" className={spells.some((_, m) => slot[m] === slot[n] && (m === pair[0] || m === pair[1])) ? "on" : undefined}>{season(s.season).replace(/^20/, "")}{multiClub && slot.filter((v) => v === slot[n]).length > 1 ? "×2" : ""}</text>)}
       {meta.archetypes.map((a) => (
         <g key={a.id}>
-          <polyline points={spells.map((s, n) => `${xs(n)},${ys(s.distToCluster[a.id])}`).join(" ")} fill="none" stroke={a.color} strokeWidth={2} />
+          {/* Segments only between consecutive seasons; two clubs in one season are not joined (no known order). */}
+          {spells.flatMap((_, u) => spells.map((__, v) => [u, v] as const)).filter(([u, v]) => slot[v] === slot[u] + 1).map(([u, v]) => (
+            <line key={`${u}-${v}`} x1={xs(u)} y1={ys(spells[u].distToCluster[a.id])} x2={xs(v)} y2={ys(spells[v].distToCluster[a.id])} stroke={a.color} strokeWidth={2} />
+          ))}
           {spells.map((s, n) => s.cluster === a.id
             ? <circle key={n} cx={xs(n)} cy={ys(s.distToCluster[a.id])} r={4.5} fill={a.color} stroke="var(--ink)" strokeWidth={1.2}><title>{`${season(s.season)}: closest to ${a.code}, ${fmtDist(s.distToCluster[a.id])}`}</title></circle>
             : <circle key={n} cx={xs(n)} cy={ys(s.distToCluster[a.id])} r={2.2} fill={a.color} />)}

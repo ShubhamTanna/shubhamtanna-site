@@ -63,7 +63,7 @@ export default function StylesView({ meta, reps, featured }: Props) {
           {!all && <p className="read">{readingOf(a, meta.features)}</p>}
         </header>
         <Signature a={a} meta={meta} all={all} />
-        <button type="button" className="wx-all mono" aria-expanded={all} onClick={() => setAll(!all)}>{all ? "Back to the six that define it" : "Show all 20 behaviours"}</button>
+        <button type="button" className="wx-all mono" aria-expanded={all} onClick={() => setAll(!all)}>{all ? "Back to the six largest differences" : "Show all 20 behaviours"}</button>
       </section>
 
       <section className="wrap wx-reps">

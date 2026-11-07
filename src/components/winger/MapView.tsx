@@ -38,8 +38,8 @@ export default function MapView({ meta }: { meta: Meta }) {
   return (
     <div className="wx-map2">
       <div className="wx-map-guide">
-        <div><b>Each dot is one footballer’s season at one club.</b> Its colour is the style it sits closest to.</div>
-        <div><b>Close dots played alike.</b> Seasons with similar numbers across all 20 behaviours land near each other; very different seasons land far apart.</div>
+        <div><b>Each dot is one footballer at one club in one season.</b> Its colour is the style whose centre it sits nearest across all 20 behaviours.</div>
+        <div><b>Nearby dots are alike on the directions shown.</b> They may still differ on other behaviours the map cannot show; Compare checks all 20.</div>
         <div><b>What the directions mean.</b> The map uses the directions in which wingers differ most (principal components). <b className="dir">Right</b> goes with {PCA_AXES[0].high}; left with {PCA_AXES[0].low}. <b className="dir">Up</b> goes with {PCA_AXES[1].high}; down with {PCA_AXES[1].low}.{mode === "3d" && <> <b className="dir">PC3</b> goes with {PCA_AXES[2].high} at one end and {PCA_AXES[2].low} at the other.</>}</div>
       </div>
 

@@ -444,3 +444,13 @@
 .wx-featured .why small { color: var(--muted); font-size: 13px; }
 @media (max-width: 760px) { .wx-flat .ax-lab { white-space: normal; max-width: 44%; line-height: 1.25; } .wx-flat .ax-lab.x0, .wx-flat .ax-lab.x1 { max-width: 36%; } .wx-flat .ax-lab.x1 { text-align: right; } }
 @media (max-width: 760px) { .wx-flat .pick-lab { white-space: normal; max-width: 46%; width: max-content; line-height: 1.25; } }
+.wx-dumb .ln.tie::after { display: none; }
+.wx-defs { margin-top: 18px; border-top: 1px solid var(--rule); padding-top: 10px; }
+.wx-defs summary { cursor: pointer; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; padding-block: 8px; min-height: 24px; }
+.wx-defs summary:focus-visible { outline: 2px solid var(--sel); outline-offset: 2px; }
+.wx-defs dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 28px; margin: 10px 0 0; }
+.wx-defs dt { font-weight: 600; font-size: 16px; }
+.wx-defs dt span { font-size: 11px; color: var(--muted); font-weight: 400; margin-left: 6px; letter-spacing: .06em; text-transform: uppercase; }
+.wx-defs dd { margin: 2px 0 0; font-size: 15px; line-height: 1.4; }
+.wx-defs dd small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+@media (max-width: 760px) { .wx-defs dl { grid-template-columns: minmax(0, 1fr); } }

@@ -50,7 +50,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ slug: s
           </div>
           {career.length > 1 && (
             <nav className="wx-career" aria-label={`${s.player}’s seasons`}>
-              <span className="mono">Seasons in the data · <Link href={`${EXPLORE}/evolution?p=${s.slug}`} style={{ display: "inline-block", paddingBlock: 4 }}>Follow across seasons →</Link></span>
+              <span className="mono">Club spells in the data · <Link href={`${EXPLORE}/evolution?p=${s.slug}`} style={{ display: "inline-block", paddingBlock: 4 }}>Follow across seasons →</Link></span>
               <ol>
                 {career.map((c) => (
                   <li key={c.slug}>
@@ -68,10 +68,10 @@ export default async function PlayerPage({ params }: { params: Promise<{ slug: s
 
       <section className="wrap">
         <div className="head"><h2 className="d">Which style is it closest to?</h2>
-          <p className="wx-note">Each style has a centre: its average across all 20 behaviours. This season is placed at the left and each centre sits as far away as it is. The nearest centre decides the style. Styles overlap, so a second centre close behind means a mixed profile.</p>
+          <p className="wx-note">Each style has a centre: its average across all 20 behaviours. This spell is placed at the left and each centre sits as far away as it is. The nearest centre decides the style. The five styles overlap, so a second centre close behind is common; it is not a measure of mixed membership.</p>
         </div>
-        <Closeness dist={s.distToCluster} cluster={s.cluster} archetypes={m.archetypes} label={`${s.player.split(" ").slice(-1)[0]} ${season(s.season)}`} />
-        <p className="wx-small">{robustCount === 3 ? `It stayed closest to ${a.code} in all three robustness tests.` : `It moved style in ${3 - robustCount} of three robustness tests, so treat the assignment as borderline.`}</p>
+        <Closeness dist={s.distToCluster} cluster={s.cluster} archetypes={m.archetypes} label={`${s.player.split(" ").slice(-1)[0]} ${season(s.season)}`} margin={s.margin} />
+        <p className="wx-small">{robustCount === 3 ? `The assignment stayed ${a.code} in all three sensitivity checks (family-balanced, equal weight per footballer, extremes trimmed).` : `The assignment changed in ${3 - robustCount} of three sensitivity checks (family-balanced, equal weight per footballer, extremes trimmed). That shows sensitivity to alternative specifications, not a confidence level.`}</p>
       </section>
 
       <section className="wrap">
@@ -84,7 +84,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ slug: s
 
       <section className="wrap">
         <div className="head"><h2 className="d">Most similar seasons</h2>
-          <p className="wx-note">The ten closest spells by other footballers, across all 20 behaviours and the whole 2017–2024 period. Smaller distance means more alike in style. It is not a percentage and says nothing about quality.</p>
+          <p className="wx-note">For each other footballer we kept their closest qualifying spell, then selected the ten closest of those, across all 20 behaviours. All spells of {s.player} are excluded, and the search covers the whole 2017–2024 period, so later seasons can appear. Smaller distance means more alike in measured style; it is not a percentage and says nothing about quality.</p>
         </div>
         <ol className="wx-list">
           {nbs.map(({ r, d }, i) => (

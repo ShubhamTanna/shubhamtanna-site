@@ -4,8 +4,9 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { DATA, EXPLORE, type CatalogRow, type Meta, type Spell } from "@/lib/winger-types";
-import { distanceParts, fmtDist, fmtZ, fold, haystack, onColor, ordinal, sdText, SEARCH_HINT, season, skewed, skewNote } from "@/lib/winger-format";
+import { distanceParts, fmtDist, fmtZ, fold, haystack, onColor, pctShort, sdText, SEARCH_HINT, season, shareText, SHOT_UNIT_NOTE, signedBar, skewed, skewNote } from "@/lib/winger-format";
 import { loadCatalog } from "./PlayerSearch";
+import Definitions from "./Definitions";
 import { useSelection } from "./Selection";
 
 const spellCache = new Map<string, Promise<Spell>>();
@@ -79,7 +80,8 @@ export default function CompareView({ meta }: { meta: Meta }) {
   const cmp = A && B ? distanceParts(A.fp.map((r) => r[1]), B.fp.map((r) => r[1])) : null;
   const [q1, q2, q3] = meta.nearestQuartiles;
   const F = meta.features;
-  const topK = cmp ? cmp.parts.slice(0, 5).map((p) => p.k) : [];
+  const same = !!cmp && cmp.total === 0; // identical measured profiles: nothing to apportion
+  const topK = cmp && !same ? cmp.parts.slice(0, 5).map((p) => p.k) : [];
   const share = (k: number) => (cmp ? cmp.parts.find((p) => p.k === k)!.sq / cmp.total : 0);
 
   const Side = ({ s, k }: { s: Spell; k: number }) => {
@@ -89,18 +91,18 @@ export default function CompareView({ meta }: { meta: Meta }) {
       <div className="side">
         {/* Bars show percentile rank: from the middle season (50th) towards 0 or 100. Bounded, so one extreme value
             cannot squash the rest; the exact SD stays printed beside it. */}
-        <div className="trk" role="img" aria-label={`${s.player}: ${ordinal(pct)} percentile, ${sdText(z)}`}>
+        <div className="trk" role="img" aria-label={`${s.player}: ${shareText(pct)}, ${sdText(z)}`}>
           <i className="mid" style={{ left: "50%" }} />
-          <i className="bar" style={{ left: `${Math.min(50, pct)}%`, width: `${Math.max(0.8, Math.abs(pct - 50))}%`, background: c }} />
+          {(() => { const b = signedBar(pct, 50); return b && <i className="bar" style={{ left: `${b.left}%`, width: `${b.width}%`, background: c }} />; })()}
         </div>
-        <span className="mono v">{ordinal(pct)}<small> · {fmtZ(z)}{skewed(pct, z) ? " †" : ""}</small></span>
+        <span className="mono v">{pctShort(pct)}<small> · {fmtZ(z)}{skewed(pct, z) ? " †" : ""}</small></span>
       </div>
     );
   };
   const Row = ({ k }: { k: number }) => (
     <li className={topK.includes(k) ? "top" : undefined}>
       <Side s={A!} k={k} />
-      <div className="mid-col"><b>{F[k].name}{F[k].unitStatus === "unresolved_physical_unit" ? "*" : ""}</b>{topK.includes(k) && <span className="mono">{Math.round(share(k) * 100)}% of the gap</span>}</div>
+      <div className="mid-col"><b>{F[k].name}{F[k].unitStatus === "unresolved_physical_unit" ? "*" : ""}</b>{topK.includes(k) && <span className="mono">{Math.round(share(k) * 100)}% of the total squared difference</span>}</div>
       <Side s={B!} k={k} />
     </li>
   );
@@ -130,15 +132,20 @@ export default function CompareView({ meta }: { meta: Meta }) {
           <div className="wx-gap">
             <span className="mono">Style distance between them</span>
             <b className="d">{fmtDist(cmp.distance)}</b>
-            <p>{cmp.distance <= q1 ? "Very close: about as near as a typical closest match." : cmp.distance <= q3 ? "Close: in the range of typical closest matches." : "Further apart than most seasons are from their closest match."} For reference, half of all spells have another footballer’s season within {fmtDist(q2)}. {A.cluster === B.cluster ? `Both sit closest to ${meta.archetypes[A.cluster].label}.` : `A sits closest to ${meta.archetypes[A.cluster].code}, B to ${meta.archetypes[B.cluster].code}.`}</p>
+            <p>{same
+              ? "These measured profiles coincide. Distance: 0. There are no differences to apportion."
+              : <>For reference, compared with each spell’s nearest other footballer in this dataset: a quarter are within {fmtDist(q1)}, half within {fmtDist(q2)} and three quarters within {fmtDist(q3)}. {cmp.distance <= q3 ? "This pair is within that range." : "This pair is further apart than three quarters of those nearest matches."} There is no universal threshold for a good match.</>}{" "}
+              {A.cluster === B.cluster ? `Both sit nearest the ${meta.archetypes[A.cluster].label} centre.` : `A sits nearest ${meta.archetypes[A.cluster].code}, B nearest ${meta.archetypes[B.cluster].code}.`}</p>
           </div>
 
           <div className="wx-cols-key mono" aria-hidden="true">
-            <span>Each bar shows rank among all 1,396 winger seasons, growing from the middle season (50th percentile) to the right for more, to the left for less. Numbers: percentile · SD from the mean.</span>
+            <span>Each bar shows percentile rank among all 1,396 qualifying spells, growing from the middle rank (50th) to the right for higher values, to the left for lower. Numbers: percentile · SD from the mean.</span>
           </div>
 
-          <h3 className="wx-label mono">Where they differ most</h3>
-          <ol className="wx-cols rows">{topK.map((k) => <Row key={k} k={k} />)}</ol>
+          {!same && <>
+            <h3 className="wx-label mono">Largest differences</h3>
+            <ol className="wx-cols rows">{topK.map((k) => <Row key={k} k={k} />)}</ol>
+          </>}
 
           <button type="button" className="wx-all mono" aria-expanded={all} onClick={() => setAll(!all)}>{all ? "Hide the other behaviours" : "Show all 20 behaviours"}</button>
           {all && meta.families.map((fam) => {
@@ -150,7 +157,8 @@ export default function CompareView({ meta }: { meta: Meta }) {
               </section>
             ) : null;
           })}
-          <p className="wx-small">Style distance is the research’s own measure: straight-line distance across all 20 standardized behaviours. It is not a similarity percentage and says nothing about which player is better. Percentile is rank among all 1,396 spells; SD is distance from the all-spell mean.{[A, B].some((s) => s.fp.some((r) => skewed(r[2], r[1]))) ? ` † ${skewNote}` : ""}</p>
+          <p className="wx-small">Style distance is the research’s own measure: straight-line distance across all 20 standardized behaviours. It is not a similarity percentage and says nothing about which player is better. “Share of the total squared difference” is each behaviour’s squared difference divided by the sum across all 20; the style distance is the square root of that sum. Percentile is rank among all 1,396 spells; SD is distance from the all-spell mean.{[A, B].some((s) => s.fp.some((r) => skewed(r[2], r[1]))) ? ` † ${skewNote}` : ""} {SHOT_UNIT_NOTE}</p>
+          <Definitions features={F} />
         </>
       )}
     </div>

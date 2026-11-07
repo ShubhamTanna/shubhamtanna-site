@@ -2,7 +2,8 @@
 // (left) or more (right), in the style colour. Grouped by the eight families. The axis widens to fit every value
 // (the research contract forbids clipping). Words come from percentile rank; SD is distance from the mean.
 import type { Feature } from "@/lib/winger-types";
-import { fmtRaw, fmtZ, ordinal, sdText, skewed, skewNote } from "@/lib/winger-format";
+import { fmtRaw, fmtZ, sdText, shareText, SHOT_UNIT_NOTE, signedBar, skewed, skewNote } from "@/lib/winger-format";
+import Definitions from "./Definitions";
 
 type Row = [raw: number, z: number, pct: number, centroidZ: number];
 
@@ -22,7 +23,7 @@ export default function Fingerprint({ fp, features, families, color, code, selec
           <li key={k}>
             <span className="big d">{fmtRaw(features[k], raw)}{features[k].unitStatus === "unresolved_physical_unit" ? "*" : ""}</span>
             <b>{features[k].name}</b>
-            <span>Around the {ordinal(pct)} percentile · {sdText(z)}</span>
+            <span>{shareText(pct).charAt(0).toUpperCase() + shareText(pct).slice(1)} · {sdText(z)}</span>
           </li>
         ))}
       </ol>
@@ -50,11 +51,11 @@ export default function Fingerprint({ fp, features, families, color, code, selec
                 <div key={f.key} className={`wx-fp-row${selected === f.key ? " sel" : ""}`}>
                   <div className="lab">
                     <b>{f.name}{star}</b>
-                    <span>Around the {ordinal(pct)} percentile{skewed(pct, z) ? " †" : ""}</span>
+                    <span>{shareText(pct).charAt(0).toUpperCase() + shareText(pct).slice(1)}{skewed(pct, z) ? " †" : ""}</span>
                   </div>
-                  <div className="track" role="img" aria-label={`${f.name}: ${ordinal(pct)} percentile, ${sdText(z)}. ${code} average ${fmtZ(cz)} SD.`}>
+                  <div className="track" role="img" aria-label={`${f.name}: ${shareText(pct)}, ${sdText(z)}. ${code} average ${fmtZ(cz)} SD.`}>
                     <i className="band" style={{ left: `${x(-1)}%`, width: `${x(1) - x(-1)}%` }} />
-                    <i className={`bar ${z < 0 ? "neg" : ""}`} style={{ left: `${Math.min(x(0), x(z))}%`, width: `${Math.max(0.6, Math.abs(x(z) - x(0)))}%` }} />
+                    {(() => { const b = signedBar(x(z), x(0), 0.6); return b && <i className={`bar ${z < 0 ? "neg" : ""}`} style={{ left: `${b.left}%`, width: `${b.width}%` }} />; })()}
                     <i className="mid" style={{ left: `${x(0)}%` }} />
                     <i className="avg" style={{ left: `${x(cz)}%` }} title={`${code} average: ${fmtZ(cz)} SD`} />
                   </div>
@@ -68,7 +69,8 @@ export default function Fingerprint({ fp, features, families, color, code, selec
           </section>
         );
       })}
-      <p className="wx-small">Bars grow from the mean of all winger seasons: right means more of that behaviour than the mean, left means less, measured in standard deviations (SD). Percentile is this season’s rank among all 1,396 spells (repeated footballers included); it is a rank, not a probability or a percent increase. Both describe behaviour, not quality.{fp.some((r) => skewed(r[2], r[1])) ? ` † ${skewNote}` : ""}{features.some((f) => f.unitStatus === "unresolved_physical_unit") ? " * Average shot distance is source-reported; its physical unit is not confirmed." : ""}</p>
+      <p className="wx-small">Bars grow from the mean of all qualifying spells: right means a higher value than the mean, left a lower one, measured in standard deviations (SD). Percentile is this spell’s rank among all 1,396 qualifying spells (repeated footballers included); it is a rank, not a probability, a percent increase or the exact share below. Both describe behaviour, not quality.{fp.some((r) => skewed(r[2], r[1])) ? ` † ${skewNote}` : ""}{features.some((f) => f.unitStatus === "unresolved_physical_unit") ? ` ${SHOT_UNIT_NOTE}` : ""}</p>
+      <Definitions features={features} />
     </div>
   );
 }

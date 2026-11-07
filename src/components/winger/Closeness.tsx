@@ -3,8 +3,8 @@
 import type { Archetype } from "@/lib/winger-types";
 import { fmtDist } from "@/lib/winger-format";
 
-export default function Closeness({ dist, cluster, archetypes, label = "This season" }: {
-  dist: number[]; cluster: number; archetypes: Archetype[]; label?: string;
+export default function Closeness({ dist, cluster, archetypes, label = "This spell", margin }: {
+  dist: number[]; cluster: number; archetypes: Archetype[]; label?: string; margin?: number;
 }) {
   const max = Math.max(4, Math.ceil(Math.max(...dist)));
   const x = (d: number) => (d / max) * 100;
@@ -46,8 +46,9 @@ export default function Closeness({ dist, cluster, archetypes, label = "This sea
         })}
       </ol>
       <p className="wx-small">
-        Nearest centre: {archetypes[first.k].code} {archetypes[first.k].label}. The next nearest, {archetypes[second.k].code}, is {fmtDist(second.d - first.d)} further away
-        {second.d - first.d < 0.5 ? ", a small margin, so this season sits near the boundary between the two." : "."} Distance runs across all 20 behaviours; it is not a percentage and says nothing about quality.
+        {archetypes[first.k].code} {archetypes[first.k].label} was closest; {archetypes[second.k].code} {archetypes[second.k].label} was another {fmtDist(second.d - first.d)} distance units away.
+        {margin !== undefined && ` Runner-up margin: ${margin.toFixed(2)} (that gap as a share of the runner-up distance; a geometric measure, not a probability).`}
+        {" "}Distance runs across all 20 behaviours; it is not a percentage and says nothing about quality.
       </p>
     </div>
   );

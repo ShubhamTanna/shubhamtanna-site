@@ -12,13 +12,14 @@ export const ordinal = (n: number) => { const r = Math.round(n); const s = ["th"
 // Words come from percentile rank (share of all spells below a value). SD values are shown alongside as
 // distance from the all-spell mean. On skewed behaviours the two can point different ways; see skewNote.
 // Percentile is a rank among all 1,396 spells (average ranks for ties), not an exact share below.
-export const shareText = (pct: number) => `around the ${ordinal(pct)} percentile`;
+export const pctShort = (pct: number) => (pct < 1 ? "<1st" : ordinal(pct));
+export const shareText = (pct: number) => (pct < 1 ? "below the 1st percentile" : `around the ${ordinal(pct)} percentile`);
 export const sdText = (z: number) =>
-  Math.abs(z) < 0.005 ? "at the mean" : `${Math.abs(z).toFixed(2)} SD ${z > 0 ? "above" : "below"} the mean`;
+  Math.abs(z) < 0.005 ? "near the mean" : `${Math.abs(z).toFixed(2)} SD ${z > 0 ? "above" : "below"} the mean`;
 // True when percentile and mean point opposite ways (above the median but below the mean, or the reverse).
 export const skewed = (shareBelow: number, z: number) => (shareBelow - 50) * z < 0 && Math.abs(shareBelow - 50) >= 1;
 export const skewNote =
-  "Above the median but below the mean (or the reverse) is not a contradiction: on lopsided behaviours a few very high values pull the mean away from the middle spell.";
+  "Above the middle-ranked spell but below the mean (or the reverse) is not a contradiction: on an uneven distribution the mean can sit above or below the middle.";
 
 // Text colour with the better contrast on an archetype fill.
 const lum = (hex: string) => {
@@ -74,6 +75,12 @@ export const SEARCH_HINT = "e.g. Foden, Man City";
 // direction mixes all 20 behaviours. Descriptions of behaviour, not quality.
 export const PCA_AXES = [
   { pc: "PC1", high: "more carries into the box and more of the progress made by carrying", low: "a higher long-pass share and longer average shots", short: ["Long passes, longer shots", "Carrying into the box"] },
-  { pc: "PC2", high: "more passes into the box and more crosses", low: "more of the attacking-third touches inside the box and more shots per touch", short: ["Box touches, shots", "Passes into the box, crosses"] },
+  { pc: "PC2", high: "more passes into the box and more crosses", low: "a larger share of attacking-third touches inside the box and more shots per 100 attacking-third touches", short: ["Box touches, shots", "Passes into the box, crosses"] },
   { pc: "PC3", high: "a bigger cross share of passes and more crosses", low: "a higher progressive-pass share and more progressive passes", short: ["Progressive passing", "Cross share"] },
 ] as const;
+
+// Shown wherever the average-shot-distance asterisk appears.
+export const SHOT_UNIT_NOTE = "* Average shot distance is source-reported; its physical unit is unconfirmed.";
+// Bar from a centre line that keeps its sign even when tiny: never drawn across the centre, none at exactly zero.
+export const signedBar = (v: number, centre: number, min = 0.8) =>
+  v === centre ? null : { left: v < centre ? centre - Math.max(min, centre - v) : centre, width: Math.max(min, Math.abs(v - centre)) };
