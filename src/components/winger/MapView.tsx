@@ -141,7 +141,7 @@ function Flat({ meta, rows, off, picked, centres, onHover, onPick }: ViewProps) 
       ))}
       {W > 0 && picked && !off.has(picked.cluster) && (
         <span className={`pick-lab${px(picked.pc1) > W * (W < 600 ? 0.45 : 0.6) ? " left" : ""}`} style={{ left: px(picked.pc1), top: py(picked.pc2) }}>
-          <b>{picked.player}</b> {season(picked.season)}
+          <b>{picked.player}</b> <span className="nw">{season(picked.season)}</span>
         </span>
       )}
       {W > 0 && <>
@@ -151,6 +151,11 @@ function Flat({ meta, rows, off, picked, centres, onHover, onPick }: ViewProps) 
         <span className="ax-lab mono y0" style={{ left: px(0), top: H }}>↓ {PCA_AXES[1].short[0]}</span>
       </>}
       <figcaption className="mono"><span>PC1 · {meta.pca[0].pct.toFixed(1)}% of variation</span><span>PC2 · {meta.pca[1].pct.toFixed(1)}%</span></figcaption>
+      {/* Phones: direction labels move under the chart instead of sitting on the dots. */}
+      <ul className="ax-key mono">
+        <li>→ {PCA_AXES[0].short[1]}</li><li>← {PCA_AXES[0].short[0]}</li>
+        <li>↑ {PCA_AXES[1].short[1]}</li><li>↓ {PCA_AXES[1].short[0]}</li>
+      </ul>
     </figure>
   );
 }

@@ -35,11 +35,18 @@ export default function CaseStudy() {
 
   return (
     <article className="page-project wcs">
-      <header className="cband"><div className="wrap">
+      <header className="cband wcs-hero"><div className="wrap">
         <Link className="back" href="/work">← All work</Link>
-        <div className="grid2">
-          <div><span className="kicker">Analytics &amp; research · 2026 · Personal project</span><h1>Decoding winger playstyles</h1></div>
-          <div className="hero"><b>5</b><span>overlapping attacking styles in 1,396 winger spells</span></div>
+        <div className="wcs-hgrid">
+          <div>
+            <span className="kicker">Analytics &amp; research · 2026 · Personal project</span>
+            <h1>Decoding winger playstyles</h1>
+            <p className="deck">Goals and assists tell you who finished the move. I set out to measure everything else a winger does.</p>
+          </div>
+          <figure className="wcs-hmap">
+            <CaseMap rows={rows} colors={A.map((a) => a.color)} labels={A.map((a) => a.code)} dark />
+            <figcaption>Every dot is one of 1,396 winger spells from 2017–18 to 2023–24, coloured by the nearest of five styles. The colours overlap. That is the finding.</figcaption>
+          </figure>
         </div>
       </div></header>
 
@@ -55,11 +62,11 @@ export default function CaseStudy() {
           <Link className="btn" href={EXPLORE}>Open the Winger Style Explorer →</Link>
         </div>
 
-        <div className="stats">
+        <div className="stats wcs-stats">
           <div><b>1,396</b><span>player–club–season spells</span></div>
           <div><b>665</b><span>footballers</span></div>
           <div><b>20</b><span>behavioural measures</span></div>
-          <div><b>7 × 5</b><span>seasons × top leagues, 2017–18 to 2023–24</span></div>
+          <div><b>7</b><span>seasons across 5 top leagues</span></div>
         </div>
 
         <section className="csec"><h2><i>{num()}</i><b>The question</b></h2><div>
@@ -193,17 +200,17 @@ export default function CaseStudy() {
 }
 
 // Static style map for the case study: every spell on PC1/PC2, coloured by nearest style (verified release).
-function CaseMap({ rows, colors, labels }: { rows: { pc1: number; pc2: number; cluster: number; slug: string }[]; colors: string[]; labels: string[] }) {
+function CaseMap({ rows, colors, labels, dark }: { rows: { pc1: number; pc2: number; cluster: number; slug: string }[]; colors: string[]; labels: string[]; dark?: boolean }) {
   const X0 = -8.5, X1 = 12.5, Y0 = -6.5, Y1 = 7, S = 10;
   const px = (v: number) => (v - X0) * S, py = (v: number) => (Y1 - v) * S;
   return (
-    <figure className="wcs-map">
+    <figure className={dark ? "wcs-map dark" : "wcs-map"}>
       <svg viewBox={`0 0 ${(X1 - X0) * S} ${(Y1 - Y0) * S}`} role="img" aria-label="Scatter of 1,396 spells on two principal components; the five style colours overlap heavily rather than forming separate clusters.">
-        <line x1={px(0)} x2={px(0)} y1={0} y2={(Y1 - Y0) * S} className="ax" />
-        <line y1={py(0)} y2={py(0)} x1={0} x2={(X1 - X0) * S} className="ax" />
-        {rows.map((r) => <circle key={r.slug} cx={px(r.pc1)} cy={py(r.pc2)} r={1.5} fill={colors[r.cluster]} />)}
+        {!dark && <line x1={px(0)} x2={px(0)} y1={0} y2={(Y1 - Y0) * S} className="ax" />}
+        {!dark && <line y1={py(0)} y2={py(0)} x1={0} x2={(X1 - X0) * S} className="ax" />}
+        {rows.map((r) => <circle key={r.slug} cx={px(r.pc1)} cy={py(r.pc2)} r={dark ? 1.7 : 1.5} fill={colors[r.cluster]} />)}
       </svg>
-      <div className="key mono" aria-hidden="true">{labels.map((l, i) => <span key={l}><i style={{ background: colors[i] }} />{l}</span>)}</div>
+      <div className="key mono" aria-hidden={dark ? undefined : true}>{labels.map((l, i) => <span key={l}><i style={{ background: colors[i] }} />{l}</span>)}</div>
     </figure>
   );
 }

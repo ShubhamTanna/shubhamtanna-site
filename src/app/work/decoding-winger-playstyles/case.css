@@ -56,3 +56,29 @@
   .wcs-checks .bar { grid-column: 1 / -1; grid-row: 2; }
   .wcs-steps li { padding-left: 44px; }
 }
+
+/* Hero: headline and deck on the left, the whole dataset as a dark map on the right */
+.wcs-hero .wcs-hgrid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 32px 56px; align-items: end; margin-top: 48px; }
+.wcs-hero h1 { margin-bottom: 0; }
+.wcs-hero .deck { font-family: var(--display); font-size: clamp(22px, 2.6vw, 32px); line-height: 1.25; color: var(--on-night); margin: 22px 0 0; max-width: 26ch; text-wrap: balance; }
+.wcs-hmap { margin: 0; }
+.wcs-hmap figcaption { font: 12px/1.5 var(--mono); color: var(--night-muted); margin-top: 10px; max-width: 46ch; }
+.wcs-map.dark { margin: 0; }
+.wcs-map.dark svg { background: transparent; }
+.wcs-map.dark circle { fill-opacity: .85; }
+.wcs-map.dark .key { color: var(--on-night); }
+
+/* Four numbers in one row (two by two on phones), never a part-empty grid */
+.wcs .wcs-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* Breathing room: buttons after text, notes after the style cards */
+.wcs .csec .actions { margin-top: 26px; }
+.wcs .wcs-styles { margin-bottom: 28px; }
+.wcs .wcs-styles + .ctx { margin-top: 0; }
+
+@media (max-width: 900px) {
+  .wcs-hero .wcs-hgrid { grid-template-columns: minmax(0, 1fr); margin-top: 32px; }
+}
+@media (max-width: 640px) {
+  .wcs .wcs-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

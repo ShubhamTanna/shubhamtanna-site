@@ -454,3 +454,10 @@
 .wx-defs dd { margin: 2px 0 0; font-size: 15px; line-height: 1.4; }
 .wx-defs dd small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
 @media (max-width: 760px) { .wx-defs dl { grid-template-columns: minmax(0, 1fr); } }
+/* Phone map: no style boxes or direction labels on the dots; directions listed underneath */
+.wx-flat .ax-key { display: none; }
+@media (max-width: 600px) {
+  .wx-flat .ctr-lab, .wx-flat .ax-lab { display: none; }
+  .wx-flat .ax-key { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; list-style: none; margin: 10px 0 0; padding: 10px 0 0; border-top: 1px solid var(--rule); font-size: 11px; letter-spacing: .02em; text-transform: none; color: var(--ink); }
+}
+.wx-flat .pick-lab .nw { white-space: nowrap; }
