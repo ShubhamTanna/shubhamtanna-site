@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
       { source: "/now", destination: "/about#now", permanent: false },
       { source: "/resume", destination: "/resume.pdf", permanent: false },
       { source: "/contact", destination: "/#contact", permanent: false },
+      // Old draft address of the winger project.
+      { source: "/work/winger-classification", destination: "/work/decoding-winger-playstyles", permanent: true },
     ];
   },
 };

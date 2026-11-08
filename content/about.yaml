@@ -30,11 +30,11 @@ off:
 now:
   updated: 2026-11
   building:
-    - name: Football winger classification
-      stage: Building
-      tech: Python, PCA
-      line: Grouping wingers into playing styles from match data; also being written up as a research paper.
-      doneWhen: The clusters are final and interpretable, and the paper is drafted.
+    - name: Decoding winger playstyles
+      stage: Live
+      tech: Python, PCA, K-Means, Next.js
+      line: How wingers attack, beyond goals and assists. Five overlapping styles from 1,396 spells, with an interactive explorer.
+      doneWhen: Shipped. The case study and the Winger Style Explorer are public.
     - name: Wedding Concierge
       stage: Building
       tech: Next.js, Supabase, WhatsApp API, LLM

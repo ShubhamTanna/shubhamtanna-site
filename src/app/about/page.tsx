@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getAbout, getSite, monthName, STAGES } from "@/lib/content";
+import { getAbout, getSite, inProgress, monthName, STAGES } from "@/lib/content";
 import { SecHead, Todo } from "@/components/bits";
 import { OffTiles } from "@/components/Off";
 
@@ -30,7 +30,7 @@ export default function AboutPage() {
       <div className="statusbar">
         <div><span>Looking for</span><p>{site.lookingFor}</p></div>
         <div><span>Based in</span><p>{site.location.split(",")[0]}</p></div>
-        <div><span>In progress</span><p>{a.now.building.length} projects</p></div>
+        <div><span>In progress</span><p>{inProgress(a.now.building).length} projects</p></div>
         <div><span>Updated</span><p>{monthName(a.now.updated)}</p></div>
       </div>
       <div className="nowcards" style={{ marginTop: 24 }}>

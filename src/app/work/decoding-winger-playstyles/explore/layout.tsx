@@ -10,7 +10,6 @@ import { BASE, EXPLORE, getMeta } from "@/lib/winger";
 export const metadata: Metadata = {
   title: { default: "Winger Style Explorer", template: "%s · Winger Style Explorer" },
   description: "Explore five attacking styles across 1,396 qualifying winger spells (player, club, season) from Europe’s top five leagues, 2017–18 to 2023–24.",
-  robots: { index: false, follow: false },
 };
 
 export default function ExplorerLayout({ children }: { children: React.ReactNode }) {

@@ -5,11 +5,9 @@ import "./case.css";
 
 // Case study. Every number on this page comes from the research fact sheet
 // (decoding-winger-playstyles docs/case_study_fact_sheet.md, PR #5 at d9d8ef9) or from the verified data release.
-// Not indexed until the coordinated launch.
 export const metadata: Metadata = {
   title: "Decoding winger playstyles",
   description: "A self-initiated investigation into how wingers differ in attack: 1,396 player–club–season spells, 20 behavioural measures, five overlapping styles and an interactive explorer.",
-  robots: { index: false, follow: false },
 };
 
 // From the fact sheet: archetype table (measured tendencies, approved examples) and counts.

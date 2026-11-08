@@ -14,7 +14,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const r = getRow((await params).slug);
-  return r ? { title: `${r.player}, ${r.club} ${season(r.season)}` } : {};
+  // 1,396 generated profiles: reachable and followable, but kept out of search results so they don't dilute the site.
+  return r ? { title: `${r.player}, ${r.club} ${season(r.season)}`, robots: { index: false, follow: true } } : {};
 }
 
 export default async function PlayerPage({ params }: { params: Promise<{ slug: string }> }) {

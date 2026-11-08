@@ -113,7 +113,7 @@ chapters:
     text: "I like questions that end in a number someone can act on: which company is the safer ESG bet, what drives a transfer fee, where the ball is in a broadcast frame."
     long:
       - "For an ESG investor choosing between Adani and Reliance, I scored both on 10 like-for-like metrics: Reliance won 5–3, with 2 even. For Premier League transfer values, I replicated a published regression on 324 players: age, club rank, goals and minutes explain 68.4% of value. For broadcast football, I trained a small model to find players, referees and the ball at 0.83 mAP on an ordinary CPU."
-      - "At Yocket I’m doing it on a live funnel: why students book a consultation and never show up. And outside work, I’m grouping wingers into playing styles with PCA, written up as a research paper."
+      - "At Yocket I’m doing it on a live funnel: why students book a consultation and never show up. And outside work, I led my own investigation into how wingers attack: 1,396 spells, five overlapping styles, and an interactive explorer to dig through them."
     photo:
       src: /img/analyse.jpg
       alt: Shubham on a football panel

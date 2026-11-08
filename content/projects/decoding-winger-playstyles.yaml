@@ -1,0 +1,28 @@
+# Tier 1, analytics flagship. The page itself is custom: src/app/work/decoding-winger-playstyles/page.tsx
+# (case study) plus the Winger Style Explorer under /explore. This file feeds the Work card, the home page,
+# the sitemap and "next project" links. Numbers come from the research fact sheet (case_study_fact_sheet.md).
+# The old draft address /work/winger-classification redirects here (next.config.ts).
+
+slug: decoding-winger-playstyles
+rank: 3.5
+tier: 1
+type: analytics
+origin: personal
+section: Analytics & ML
+title: Decoding winger playstyles
+cardTitle: Decoding winger playstyles
+cardLine: A self-initiated investigation into how wingers attack, beyond goals and assists. Five overlapping styles from 1,396 spells, plus an interactive explorer.
+hero:
+  value: "1,396"
+  label: winger spells, 20 behaviours, 5 overlapping styles
+year: "2026"
+team: Solo · conceived and led
+tools: [ Python, PCA, K-Means, Next.js ]
+problem: "Goals and assists flatten very different winger jobs into one column. Can we identify and quantify the different ways wingers contribute in attack?"
+did:
+  - "Defined a consistent winger population across five leagues and seven seasons: 1,396 player–club–season spells from 665 footballers."
+  - "Screened 27 candidate measures down to 20 behavioural features across eight families, standardized over all spells."
+  - "Used PCA to map variation, all 20 measures for similarity, and K-Means for five descriptive styles; tested three alternative specifications."
+  - "Found a continuum rather than distinct types (silhouette ≈0.149) and built an interactive explorer to make the results explorable."
+links: []
+code: https://github.com/ShubhamTanna/decoding-winger-playstyles
