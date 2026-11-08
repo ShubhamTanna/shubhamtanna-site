@@ -30,11 +30,6 @@ off:
 now:
   updated: 2026-11
   building:
-    - name: Decoding winger playstyles
-      stage: Live
-      tech: Python, PCA, K-Means, Next.js
-      line: How wingers attack, beyond goals and assists. Five overlapping styles from 1,396 spells, with an interactive explorer.
-      doneWhen: Shipped. The case study and the Winger Style Explorer are public.
     - name: Wedding Concierge
       stage: Building
       tech: Next.js, Supabase, WhatsApp API, LLM
@@ -45,11 +40,6 @@ now:
       tech: Python, NumPy, Plotly, Streamlit
       line: "The Code1o1 Python in Finance capstone, taught to a student: thousands of simulated futures for a portfolio of NSE stocks."
       doneWhen: The student finishes her capstone and the app is live with real prices.
-    - name: Job-portal watcher
-      stage: Live
-      tech: Python, GitHub Actions
-      line: Checks 7 consulting and advisory firms' portals every morning and alerts me to new junior roles in India.
-      doneWhen: It runs reliably on GitHub Actions for 2 weeks.
   learning:
     - kind: Reading
       topic: Game theory
@@ -66,6 +56,8 @@ now:
   log:
     - date: Nov 2026
       text: "Launched Job Watcher: daily alerts for new roles at 7 consulting and advisory firms."
+    - date: Nov 2026
+      text: "Launched Decoding winger playstyles: a case study and the Winger Style Explorer, with 1,396 spells and five overlapping styles."
     - date: Nov 2026
       text: Launched this site.
     - date: Oct 2026
