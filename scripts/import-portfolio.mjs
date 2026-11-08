@@ -22,6 +22,7 @@ const SOURCES = {
   "player-detection": ["football-player-detection"], "esg-sentiment": ["esg-sentiment-classifier"], "research-buddy": ["research-buddy"],
   "compiler-lab": ["shift-reduce-parser"], "autobot": ["autobot-ros2-simulation"], "breakout": ["tilt-breakout-arduino"],
   "decoding-winger-playstyles": ["decoding-winger-playstyles"],
+  "job-watcher": ["job-watcher"],
 };
 
 const args = process.argv.slice(2);

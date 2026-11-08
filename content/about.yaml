@@ -46,9 +46,9 @@ now:
       line: "The Code1o1 Python in Finance capstone, taught to a student: thousands of simulated futures for a portfolio of NSE stocks."
       doneWhen: The student finishes her capstone and the app is live with real prices.
     - name: Job-portal watcher
-      stage: Building
+      stage: Live
       tech: Python, GitHub Actions
-      line: A daily automation that checks job portals for new roles and alerts me.
+      line: Checks 7 consulting and advisory firms' portals every morning and alerts me to new junior roles in India.
       doneWhen: It runs reliably on GitHub Actions for 2 weeks.
   learning:
     - kind: Reading
@@ -64,6 +64,8 @@ now:
       topic: Jive and bachata
       detail: Learning both
   log:
+    - date: Nov 2026
+      text: "Launched Job Watcher: daily alerts for new roles at 7 consulting and advisory firms."
     - date: Nov 2026
       text: Launched this site.
     - date: Oct 2026
