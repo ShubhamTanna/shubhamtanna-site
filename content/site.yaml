@@ -8,8 +8,8 @@ links:
   linkedin: "https://www.linkedin.com/in/shubhamtanna/"
   github: "https://github.com/ShubhamTanna"
   resume: /resume.pdf
-positioning: Most graduates have case studies. I have customers.
-subline: Co-founder, Code1o1 · Business Operations Intern, Yocket · Mumbai. Looking for management consulting, strategy consulting and decision analytics roles.
+positioning: I learn by solving real business problems. So far, it’s paid off.
+subline: Co-founder, Code1o1 · Business Operations Intern, Yocket · Mumbai. Looking for Management Consulting, Strategy Consulting, and Decision Analytics roles.
 proof:
   - value: "14"
     label: paying clients
@@ -21,4 +21,4 @@ heroPhoto:
   src: /img/hero.jpg
   alt: Shubham Tanna in a grey suit
 lookingFor: Management consulting · Strategy consulting · Decision analytics
-closing: Hiring for consulting or analytics? Let's talk.
+closing: Hiring for Consulting or Analytics? Let's talk.
