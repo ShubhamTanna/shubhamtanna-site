@@ -1,0 +1,70 @@
+# Tier 2: short page. Source: job-watcher repo, portfolio/HANDOFF.md and portfolio/facts.md (launch snapshot, 8 Nov 2026).
+# Every number is in facts.md. No reliability claim until the 2-week run record is added there (after 22 Nov 2026).
+# Private notes go in content/private/internal-notes.yaml (gitignored), never here.
+
+slug: job-watcher
+rank: 11.5
+tier: 2
+type: build
+origin: personal
+section: Build
+title: Job Watcher
+cardTitle: Job Watcher
+cardLine: A daily automation that checks 7 consulting and advisory firms' career portals, keeps junior roles in India and alerts me only to new ones.
+hero:
+  value: 7 firms
+  label: checked every morning, ₹0 to run
+year: "2026"
+team: Solo
+tools:
+  - Python
+  - GitHub Actions
+  - REST APIs
+stats:
+  - value: "6"
+    label: career-portal systems read
+  - value: "38"
+    label: automated tests
+  - value: 31–37 s
+    label: per daily run
+problem: Consulting firms post roles on 6 different career-portal systems, and checking each one by hand every day doesn't happen.
+did:
+  - Wrote a reader for each portal system (Workday, Phenom, iCIMS Jibe, Yello, Oleeo, SuccessFactors) that turns every listing into the same record.
+  - Filtered by role, seniority and location, then compared against everything seen before, so alerts only show new postings.
+  - Put it on GitHub Actions to run daily at 08:47 IST for ₹0. Each day with new matches opens a GitHub issue that emails me.
+  - Left alone the 4 firms that block automated access, and used their own job alerts instead.
+results:
+  - caption: Coverage at launch
+    columns:
+      - Firm
+      - Status
+    rows:
+      - - ZS, Kearney, L.E.K., BearingPoint, FTI, Marsh McLennan (incl. Oliver Wyman and Mercer), BCG
+        - Watched daily
+      - - McKinsey, Bain, Alvarez & Marsal, Grant Thornton Bharat
+        - Not watched. Their systems block automated access, so I use each firm's own alert
+    source: config.yaml
+story:
+  title: The filter that let 62 jobs through
+  text: "On the first live run, Marsh McLennan's portal rejected the India filter I had copied from FTI's. The script fell back to every location, and 62 roles from places like Florida, Munich and Sydney reached my alert. The fix: look up each portal's own filter instead of reusing one. The rerun returned 69 India postings and 7 real matches."
+skills:
+  - Automation
+  - APIs
+  - Data pipelines
+  - Testing
+links: []
+charts:
+  - kind: bar
+    file: chart-1.csv
+    title: 666 postings in, 39 matches out
+    label: stage
+    value: postings
+    note: Launch run, 8 Nov 2026. Postings with no location are kept on purpose rather than dropped.
+  - kind: bar
+    file: chart-2.csv
+    title: Where the matches came from
+    label: firm
+    value: matches
+    detail: "{postings_scanned} postings · {portal_system}"
+    note: Launch run, 8 Nov 2026. Kearney listed 173 roles, none in India.
+code: https://github.com/ShubhamTanna/job-watcher
