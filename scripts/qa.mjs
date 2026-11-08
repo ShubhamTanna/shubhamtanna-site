@@ -15,7 +15,8 @@ const { chromium } = pw;
 const BASE = process.env.QA_URL ?? "http://localhost:3000";
 const SIZES = [[320, 640, true], [360, 780, true], [390, 844, true], [844, 390, true], [768, 1024, true], [1024, 768, false], [1366, 768, false], [1920, 1080, false]];
 const sitemap = await (await fetch(`${BASE}/sitemap.xml`)).text();
-const PAGES = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
+const PAGES = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => new URL(m[1]).pathname).concat((process.env.QA_PAGES ?? "").split(",").filter(Boolean)); // QA_PAGES: extra paths not in the sitemap yet
+if (process.env.QA_ONLY) PAGES.splice(0, PAGES.length, ...process.env.QA_ONLY.split(","));
 fs.mkdirSync("qa-shots", { recursive: true });
 
 const browser = await chromium.launch(fs.existsSync("/usr/bin/google-chrome") ? { executablePath: "/usr/bin/google-chrome" } : {});

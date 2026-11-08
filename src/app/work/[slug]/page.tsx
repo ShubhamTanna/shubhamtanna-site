@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPagedProjects, getProject, originLabel, readScreens, type Screen } from "@/lib/content";
+import { CUSTOM_PAGES, getPagedProjects, getProject, originLabel, readScreens, type Screen } from "@/lib/content";
 import { Origin } from "@/components/bits";
 import { ChartView } from "@/components/Charts";
 
 const codeLabel = (url: string) => (url.includes("/case-studies/") ? "Case files on GitHub" : "Code on GitHub");
 
 export function generateStaticParams() {
-  return getPagedProjects().map((p) => ({ slug: p.slug }));
+  return getPagedProjects().filter((p) => !CUSTOM_PAGES.has(p.slug)).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

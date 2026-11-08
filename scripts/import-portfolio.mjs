@@ -21,7 +21,7 @@ const SOURCES = {
   "getawayguru": ["case-studies", "getawayguru"], "hope-for-recovery": ["case-studies", "hope-for-recovery"], "linkup": ["case-studies", "linkup"],
   "player-detection": ["football-player-detection"], "esg-sentiment": ["esg-sentiment-classifier"], "research-buddy": ["research-buddy"],
   "compiler-lab": ["shift-reduce-parser"], "autobot": ["autobot-ros2-simulation"], "breakout": ["tilt-breakout-arduino"],
-  "winger-classification": ["decoding-winger-playstyles"],
+  "decoding-winger-playstyles": ["decoding-winger-playstyles"],
 };
 
 const args = process.argv.slice(2);

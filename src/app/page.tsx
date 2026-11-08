@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAbout, getChapters, getExperience, getPagedProjects, getSite, monthName, toCard } from "@/lib/content";
+import { getAbout, getChapters, getExperience, getPagedProjects, getSite, inProgress, monthName, toCard } from "@/lib/content";
 import StoryScene from "@/components/StoryScene";
 import { SideTabs } from "@/components/Pickers";
 import { SecHead, Venture } from "@/components/bits";
@@ -47,7 +47,7 @@ export default function Home() {
             <span><b>{rest.length}</b>projects</span>
             <span><b>{from("coursework")}</b>from coursework</span>
             <span><b>{from("personal")}</b>personal</span>
-            <span><b>{about.now.building.length}</b>in progress</span>
+            <span><b>{inProgress(about.now.building).length}</b>in progress</span>
           </div>
           <SideTabs projects={rest.map(toCard)} />
         </div>
@@ -66,7 +66,7 @@ export default function Home() {
 
         <SecHead eyebrow="04 · About" title="Right now, and off the clock." more={{ href: "/about", label: "More about me →" }} />
         <section className="now">
-          <div className="p"><p className="mono upd">Updated {monthName(about.now.updated)}</p><p style={{ margin: "12px 0 0", color: "var(--night-muted)" }}>{about.now.building.length} things in progress. Updated monthly.</p></div>
+          <div className="p"><p className="mono upd">Updated {monthName(about.now.updated)}</p><p style={{ margin: "12px 0 0", color: "var(--night-muted)" }}>{inProgress(about.now.building).length} things in progress. Updated monthly.</p></div>
           <div className="p"><p className="mono">Building</p><ul>{about.now.building.map((b) => <li key={b.name}>{b.name}<span>{b.stage}</span></li>)}</ul></div>
           <div className="p"><p className="mono">Learning</p><ul>{about.now.learning.map((l) => <li key={l.topic}>{l.topic}<span>{l.kind}</span></li>)}</ul></div>
         </section>

@@ -1,0 +1,84 @@
+/* Case study: Decoding winger playstyles. Builds on the shared project-page styles (.page-project, .csec). */
+.wcs .lede { font-size: clamp(20px, 2.2vw, 24px); line-height: 1.35; font-weight: 600; margin-top: 0; text-wrap: pretty; }
+.wcs .q { font-family: var(--display); font-size: clamp(24px, 3vw, 34px); line-height: 1.2; border-left: 6px solid var(--accent, #ff0000); padding: 6px 0 6px 18px; margin: 24px 0; text-wrap: balance; }
+.wcs .cap { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.wcs a { text-underline-offset: 3px; }
+.wcs p > a, .wcs .ctx a { display: inline-block; padding-block: 2px; }
+
+.wcs-styles { list-style: none; margin: 20px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px; }
+.wcs-styles li { display: grid; grid-template-rows: 1fr auto; border: 1.5px solid var(--ink); border-top: 10px solid var(--c); background: var(--paper); }
+.wcs-styles li > a:first-child { display: grid; gap: 6px; align-content: start; padding: 14px 16px 10px; text-decoration: none; color: inherit; }
+.wcs-styles li > a:first-child:hover b { text-decoration: underline; text-decoration-thickness: 2px; }
+.wcs-styles .code { font-size: 12px; letter-spacing: .06em; color: var(--muted); }
+.wcs-styles b { font-family: var(--display); font-size: 22px; line-height: 1.15; }
+.wcs-styles .line { font-size: 15px; line-height: 1.4; }
+.wcs-styles .ex { display: block; padding: 10px 16px; border-top: 1px solid var(--rule); font-size: 12px; letter-spacing: .02em; text-decoration: none; min-height: 24px; }
+.wcs-styles .ex:hover { background: var(--panel); }
+
+.wcs-map { margin: 22px 0 0; }
+.wcs-map svg { width: 100%; height: auto; display: block; background: var(--panel); }
+.wcs-map circle { fill-opacity: .7; }
+.wcs-map .ax { stroke: #a9a79f; stroke-width: .6; }
+.wcs-map .key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; font-size: 12px; }
+.wcs-map .key span { display: inline-flex; align-items: center; gap: 6px; }
+.wcs-map .key i { width: 12px; height: 12px; display: inline-block; }
+
+.wcs-checks { list-style: none; margin: 14px 0; padding: 0; border-top: 1.5px solid var(--ink); }
+.wcs-checks li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) 52px; gap: 16px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+.wcs-checks li > span:first-child { display: grid; }
+.wcs-checks small { color: var(--muted); font-size: 14px; }
+.wcs-checks .bar { height: 16px; background: var(--panel); position: relative; }
+.wcs-checks .bar i { position: absolute; inset: 0 auto 0 0; background: var(--ink); }
+.wcs-checks .mono { text-align: right; font-size: 16px; }
+
+.wcs-steps { list-style: none; counter-reset: s; margin: 16px 0 0; padding: 0; }
+.wcs-steps li { counter-increment: s; position: relative; padding: 16px 0 16px 56px; border-top: 1px solid var(--rule); }
+.wcs-steps li::before { content: counter(s, decimal-leading-zero); position: absolute; left: 0; top: 14px; font: 700 20px var(--mono); }
+.wcs-steps b { font-size: 19px; }
+.wcs-steps p { margin: 6px 0 0; }
+
+.wcs-pairs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 18px 0 22px; }
+.wcs-pairs figure { margin: 0; padding: 18px; border: 1.5px solid var(--ink); display: grid; gap: 10px; align-content: start; }
+.wcs-pairs figcaption { display: grid; gap: 2px; }
+.wcs-pairs figcaption .mono { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.wcs-pairs figcaption b { font-family: var(--display); font-size: 28px; line-height: 1.05; }
+.wcs-pairs dl { margin: 0; display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.wcs-pairs dl div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--rule); }
+.wcs-pairs dt { font-size: 15px; }
+.wcs-pairs dd { margin: 0; font: 600 15px var(--mono); white-space: nowrap; }
+.wcs-pairs dd i { font-style: normal; color: var(--muted); margin: 0 4px; }
+.wcs-pairs p { margin: 0; font-size: 16px; }
+.wcs-pairs a { font-size: 12px; display: inline-block; padding-block: 4px; }
+
+@media (max-width: 760px) {
+  .wcs-pairs { grid-template-columns: minmax(0, 1fr); }
+  .wcs-checks li { grid-template-columns: minmax(0, 1fr) 48px; }
+  .wcs-checks .bar { grid-column: 1 / -1; grid-row: 2; }
+  .wcs-steps li { padding-left: 44px; }
+}
+
+/* Hero: headline and deck on the left, the whole dataset as a dark map on the right */
+.wcs-hero .wcs-hgrid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 32px 56px; align-items: end; margin-top: 48px; }
+.wcs-hero h1 { margin-bottom: 0; }
+.wcs-hero .deck { font-family: var(--display); font-size: clamp(22px, 2.6vw, 32px); line-height: 1.25; color: var(--on-night); margin: 22px 0 0; max-width: 26ch; text-wrap: balance; }
+.wcs-hmap { margin: 0; }
+.wcs-hmap figcaption { font: 12px/1.5 var(--mono); color: var(--night-muted); margin-top: 10px; max-width: 46ch; }
+.wcs-map.dark { margin: 0; }
+.wcs-map.dark svg { background: transparent; }
+.wcs-map.dark circle { fill-opacity: .85; }
+.wcs-map.dark .key { color: var(--on-night); }
+
+/* Four numbers in one row (two by two on phones), never a part-empty grid */
+.wcs .wcs-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* Breathing room: buttons after text, notes after the style cards */
+.wcs .csec .actions { margin-top: 26px; }
+.wcs .wcs-styles { margin-bottom: 28px; }
+.wcs .wcs-styles + .ctx { margin-top: 0; }
+
+@media (max-width: 900px) {
+  .wcs-hero .wcs-hgrid { grid-template-columns: minmax(0, 1fr); margin-top: 32px; }
+}
+@media (max-width: 640px) {
+  .wcs .wcs-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

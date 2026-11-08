@@ -105,6 +105,8 @@ const Experience = z.object({
   leadership: z.array(z.object({ dates: z.string(), role: z.string(), org: z.string(), line: z.string() })),
 });
 const Stage = z.enum(["Idea", "Building", "Testing", "Live"]);
+/** Now items still being worked on (Live ones are shipped and stay listed as proof, not as in-progress work). */
+export const inProgress = <T extends { stage: string }>(items: T[]) => items.filter((b) => b.stage !== "Live");
 const About = z.object({
   photo: Photo, lede: z.string(), body: z.array(z.string()), whyConsulting: z.string().default(""),
   facts: z.array(z.object({ label: z.string(), value: z.string() })),
@@ -134,6 +136,8 @@ export { originLabel } from "./origin";
 const showDrafts = () => !!process.env.SHOW_DRAFTS;
 export const getPagedProjects = () => getProjects().filter((p) => p.tier < 3 && (!p.draft || showDrafts()));
 export const getProject = (slug: string) => getPagedProjects().find((p) => p.slug === slug);
+/** Projects with their own page under src/app/work/<slug>/ (not rendered by /work/[slug]). */
+export const CUSTOM_PAGES = new Set(["decoding-winger-playstyles"]);
 export const getSite = () => parse(Site, "site.yaml");
 export const getChapters = () => parse(z.object({ chapters: z.array(Chapter).length(6) }), "story.yaml").chapters;
 export const getExperience = () => parse(Experience, "experience.yaml");

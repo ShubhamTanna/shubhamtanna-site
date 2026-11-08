@@ -42,3 +42,5 @@ next-env.d.ts
 qa-shots/
 content/private/
 content/projects/*/facts.md
+/public/winger/
+/src/generated/
