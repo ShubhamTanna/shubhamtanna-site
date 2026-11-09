@@ -1,6 +1,8 @@
 file,alt,caption,size
-01-home.png,"The Aur Sunao home screen: mood check-in, a call-a-listener card and shortcuts to counselling and activities",Home: a mood check-in and one tap to call a listener,phone
-02-chat.png,The chat screen with a supportive conversation in progress,"Chat: the original plan bundled an AI chatbot, which the redesign drops",phone
-03-dildost-call.png,An anonymous voice call with a peer listener in progress,A DilDost call: the human listener time the plan is built around,phone
-04-unit-economics-model.png,"The Excel model: line-item costs for the original and redesigned plans, and the sensitivity grid","The live model: original plan loses ₹262 a month per subscriber, redesign earns ₹154",
-05-recommendation-slide.png,"Deck slide: rebuild the Basic plan with 60 listener minutes, counsellor on demand and no AI chatbot","The recommendation: same ₹499 price, a plan that pays for itself",
+01-home.png,"The Aur Sunao home screen: mood check-in, a call-a-listener card and shortcuts to counselling, relaxing activities and the AI chatbot",Home: a mood check-in and one tap to call a listener,phone
+02-dildost-call.png,An anonymous voice call with a peer listener in progress,"DilDost Calls, the core feature: talk anonymously to a trained peer listener",phone
+03-chat.png,The chat screen with a supportive conversation in progress,The 24/7 AI chatbot (the 2026 review recommends dropping it),phone
+04-relaxing-games.png,"A grid of relaxing games: mandala art, jigsaw puzzle, sudoku and Tetris",Relaxing games for quick stress relief between sessions,phone
+05-sketch-to-screen.png,Paper sketches of the home and call screens beside the finished Figma screens,From paper sketch to Figma screen: home and DilDost call,
+06-unit-economics-model.png,"The Excel model: line-item costs for the original and redesigned plans, and the sensitivity grid",The 2026 review: the ₹499 plan lost ₹262 a month per subscriber; the redesign earns ₹154,
+07-recommendation-slide.png,"Deck slide: rebuild the Basic plan with 60 listener minutes, counsellor on demand and no AI chatbot","The fix: same ₹499 price, a plan that pays for itself",
