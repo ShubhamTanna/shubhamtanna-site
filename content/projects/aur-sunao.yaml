@@ -1,4 +1,5 @@
-# Tier 1: full page.
+# Tier 1: full page, story-ordered (see `sections`). Source: case-studies/aur-sunao, README.md and portfolio/facts.md (rewritten Nov 2026).
+# Every number on the page is in facts.md. A concept app: never say it launched or had users; say "concept" or "designed".
 # Private notes go in content/private/internal-notes.yaml (gitignored), never here.
 
 slug: aur-sunao
@@ -8,32 +9,95 @@ type: case
 origin: coursework
 originNote: "Semester 5"
 section: Case study
-title: "Aur Sunao: the ₹499 plan that lost money on every user"
-cardTitle: "Aur Sunao: the ₹499 plan that lost money"
-cardLine: Found that a peer-listening app's flagship plan cost ₹761 to deliver at a ₹499 price, and redesigned it to earn ₹154 per subscriber.
+title: "Aur Sunao: an anonymous listening app, from idea to pricing"
+cardTitle: "Aur Sunao: an anonymous listening app, from idea to pricing"
+cardLine: Designed an anonymous peer-listening app from scratch, from research and features to pricing and a Figma prototype, then found its ₹499 plan cost ₹761 to deliver and redesigned it to earn ₹154 per subscriber.
+# Shown on cards and the "Next project" band. The page itself opens with the card line instead.
 hero:
   value: −₹262 → +₹154
-  label: per subscriber per month
+  label: per subscriber per month, after the 2026 pricing review
 year: "2024"
 team: Team of 6
 tools:
-  - Unit economics
-  - Excel
   - Figma
-stats:
-  - value: ₹761 → ₹357
-    label: cost to deliver
-  - value: +₹154
-    label: contribution per user
-  - value: "440"
-    label: subscribers to break even
-context: Concept app for anonymous peer listening and counselling · 6-person team project, Semester 5, 2024 · unit-economics review added in 2026
-answer: "Keep the ₹499 price, cut included listener minutes from 80 to 60, sell counsellor sessions separately at ₹450 and drop the AI chatbot. The plan stays profitable even if subscribers use every included minute: +₹67."
-problem: The Basic plan bundled ₹1,170 of pay-per-use value for ₹499, so every new subscriber made losses worse.
-did:
-  - Analysed the user survey (54 respondents) and built personas.
-  - Built a live unit-economics model with sensitivity analysis.
-  - Designed the pricing and wrote the recommendation.
+  - Excel
+context: Concept app, never launched. 6-person team project, Semester 5, 2024. Pricing review added by me in 2026.
+
+sections:
+  - title: The problem
+    blocks:
+      - p: Plenty of people are stressed and lonely but still avoid therapy, because of the stigma and the time it takes. Aur Sunao ("tell me more") was designed for them, as a way to talk to someone anonymously without committing to therapy.
+      - callout:
+          label: Who we designed for
+          text: A 23-year-old marketing executive who has just moved to a new city alone. Stressed and lonely, but therapy feels like a step too far.
+
+  - title: What users told us
+    blocks:
+      - p: We ran an online survey in August 2024 and got 54 responses. Two things stood out. People wanted a human, not a bot, and they wanted privacy.
+      - chart: 2
+      - note: "Caveat: a convenience sample, with 89% of respondents aged 18–25. Read these figures as directional, not representative."
+
+  - title: The product
+    blocks:
+      - p: Four features, built around one.
+      - items:
+          - title: DilDost Calls
+            tag: Core feature
+            text: Anonymous calls with trained peer listeners, called DilDosts. Users choose a listener by gender and age.
+          - title: Psychologist sessions
+            text: 30-minute video sessions with licensed psychologists, filtered by experience, specialisation and rating.
+          - title: Relaxing games
+            text: Mandala art, jigsaw, sudoku and Tetris, for quick stress relief between sessions.
+          - title: AI chatbot
+            text: A helper for finding your way around the app and getting support.
+      - screens: [01-home.png, 02-dildost-call.png, 03-chat.png, 04-relaxing-games.png]
+
+  - title: Business model
+    blocks:
+      - p: Two ways to pay, so people could start small or commit.
+      - cards:
+          - title: Basic plan
+            price: ₹499 a month
+            lines:
+              - 80 DilDost minutes
+              - One 30-minute counsellor session
+              - AI chatbot and games
+          - title: FlexiFare
+            price: Pay per use
+            lines:
+              - DilDost calls at ₹90 per 10 minutes
+              - Counsellor sessions at ₹450 each
+              - No monthly commitment
+        foot: Listeners and counsellors keep 80% of what the user pays. The platform keeps 20%.
+
+  - title: Prototype
+    blocks:
+      - p: We sketched on paper first. 5 paper sketches became 7 high-fidelity Figma screens, linked into a clickable prototype.
+      - screens: [05-sketch-to-screen.png]
+      - button:
+          label: Try the Figma prototype
+          href: https://www.figma.com/proto/b5lymMQcj1m59Yzop4vkcD/AUR-SUNAO?node-id=317-769&t=QeVbKMk1CxHuieHL-1
+
+  - title: Stress-testing our own pricing
+    blocks:
+      - p: In 2026 I went back and rebuilt the Basic plan's economics in a live Excel model, with sensitivity analysis. The plan we had designed lost money on every subscriber. It bundled ₹1,170 of pay-per-use value for ₹499, a 57% discount, so every new subscriber made the losses worse.
+      - chart: 0
+      - table: 0
+      - callout:
+          label: The redesign
+          text: "Keep the ₹499 price, cut included listener minutes from 80 to 60, sell counsellor sessions separately at ₹450 and drop the AI chatbot. The plan stays profitable even if subscribers use every included minute: +₹67."
+      - chart: 1
+      - note: "Assumptions: 80% payout share (the team's own split), 80% usage of included minutes, Razorpay's 2.36% gateway fee, 15% of subscribers buying one ₹450 counsellor session a month at ₹79 margin, and fixed costs from the team's FY25 snapshot. Break-even = ₹67,500 ÷ ₹153.5 = 440 subscribers. Across 50–100% usage and 60–85% payout share, break-even ranges from 193 to 1,837 subscribers."
+      - screens: [06-unit-economics-model.png, 07-recommendation-slide.png]
+
+  - title: Credits
+    blocks:
+      - items:
+          - title: Team (2024)
+            text: Idea, research, product, pricing plans, prototype.
+          - title: Me (2026)
+            text: Unit-economics model and redesign.
+
 results:
   - caption: Original vs recommended plan
     columns:
@@ -60,26 +124,14 @@ results:
         - Never
         - 440 subscribers
     source: model Inputs sheet; model Unit Economics sheet row 22; model Unit Economics sheet row 18; model Unit Economics sheet row 20; model Unit Economics sheet row 21
-  - caption: What the survey said (n = 54)
-    columns:
-      - Finding
-      - Share
-    rows:
-      - - Prefer a human listener over AI
-        - 80% (2 of 54 chose AI)
-      - - Rate privacy 5 out of 5
-        - 78%
-      - - Need someone weekly or daily
-        - 39%
-      - - Have used such a platform
-        - 11%
-method: 80% payout share (the team's own split), 80% usage of included minutes, Razorpay's 2.36% gateway fee, 15% of subscribers buying one ₹450 counsellor session a month at ₹79 margin, and fixed costs from the team's FY25 snapshot. Break-even = ₹67,500 ÷ ₹153.5 = 440 subscribers. Across 50–100% usage and 60–85% payout share, break-even ranges from 193 to 1,837 subscribers.
 skills:
-  - Unit economics
-  - Pricing
-  - Survey research
-  - Sensitivity analysis
+  - Product strategy
+  - User research
+  - Feature design
+  - Business model and pricing
   - Figma prototyping
+  - Unit economics
+  - Sensitivity analysis
 links:
   - label: Figma prototype
     href: https://www.figma.com/proto/b5lymMQcj1m59Yzop4vkcD/AUR-SUNAO?node-id=317-769&t=QeVbKMk1CxHuieHL-1
@@ -110,7 +162,11 @@ charts:
       x: 440
       label: "Break-even: 440"
     note: Monthly profit after fixed costs (₹70,000 original, ₹67,500 recommended).
-lead:
-  kind: chart
-  chart: 0
+  - kind: bar
+    file: chart-3.csv
+    title: 80% wanted a human listener. Only 11% had ever used anything like this.
+    label: finding
+    value: percent_of_respondents
+    unit: "%"
+    note: Share of 54 respondents. Voice and text were a multi-select question.
 code: https://github.com/ShubhamTanna/case-studies/tree/main/aur-sunao

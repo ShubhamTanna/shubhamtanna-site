@@ -572,6 +572,25 @@ file,alt,caption,size
 
 `size` is empty for full-width screenshots, or `phone` for phone screens (they sit three to a row). For a clip, add a same-named `.jpg` as its still frame (`03-search.mp4` + `03-search.jpg`). Then re-import. To reword a caption, edit `screens.csv` in the project repo and re-import.
 
+### Pages that tell a story in your own order (`sections`)
+
+Most project pages use the fixed order: problem, what I did, in action, results. A project can instead list its own `sections:` in its YAML, and the page then shows them in that order (Aur Sunao does this; search `sections:` in `content/projects/aur-sunao.yaml`). Each section has a `title` and `blocks`, one per line of the page:
+
+| Block | What it shows |
+|---|---|
+| `p: text` | a paragraph |
+| `list: [...]` | bullet points |
+| `callout: {label, text}` | a highlighted box, e.g. a persona |
+| `items: [{title, text, tag}]` | a list of named things (features, credits); `tag` adds a red label like "Core feature" |
+| `cards: [{title, price, lines}]` + optional `foot` | side-by-side plan cards |
+| `chart: 0` | a chart from `charts:`, numbered from 0 |
+| `table: 0` | a table from `results:`, numbered from 0 |
+| `note: text` | a small grey note, e.g. a caveat under a chart |
+| `screens: [01-home.png, ...]` | screenshots by file name from `screens.csv`; phone screens get a phone frame |
+| `button: {label, href}` | a red button that opens in a new tab |
+
+On these pages the hero shows the card line and `context` instead of the big number. The big number (`hero`) still shows on cards. A wrong chart or table number stops the build with a message saying which one.
+
 ---
 
 ## 8. Rules that keep the site credible

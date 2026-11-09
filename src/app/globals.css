@@ -635,3 +635,40 @@ figure.cph figcaption, .xstrip figcaption, .lead > figcaption { text-transform: 
 }
 /* Origin badges may wrap on the narrowest phones instead of pushing the card wider */
 .origin { white-space: normal; line-height: 1.3; max-width: 100%; padding: 4px 7px; }
+
+/* --- Story-ordered project pages (`sections` in the YAML), first used by Aur Sunao (9 Nov) --- */
+.cband .deck { border-top: 1px solid color-mix(in srgb, var(--on-night) 18%, transparent); padding-top: 22px; max-width: 62ch; }
+.cband .deck p { margin: 0; font-size: clamp(17px, 1.9vw, 21px); line-height: 1.45; }
+.cband .deck .ctx { margin-top: 14px; font: 13px/1.5 var(--mono); color: var(--night-muted); }
+.sblocks > * + * { margin-top: 22px; }
+.sblocks > p + p, .sblocks > p + ul { margin-top: 0; }
+.sblocks .chart { margin-bottom: 0; }
+.sblocks .chart + .ctx { margin-top: 12px; }
+.callout { border-left: 4px solid var(--accent); background: var(--panel); padding: 18px 22px; max-width: 62ch; }
+.callout span { font: 500 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent-text); }
+.callout p { margin: 6px 0 0 !important; font-size: 18px; }
+.items { margin: 0; display: grid; gap: 0; border-top: 1px solid var(--rule); max-width: 62ch; }
+.items > div { padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.items dt { font-family: var(--display); font-weight: 800; font-size: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; }
+.items dt i { font: 500 10.5px var(--mono); font-style: normal; letter-spacing: .1em; text-transform: uppercase; background: var(--accent); color: var(--on-accent); padding: 3px 7px; }
+.items dd { margin: 4px 0 0; font-size: 17px; color: var(--muted); }
+.items .key dt { font-size: 23px; }
+.plans .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.plans .grid > div { border: 1px solid var(--ink); padding: 20px 22px; min-width: 0; }
+.plans .grid span { font: 500 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.plans .grid b { display: block; font-family: var(--display); font-weight: 900; font-size: clamp(1.7rem, 3.2vw, 2.4rem); line-height: 1.05; margin: 8px 0 12px; }
+.plans .grid ul { padding-left: 18px; gap: 6px; }
+.plans .grid li { font-size: 16px; }
+.plans .foot { margin: 14px 0 0 !important; font-size: 17px; }
+@media (max-width: 620px) { .plans .grid { grid-template-columns: minmax(0, 1fr); } }
+.sbtn { margin: 0 !important; }
+/* phone screenshots shown in a device frame */
+.shots .row.phone.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shots .row.framed img { border: 6px solid var(--ink); border-radius: 22px; background: var(--ink); }
+.shots .row.framed a:hover img { border-color: var(--accent); }
+@media (max-width: 900px) { .shots .row.phone.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .shots .row.framed img { border-width: 4px; border-radius: 16px; } }
+/* the story hero has no "answer" block, so the buttons follow the glance row directly */
+.glance + .actions { margin-top: 24px; }
+.sblocks > .sbtn { margin-top: 22px !important; }
+.plans .foot { color: var(--ink); }

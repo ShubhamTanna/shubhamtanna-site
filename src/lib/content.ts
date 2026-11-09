@@ -43,6 +43,24 @@ const Lead = z.object({
   caption: z.string().optional(), chart: z.number().optional(), // index into charts[] when kind = chart
 });
 
+// A story-ordered page. When a project has `sections`, the page shows them in this order instead of the
+// default Problem / What I did / In action / Results / Story. Each block is one thing, in reading order.
+// chart and table are indexes into charts[] and results[]; screens are file names from screens.csv.
+const Block = z.union([
+  z.object({ p: z.string() }).strict(),
+  z.object({ list: z.array(z.string()) }).strict(),
+  z.object({ callout: z.object({ label: z.string(), text: z.string() }) }).strict(),
+  z.object({ items: z.array(z.object({ title: z.string(), text: z.string(), tag: z.string().optional() })) }).strict(),
+  z.object({ cards: z.array(z.object({ title: z.string(), price: z.string(), lines: z.array(z.string()) })), foot: z.string().optional() }).strict(),
+  z.object({ chart: z.number().int() }).strict(),
+  z.object({ table: z.number().int() }).strict(),
+  z.object({ note: z.string() }).strict(),
+  z.object({ screens: z.array(z.string()).min(1) }).strict(),
+  z.object({ button: Link }).strict(),
+]);
+export type Block = z.infer<typeof Block>;
+const Section = z.object({ title: z.string(), blocks: z.array(Block).min(1) }).strict();
+
 export const Project = z.object({
   slug: z.string(),
   draft: z.boolean().default(false), // true = built but hidden until ready (shown with SHOW_DRAFTS=1)
@@ -63,8 +81,9 @@ export const Project = z.object({
   stats: z.array(Stat).optional(),
   context: z.string().optional(),
   answer: z.string().optional(),
-  problem: z.string(),
-  did: z.array(z.string()),
+  problem: z.string().optional(), // required unless the page uses `sections`
+  did: z.array(z.string()).default([]),
+  sections: z.array(Section).optional(),
   results: z.array(Table).default([]),
   method: z.string().optional(),
   notes: z.array(z.string()).optional(),
@@ -125,8 +144,21 @@ export function getProjects(): Project[] {
   const dir = path.join(root, "projects");
   return fs.readdirSync(dir)
     .filter((f) => f.endsWith(".yaml"))
-    .map((f) => parse(Project, `projects/${f}`))
+    .map((f) => checkProject(parse(Project, `projects/${f}`), f))
     .sort((a, b) => a.rank - b.rank);
+}
+/** Rules the schema can't express: a default page needs problem + did; section blocks must point at real charts and tables. */
+function checkProject(p: Project, f: string): Project {
+  const bad = (m: string) => { throw new Error(`content/projects/${f}: ${m}`); };
+  if (!p.sections) {
+    if (!p.problem || !p.did.length) bad("needs `problem` and `did` (or `sections`)");
+    return p;
+  }
+  for (const s of p.sections) for (const b of s.blocks) {
+    if ("chart" in b && !p.charts[b.chart]) bad(`section "${s.title}": chart ${b.chart} doesn't exist (charts are numbered from 0)`);
+    if ("table" in b && !p.results[b.table]) bad(`section "${s.title}": table ${b.table} doesn't exist (results are numbered from 0)`);
+  }
+  return p;
 }
 /** The only project fields that may reach the browser (client components). Never pass a whole Project. */
 export type CardData = Pick<Project, "slug" | "type" | "origin" | "originNote" | "section" | "cardTitle" | "cardLine" | "hero" | "year" | "team" | "tools">;
